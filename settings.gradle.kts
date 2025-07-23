@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "keypick_compose"
 include(":app")
 include(":core:designsystem")
+include(":login")
