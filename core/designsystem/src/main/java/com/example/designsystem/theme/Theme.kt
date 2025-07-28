@@ -10,14 +10,16 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+//TODO : 현재는 디크모드 지원
+//private val DarkColorScheme = darkColorScheme(
+//    primary = Purple80,
+//    secondary = PurpleGrey80,
+//    tertiary = Pink80
+//)
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
+    primary = Red30,
+    onPrimary = White,
     secondary = PurpleGrey40,
     tertiary = Pink40
 
@@ -34,20 +36,12 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun Keypick_composeTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+    val colorScheme = LightColorScheme
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
 
     MaterialTheme(
         colorScheme = colorScheme,
