@@ -1,0 +1,32 @@
+plugins {
+    id("java-library")
+    `kotlin-dsl`
+    alias(libs.plugins.jetbrains.kotlin.jvm)
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
+    }
+}
+dependencies {
+    compileOnly(libs.android.gradlePlugin)
+}
+tasks {
+    validatePlugins {
+        enableStricterValidation = true
+        failOnWarning = true
+    }
+}
+gradlePlugin{
+    plugins{
+        register("androidApplication"){
+            id = libs.plugins.keypick.android.application.get().pluginId
+            implementationClass = "com.AndroidApplicationConventionPlugin"
+        }
+
+    }
+}
