@@ -27,6 +27,10 @@ gradlePlugin{
             id = libs.plugins.keypick.android.application.get().pluginId
             implementationClass = "com.AndroidApplicationConventionPlugin"
         }
+        register("androidLibrary"){
+            id = libs.plugins.keypick.android.library.get().pluginId
+            implementationClass = "com.AndroidLibraryConventionPlugin"
+        }
 
     }
 }
