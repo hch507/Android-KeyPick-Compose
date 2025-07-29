@@ -40,3 +40,4 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
 keypick-android-application = { id = "keypick.android.application" }
+keypick-android-Library = {id = "keypick.android.library"}
