@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.keypick.android.library)
+    alias(libs.plugins.keypick.android.feature)
 }
 
 android {
