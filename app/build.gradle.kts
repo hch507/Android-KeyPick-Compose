@@ -34,6 +34,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.designsystem)
+    implementation(projects.feature.login)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

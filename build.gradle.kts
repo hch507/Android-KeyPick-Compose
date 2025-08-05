@@ -7,6 +7,3 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
 }
-gradle.startParameter.excludedTaskNames.addAll(
-    listOf(":build-logic:convention:testClasses")
-)
