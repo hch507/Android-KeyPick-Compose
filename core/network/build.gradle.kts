@@ -36,4 +36,7 @@ dependencies {
 
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.android)
+
+    implementation(libs.retrofit.kotlin.serialization)
+    implementation(libs.retrofit.core)
 }
