@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.keypick.android.library)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -32,4 +33,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.android)
 }
