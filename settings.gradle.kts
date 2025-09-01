@@ -19,6 +19,8 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+// build-logic rebuild 시 에러 임시 해결
+gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
 
 rootProject.name = "keypick_compose"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
@@ -27,6 +29,8 @@ include(":core:designsystem")
 include(":feature:login")
 include(":core:data")
 include(":core:domain")
-include(":core:model")
 include(":core:network")
 //include(":build-logic:convention")
+
+include(":feature:nonlogin")
+include(":core:model")
