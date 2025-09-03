@@ -25,14 +25,22 @@ import androidx.compose.ui.unit.sp
 
 
 @Composable
-internal fun LoginRoute(){
+internal fun LoginRoute(
+    onLoginClick: () -> Unit,
+    onNonLoginClick: () -> Unit
+){
 //    val blogId = loginViewModel.blogId
-    LoginScreen()
+    LoginScreen(
+        onLoginClick =onLoginClick,
+        onNonLoginClick = onNonLoginClick
+    )
 }
 
 @Composable
 fun LoginScreen(
 //    blogId : String
+    onLoginClick: () -> Unit = {},
+    onNonLoginClick: () -> Unit= {}
 ) {
     Box(
         modifier = Modifier
@@ -46,12 +54,8 @@ fun LoginScreen(
             )
             Spacer(modifier = Modifier.height(30.dp))
             LoginBottom(
-                onLoginClick = {
-
-                },
-                onNonLoginClick = {
-
-                })
+                onLoginClick = onLoginClick,
+                onNonLoginClick = onNonLoginClick)
         }
     }
 }
@@ -123,11 +127,14 @@ fun LoginTitle() {
 //        fontFamily = neoRegular
     )
 }
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview(showBackground = true)
 @Composable
 fun PreviewLoginScreen(){
     MaterialTheme {
-        LoginScreen()
+        LoginScreen(
+            onLoginClick = {},
+            onNonLoginClick = {}
+        )
     }
 }
 

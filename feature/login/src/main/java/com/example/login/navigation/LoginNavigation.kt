@@ -12,9 +12,13 @@ object LoginRoute
 fun NavController.navigateToLogin()= navigate(route = LoginRoute)
 
 fun NavGraphBuilder.loginScreen(
-
+    onNonLoginClick : () -> Unit,
+    onLoginClick : () -> Unit
 ){
     composable<LoginRoute> {
-        LoginRoute()
+        LoginRoute(
+            onLoginClick= onLoginClick,
+            onNonLoginClick = onNonLoginClick
+        )
     }
 }
