@@ -3,10 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.home"
-
+    namespace = "com.example.userbloginfo"
+    compileSdk = 35
 
     defaultConfig {
+        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -32,7 +33,6 @@ android {
 
 dependencies {
 
-    implementation(projects.feature.userbloginfo)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
