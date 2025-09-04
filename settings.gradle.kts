@@ -34,3 +34,4 @@ include(":core:network")
 
 include(":feature:nonlogin")
 include(":core:model")
+include(":feature:home")
