@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.keypick.android.feature)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {

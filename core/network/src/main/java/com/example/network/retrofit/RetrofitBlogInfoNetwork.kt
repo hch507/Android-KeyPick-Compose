@@ -16,11 +16,6 @@ private interface RetrofitBlogInfoNetworkApi{
 
 private const val BLOG_INFO_BASE_URL = "https://blog.naver.com/"
 
-@Serializable
-private data class NetworkResponse<T>(
-    val data: T,
-)
-
 @Singleton
 internal class RetrofitBlogInfoNetwork @Inject constructor(
 ) : BlogInfoNetworkDataSource {
