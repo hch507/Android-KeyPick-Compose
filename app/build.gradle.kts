@@ -38,6 +38,7 @@ dependencies {
     implementation(projects.feature.login)
     implementation(projects.feature.nonlogin)
     implementation(projects.feature.home)
+    implementation(projects.feature.search)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

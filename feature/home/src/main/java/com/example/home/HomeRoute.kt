@@ -28,23 +28,36 @@ import com.example.ranking.navigation.navigateToRanking
 import com.example.userbloginfo.navigation.navigateToUserBlogInfo
 import kotlin.reflect.KClass
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 
 @Composable
 internal fun HomeRoute(
-
+    onSearchClick :() -> Unit
 ) {
     val navController = rememberNavController()
-    HomeScreen(navController)
+    HomeScreen(navController, onSearchClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(
+    navController: NavHostController,
+    onSearchClick :() -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Main") },
-                colors = TopAppBarDefaults.topAppBarColors()
+                colors = TopAppBarDefaults.topAppBarColors(),
+                actions = {
+                    Button(
+                        onClick = onSearchClick
+                    ) {
+                        Text(text = "search")
+                    }
+                }
             )
         },
         bottomBar = {BottomNavigationBar(navController)}
