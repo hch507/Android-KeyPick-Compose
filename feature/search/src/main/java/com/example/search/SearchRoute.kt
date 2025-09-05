@@ -14,14 +14,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-internal fun SearchRoute() {
+internal fun SearchRoute(
+    onSearchClick : () -> Unit
+) {
 
-    SearchScreen()
+    SearchScreen(onSearchClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen() {
+fun SearchScreen(
+    onSearchClick : () -> Unit
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -29,7 +33,7 @@ fun SearchScreen() {
                 colors = TopAppBarDefaults.topAppBarColors(),
                 actions = {
                     Button(
-                        onClick = {}
+                        onClick = onSearchClick
                     ) {
                         Text(text = "KeywordInfo")
                     }

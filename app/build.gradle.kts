@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.feature.nonlogin)
     implementation(projects.feature.home)
     implementation(projects.feature.search)
+    implementation(projects.feature.keywordinfo)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

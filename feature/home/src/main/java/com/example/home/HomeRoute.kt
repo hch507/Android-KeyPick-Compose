@@ -34,17 +34,17 @@ import androidx.compose.material3.IconButton
 
 @Composable
 internal fun HomeRoute(
-    onSearchClick :() -> Unit
+    onMoveToSearchClick :() -> Unit
 ) {
     val navController = rememberNavController()
-    HomeScreen(navController, onSearchClick)
+    HomeScreen(navController, onMoveToSearchClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    onSearchClick :() -> Unit
+    onMoveToSearchClick :() -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -53,7 +53,7 @@ fun HomeScreen(
                 colors = TopAppBarDefaults.topAppBarColors(),
                 actions = {
                     Button(
-                        onClick = onSearchClick
+                        onClick = onMoveToSearchClick
                     ) {
                         Text(text = "search")
                     }
