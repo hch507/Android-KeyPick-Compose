@@ -34,6 +34,7 @@ android {
 dependencies {
 
     implementation(projects.feature.userbloginfo)
+    implementation(projects.feature.ranking)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

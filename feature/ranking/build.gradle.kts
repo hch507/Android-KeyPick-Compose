@@ -4,11 +4,8 @@ plugins {
 
 android {
     namespace = "com.example.ranking"
-    compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }

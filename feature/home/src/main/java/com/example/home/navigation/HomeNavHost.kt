@@ -1,10 +1,9 @@
 package com.example.home.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.example.userbloginfo.UserBlogInfoScreen
+import com.example.ranking.navigation.rankingScreen
 import com.example.userbloginfo.navigation.UserBlogInfoRoute
 import com.example.userbloginfo.navigation.userBlogInfoScreen
 
@@ -17,5 +16,6 @@ fun HomeNavHost(
         startDestination = UserBlogInfoRoute
     ){
         userBlogInfoScreen()
+        rankingScreen()
     }
 }
