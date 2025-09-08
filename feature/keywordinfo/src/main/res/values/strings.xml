@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="keyword_detail_title">키워드 정보</string>
+    <string name="releted_keywords_title">연관 검색어</string>
+</resources>
