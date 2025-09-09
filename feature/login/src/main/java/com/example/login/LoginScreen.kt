@@ -16,31 +16,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
+
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 
 
 @Composable
 internal fun LoginRoute(
     onLoginClick: () -> Unit,
-    onNonLoginClick: () -> Unit
+    onNonLoginClick: () -> Unit,
+    viewModel: LoginViewModel= hiltViewModel()
 ){
-//    val blogId = loginViewModel.blogId
+    val blogId = viewModel.blogId
     LoginScreen(
+        blogId = blogId,
         onLoginClick =onLoginClick,
-        onNonLoginClick = onNonLoginClick
+        onNonLoginClick = onNonLoginClick,
+        onBlogIdChanged = {
+            viewModel.onBlogIdChanged(it)
+        }
     )
 }
 
 @Composable
 fun LoginScreen(
-//    blogId : String
+    blogId : String,
     onLoginClick: () -> Unit = {},
-    onNonLoginClick: () -> Unit= {}
+    onNonLoginClick: () -> Unit= {},
+    onBlogIdChanged:(String) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -50,7 +55,7 @@ fun LoginScreen(
             LoginTitle()
             Spacer(modifier = Modifier.height(60.dp))
             LoginBody(
-                blogId = "test", onBlogIdChange = { null }
+                blogId = blogId, onBlogIdChange = onBlogIdChanged
             )
             Spacer(modifier = Modifier.height(30.dp))
             LoginBottom(
@@ -97,7 +102,7 @@ fun LoginBody(blogId: String, onBlogIdChange: (String) -> Unit) {
     Column(modifier = Modifier.padding(40.dp)) {
         OutlinedTextField(
             value = blogId,
-            onValueChange = onBlogIdChange,
+            onValueChange = { newValue -> onBlogIdChange(newValue) },
             label = { Text(text = stringResource(R.string.login_id_hint)) },
 //            textStyle = TextStyle(
 //                fontFamily = neoRegular
@@ -127,15 +132,15 @@ fun LoginTitle() {
 //        fontFamily = neoRegular
     )
 }
-@Preview(showBackground = true)
-@Composable
-fun PreviewLoginScreen(){
-    MaterialTheme {
-        LoginScreen(
-            onLoginClick = {},
-            onNonLoginClick = {}
-        )
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewLoginScreen(){
+//    MaterialTheme {
+//        LoginScreen(
+//            onLoginClick = {},
+//            onNonLoginClick = {}
+//        )
+//    }
+//}
 
 
