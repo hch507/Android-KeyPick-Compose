@@ -2,8 +2,12 @@ plugins {
     alias(libs.plugins.keypick.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
-
+hilt {
+    enableAggregatingTask = false
+}
 android {
     namespace = "com.example.keypick_compose"
 
@@ -57,4 +61,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    ksp(libs.hilt.compiler)          // Hilt 컴파일러 (ksp용)
+    implementation(libs.hilt.android)
 }
