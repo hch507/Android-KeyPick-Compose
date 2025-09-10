@@ -25,14 +25,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 internal fun LoginRoute(
-    onLoginClick: () -> Unit,
+    moveToMain: () -> Unit,
     onNonLoginClick: () -> Unit,
     viewModel: LoginViewModel= hiltViewModel()
 ){
     val blogId = viewModel.blogId
     LoginScreen(
         blogId = blogId,
-        onLoginClick =onLoginClick,
+        onLoginClick ={
+            viewModel.getUserBlogData(blogId)
+        },
         onNonLoginClick = onNonLoginClick,
         onBlogIdChanged = {
             viewModel.onBlogIdChanged(it)

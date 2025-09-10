@@ -25,7 +25,7 @@ fun KeypickNavHost(
         startDestination = LoginRoute
     ){
         loginScreen(
-            onLoginClick = navController::navigateToHome,
+            moveToMain = navController::navigateToHome,
             onNonLoginClick = navController::navigateToNonLogin
         )
         nonLoginScreen(

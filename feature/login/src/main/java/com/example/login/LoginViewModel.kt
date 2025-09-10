@@ -6,6 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.repository.LoginOrCntRepository
+import com.example.domain.FetchLoginOrCntUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-
+//    private val loginOrCntRepository: LoginOrCntRepository
+    private val fetchLoginOrCntUsecase: FetchLoginOrCntUsecase
 ) : ViewModel(){
     private val _blogIdOrCntResult = MutableStateFlow<LoginUiState<String>>(LoginUiState.Loading)
     val blogIdOrCntResult = _blogIdOrCntResult.asStateFlow()
@@ -27,8 +30,9 @@ class LoginViewModel @Inject constructor(
     }
 
     fun getUserBlogData(userId : String){
+        Log.d("getUserBlogData", "getUserBlogData: ")
         viewModelScope.launch {
-            Log.d("LoginViewModel", "getUserBlogData: ")
+//            fetchLoginOrCntUsecase.invoke(userId)
         }
     }
 
