@@ -1,7 +1,7 @@
 [versions]
 agp = "8.9.1"
 hiltNavigationCompose = "1.2.0"
-kotlin = "2.0.20"
+kotlin = "2.1.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -15,8 +15,8 @@ androidxNavigation = "2.8.5"
 jetbrainsKotlinJvm = "2.0.20"
 kotlinxSerializationJson = "1.8.0"
 uiTooling = "1.8.3"
-ksp = "2.0.20-1.0.25"
-hilt =  "2.48"
+ksp = "2.1.21-2.0.1"
+hilt =  "2.56"
 retrofit = "2.11.0"
 
 [libraries]
@@ -44,7 +44,7 @@ android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", ver
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-kotlin-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.keypick.android.library)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -27,7 +28,7 @@ android {
 }
 
 dependencies {
-
+    implementation(projects.core.network)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

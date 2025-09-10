@@ -5,9 +5,9 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
-hilt {
-    enableAggregatingTask = false
-}
+//hilt {
+//    enableAggregatingTask = false
+//}
 android {
     namespace = "com.example.keypick_compose"
 
