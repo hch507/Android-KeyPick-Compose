@@ -39,7 +39,6 @@
             <option value="$PROJECT_DIR$/feature/ranking" />
             <option value="$PROJECT_DIR$/feature/search" />
             <option value="$PROJECT_DIR$/feature/userbloginfo" />
-            <option value="$PROJECT_DIR$/sample" />
           </set>
         </option>
       </GradleProjectSettings>

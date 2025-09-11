@@ -32,7 +32,7 @@ class LoginViewModel @Inject constructor(
     fun getUserBlogData(userId : String){
         Log.d("getUserBlogData", "getUserBlogData: ")
         viewModelScope.launch {
-//            fetchLoginOrCntUsecase.invoke(userId)
+            fetchLoginOrCntUsecase.invoke(userId)
         }
     }
 

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.keypick.android.library)
     alias(libs.plugins.ksp)
+    id ("kotlin-kapt")
 }
 
 android {
@@ -37,6 +38,12 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.android)
 
-    implementation(libs.retrofit.kotlin.serialization)
-    implementation(libs.retrofit.core)
+    api(libs.retrofit.kotlin.serialization)
+    api(libs.retrofit.core)
+
+    implementation ("com.tickaroo.tikxml:annotation:0.8.13")
+    implementation ("com.tickaroo.tikxml:core:0.8.13")
+    implementation ("com.tickaroo.tikxml:retrofit-converter:0.8.13")
+
+    kapt ("com.tickaroo.tikxml:processor:0.8.13")
 }
