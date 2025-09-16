@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.keypick.android.feature)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -41,4 +43,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.foundation)
+
+    ksp(libs.hilt.compiler)          // Hilt
+    implementation(libs.hilt.android)
 }
