@@ -29,12 +29,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.keywordinfo.navigation.KeywordInfoLevelDestination
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun KeywordInfoRoute() {
-
+internal fun KeywordInfoRoute(
+    viewModel: KeywordInfoViewModel = hiltViewModel()
+) {
+    viewModel.fetchMonthlySearchData("아이패드")
     val pagerState = rememberPagerState(pageCount = {
         2
     })

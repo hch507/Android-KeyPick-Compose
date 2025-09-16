@@ -27,31 +27,33 @@ import androidx.hilt.navigation.compose.hiltViewModel
 internal fun LoginRoute(
     moveToMain: () -> Unit,
     onNonLoginClick: () -> Unit,
-    viewModel: LoginViewModel= hiltViewModel()
-){
+    viewModel: LoginViewModel = hiltViewModel()
+) {
     val blogId = viewModel.blogId
     LoginScreen(
         blogId = blogId,
-        onLoginClick ={
+        onLoginClick = {
             viewModel.getUserBlogData(blogId)
         },
         onNonLoginClick = onNonLoginClick,
         onBlogIdChanged = {
             viewModel.onBlogIdChanged(it)
-        }
-    )
+        },
+        moveToMain = moveToMain
+        )
 }
 
 @Composable
 fun LoginScreen(
-    blogId : String,
+    blogId: String,
     onLoginClick: () -> Unit = {},
-    onNonLoginClick: () -> Unit= {},
-    onBlogIdChanged:(String) -> Unit
+    onNonLoginClick: () -> Unit = {},
+    onBlogIdChanged: (String) -> Unit,
+    moveToMain: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
-    ){
+    ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Spacer(modifier = Modifier.height(180.dp))
             LoginTitle()
@@ -62,7 +64,9 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(30.dp))
             LoginBottom(
                 onLoginClick = onLoginClick,
-                onNonLoginClick = onNonLoginClick)
+                onNonLoginClick = onNonLoginClick,
+                moveToMain= moveToMain
+            )
         }
     }
 }
@@ -70,13 +74,15 @@ fun LoginScreen(
 
 @Composable
 fun LoginBottom(
-    onLoginClick: () -> Unit, onNonLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    onNonLoginClick: () -> Unit,
+    moveToMain: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = onLoginClick,
+            onClick = moveToMain,
             colors = ButtonDefaults.buttonColors(
                 contentColor = MaterialTheme.colorScheme.onPrimary,
                 containerColor = MaterialTheme.colorScheme.primary

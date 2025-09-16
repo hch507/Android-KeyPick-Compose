@@ -40,6 +40,8 @@ dependencies {
 
     api(libs.retrofit.kotlin.serialization)
     api(libs.retrofit.core)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.okhttp)
 
     implementation ("com.tickaroo.tikxml:annotation:0.8.13")
     implementation ("com.tickaroo.tikxml:core:0.8.13")

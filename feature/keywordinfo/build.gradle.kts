@@ -33,6 +33,8 @@ android {
 
 dependencies {
 
+    implementation(projects.core.data)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -46,4 +48,9 @@ dependencies {
 
     ksp(libs.hilt.compiler)          // Hilt
     implementation(libs.hilt.android)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation (libs.androidx.runtime)
+
+    implementation (libs.androidx.hilt.navigation.compose)
 }

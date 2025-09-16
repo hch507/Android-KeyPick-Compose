@@ -2,6 +2,7 @@ package com.example.network.retrofit
 
 import android.util.Log
 import com.example.network.BlogInfoNetworkDataSource
+import com.example.network.common.MY_BLOG
 import com.example.network.model.LoginOrCntDto
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
@@ -21,16 +22,13 @@ private interface RetrofitBlogInfoNetworkApi{
     ):Response<LoginOrCntDto>
 }
 
-
-private const val BLOG_INFO_BASE_URL = "https://blog.naver.com/"
-
 @Singleton
 class RetrofitBlogInfoNetwork @Inject constructor(
 ) : BlogInfoNetworkDataSource {
 
     private val networkApi =
         Retrofit.Builder()
-            .baseUrl(BLOG_INFO_BASE_URL)
+            .baseUrl(MY_BLOG.MY_BASE_URL)
             .addConverterFactory(TikXmlConverterFactory.create(TikXml.Builder().exceptionOnUnreadXml(false).build()))
             .build()
             .create(RetrofitBlogInfoNetworkApi::class.java)

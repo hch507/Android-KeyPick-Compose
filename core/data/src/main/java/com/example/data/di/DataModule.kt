@@ -1,6 +1,8 @@
 package com.example.data.di
 
+import com.example.data.repository.KeywordRepository
 import com.example.data.repository.LoginOrCntRepository
+import com.example.data.repository.impl.KeywordRepositoryImpl
 import com.example.data.repository.impl.LoginOrCntRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -15,4 +17,9 @@ abstract class DataModule {
     abstract fun bindLoginOrCntRepository(
         loginOrCntRepository: LoginOrCntRepositoryImpl
     ) : LoginOrCntRepository
+
+    @Binds
+    abstract fun bindKeywordRepository(
+        keywordRepository: KeywordRepositoryImpl
+    ) : KeywordRepository
 }
