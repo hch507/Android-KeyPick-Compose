@@ -83,8 +83,20 @@ class RetrofitNaverNetwork @Inject constructor(
         }
     }
 
-    override suspend fun getRecentMonthlySearchVolume() {
-        TODO("Not yet implemented")
+    override suspend fun fetchBlogPostCountAndTrend(keyword : String) : BlogSearchDto{
+        val response = networkApi.fetchBlogSearch(
+            client_id = BLOG_API.CLIENT_ID,
+            client_secret = BLOG_API.CLIENT_PW,
+            display = 100, searhTerm = keyword,
+            sort = BLOG_API.SORT
+        )
+        return if (response.isSuccessful) {
+            Log.d("test_repository", "fetchBlogPostCountAndTrend: ${response.body()!!.total}")
+            response.body() ?: throw Exception("Response body is null")
+
+        } else {
+            throw Exception("Network call failed with code: ${response.code()}")
+        }
     }
 
     override suspend fun fetchBlogPostRank(keyword : String) : BlogSearchDto {
@@ -95,7 +107,7 @@ class RetrofitNaverNetwork @Inject constructor(
             sort = BLOG_API.SORT2
         )
         return if (response.isSuccessful) {
-            Log.d("test_repository", "fetchMonthlySearch: ${response.body()}")
+            Log.d("test_repository", "fetchBlogPostRank: ${response.body()}")
             response.body() ?: throw Exception("Response body is null")
 
         } else {

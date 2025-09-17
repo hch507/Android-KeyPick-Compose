@@ -38,6 +38,7 @@ internal fun KeywordInfoRoute(
     viewModel: KeywordInfoViewModel = hiltViewModel()
 ) {
     viewModel.fetchMonthlySearchData("아이패드")
+    viewModel.fetchBlogPostCountAndTrendData("아이패드")
     val pagerState = rememberPagerState(pageCount = {
         2
     })

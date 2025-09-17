@@ -21,4 +21,9 @@ class KeywordInfoViewModel @Inject constructor(
             keywordRepository.fetchMonthlySearch(keyword = keyword)
         }
     }
+    fun fetchBlogPostCountAndTrendData(keyword : String){
+        viewModelScope.launch {
+            keywordRepository.fetchBlogPostCountAndTrend(keyword = keyword)
+        }
+    }
 }

@@ -7,7 +7,7 @@ interface NaverNetworkDataSource {
 
     suspend fun fetchMonthlySearchVolume(keyword : String) : MonthlySearchDto
 
-    suspend fun getRecentMonthlySearchVolume()
+    suspend fun fetchBlogPostCountAndTrend(keyword : String) : BlogSearchDto
 
     suspend fun fetchBlogPostRank(keyword: String) : BlogSearchDto
 }
