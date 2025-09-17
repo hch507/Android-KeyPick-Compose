@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.keypick.android.library)
     alias(libs.plugins.ksp)
     id ("kotlin-kapt")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {

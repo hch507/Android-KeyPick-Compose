@@ -7,6 +7,7 @@ import com.example.network.NaverNetworkDataSource
 import com.example.network.common.API
 import com.example.network.common.SEARCH_API
 import com.example.network.model.BlogKeywordParam
+import com.example.network.model.KeywordGroup
 import com.example.network.model.MonthlySearchDto
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -52,12 +53,19 @@ class RetrofitNaverNetwork @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun fetchMonthlySearchVolume(keyword : String) : MonthlySearchDto {
+
         val keywordGroups = listOf(
-            mapOf("groupName" to keyword, "keywords" to listOf(keyword))
+            KeywordGroup(
+                groupName = keyword,
+                keywords = listOf(keyword)
+            )
         )
+
         val request = BlogKeywordParam(
-            SEARCH_API.START_DATE, SEARCH_API.END_DATE, SEARCH_API.TIMEUNIT,
-            keywordGroups as List<Map<String, String?>>
+            startDate = SEARCH_API.START_DATE,
+            endDate = SEARCH_API.END_DATE,
+            timeUnit = SEARCH_API.TIMEUNIT,
+            keywordGroups = keywordGroups
         )
         val response = networkApi.fetchMonthlySearch(
             API.Content_Type,
