@@ -13,4 +13,9 @@ class KeywordRepositoryImpl @Inject constructor(
         Log.d("test_repository", "fetchMonthlySearch:")
     }
 
+    override suspend fun fetchBlogPostRank(keyword: String) {
+        val result = naverNetworkDataSource.fetchBlogPostRank(keyword= keyword)
+        Log.d("test_repository", "fetchBlogPostRank:")
+    }
+
 }

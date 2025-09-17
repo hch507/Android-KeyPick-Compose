@@ -5,8 +5,10 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.network.NaverNetworkDataSource
 import com.example.network.common.API
+import com.example.network.common.BLOG_API
 import com.example.network.common.SEARCH_API
 import com.example.network.model.BlogKeywordParam
+import com.example.network.model.BlogSearchDto
 import com.example.network.model.KeywordGroup
 import com.example.network.model.MonthlySearchDto
 import retrofit2.Response
@@ -32,13 +34,13 @@ private interface RetrofitNaverNetworkApi{
 
 
     @GET("search/blog.json")
-    suspend fun getBlogTotal(
+    suspend fun fetchBlogSearch(
         @Header("X-Naver-Client-Id") client_id: String,
         @Header("X-Naver-Client-Secret") client_secret: String,
         @Query("display") display: Int,
         @Query("query") searhTerm: String?,
         @Query("sort") sort: String
-    )
+    ) : Response<BlogSearchDto>
 }
 
 
@@ -85,8 +87,20 @@ class RetrofitNaverNetwork @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getBlogPostRank() {
-        TODO("Not yet implemented")
+    override suspend fun fetchBlogPostRank(keyword : String) : BlogSearchDto {
+        val response = networkApi.fetchBlogSearch(
+            client_id = BLOG_API.CLIENT_ID,
+            client_secret = BLOG_API.CLIENT_PW,
+            display = 100, searhTerm = keyword,
+            sort = BLOG_API.SORT2
+        )
+        return if (response.isSuccessful) {
+            Log.d("test_repository", "fetchMonthlySearch: ${response.body()}")
+            response.body() ?: throw Exception("Response body is null")
+
+        } else {
+            throw Exception("Network call failed with code: ${response.code()}")
+        }
     }
 
 }

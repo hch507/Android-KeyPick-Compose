@@ -1,5 +1,6 @@
 package com.example.network
 
+import com.example.network.model.BlogSearchDto
 import com.example.network.model.MonthlySearchDto
 
 interface NaverNetworkDataSource {
@@ -8,5 +9,5 @@ interface NaverNetworkDataSource {
 
     suspend fun getRecentMonthlySearchVolume()
 
-    suspend fun getBlogPostRank()
+    suspend fun fetchBlogPostRank(keyword: String) : BlogSearchDto
 }
