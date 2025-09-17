@@ -1,5 +1,6 @@
 package com.example.network.model
 
+import com.example.network.utils.StringAsAnySerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -10,13 +11,13 @@ data class RelKeywordDto(
 
 @Serializable
 data class Keyword(
-    @SerialName("compIdx") val compIdx: String,
-    @SerialName("monthlyAveMobileClkCnt") val monthlyAveMobileClkCnt: Double,
-    @SerialName("monthlyAveMobileCtr") val monthlyAveMobileCtr: Double,
-    @SerialName("monthlyAvePcClkCnt") val monthlyAvePcClkCnt: Double,
-    @SerialName("monthlyAvePcCtr") val monthlyAvePcCtr: Double,
-    @SerialName("monthlyMobileQcCnt") val monthlyMobileQcCnt: String,
-    @SerialName("monthlyPcQcCnt") val monthlyPcQcCnt: Double,
-    @SerialName("plAvgDepth") val plAvgDepth: Int,
-    @SerialName("relKeyword") val relKeyword: String
+    @SerialName("compIdx") @Serializable(with = StringAsAnySerializer::class) val compIdx: String,
+    @SerialName("monthlyAveMobileClkCnt") @Serializable(with = StringAsAnySerializer::class) val monthlyAveMobileClkCnt: String,
+    @SerialName("monthlyAveMobileCtr")  @Serializable(with = StringAsAnySerializer::class)val monthlyAveMobileCtr: String,
+    @SerialName("monthlyAvePcClkCnt")  @Serializable(with = StringAsAnySerializer::class)val monthlyAvePcClkCnt: String,
+    @SerialName("monthlyAvePcCtr") @Serializable(with = StringAsAnySerializer::class) val monthlyAvePcCtr: String,
+    @SerialName("monthlyMobileQcCnt")  @Serializable(with = StringAsAnySerializer::class)val monthlyMobileQcCnt: String,
+    @SerialName("monthlyPcQcCnt")  @Serializable(with = StringAsAnySerializer::class)val monthlyPcQcCnt: String,
+    @SerialName("plAvgDepth")  @Serializable(with = StringAsAnySerializer::class)val plAvgDepth: String,
+    @SerialName("relKeyword")  @Serializable(with = StringAsAnySerializer::class)val relKeyword: String
 )
