@@ -2,8 +2,10 @@ package com.example.network.di
 
 import com.example.network.BlogInfoNetworkDataSource
 import com.example.network.NaverNetworkDataSource
+import com.example.network.NaverRelNetworkDataSource
 import com.example.network.retrofit.RetrofitBlogInfoNetwork
 import com.example.network.retrofit.RetrofitNaverNetwork
+import com.example.network.retrofit.RetrofitNaverRelNetwork
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -24,4 +26,9 @@ abstract class NetworkModule {
     abstract fun bindNaverNetworkDataSource(
         impl: RetrofitNaverNetwork
     ): NaverNetworkDataSource
+
+    @Binds
+    abstract fun bindNaverRelNetworkDataSource(
+        impl: RetrofitNaverRelNetwork
+    ): NaverRelNetworkDataSource
 }

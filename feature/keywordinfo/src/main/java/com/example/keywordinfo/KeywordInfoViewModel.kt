@@ -12,18 +12,26 @@ import javax.inject.Inject
 @HiltViewModel
 class KeywordInfoViewModel @Inject constructor(
     private val keywordRepository: KeywordRepository
-) : ViewModel(){
-    private val _monthlySearchResult = MutableStateFlow<MonthlySearchUiState<String>>(MonthlySearchUiState.Loading)
+) : ViewModel() {
+    private val _monthlySearchResult =
+        MutableStateFlow<MonthlySearchUiState<String>>(MonthlySearchUiState.Loading)
     val monthlySearchResult = _monthlySearchResult.asStateFlow()
 
-    fun fetchMonthlySearchData(keyword : String){
+    fun fetchMonthlySearchData(keyword: String) {
         viewModelScope.launch {
             keywordRepository.fetchMonthlySearch(keyword = keyword)
         }
     }
-    fun fetchBlogPostCountAndTrendData(keyword : String){
+
+    fun fetchBlogPostCountAndTrendData(keyword: String) {
         viewModelScope.launch {
             keywordRepository.fetchBlogPostCountAndTrend(keyword = keyword)
+        }
+    }
+
+    fun fetchKeywordRelData(keyword: String) {
+        viewModelScope.launch {
+            keywordRepository.fetchKeywordRel(keyword = keyword)
         }
     }
 }
