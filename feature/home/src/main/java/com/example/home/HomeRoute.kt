@@ -61,7 +61,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            HomeNavHost(navController)
+            HomeNavHost(navController,onMoveToSearchClick)
         }
     }
 }
