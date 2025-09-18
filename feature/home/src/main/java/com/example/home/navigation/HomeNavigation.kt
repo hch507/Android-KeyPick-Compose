@@ -8,7 +8,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.example.home.HomeRoute
+import com.example.keywordstore.navigation.navigateTopStore
 import com.example.ranking.navigation.navigateToRanking
+import com.example.search.navigation.navigateToSearch
 import com.example.userbloginfo.navigation.navigateToUserBlogInfo
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
@@ -53,6 +55,8 @@ fun navigateToHomeLevelDestination(
     when (homeLevelDestination) {
         HomeLevelDestination.USER_BLOG_INFO -> navController.navigateToUserBlogInfo()
         HomeLevelDestination.RANKING -> navController.navigateToRanking()
+        HomeLevelDestination.SEARCH -> navController.navigateToSearch()
+        HomeLevelDestination.STORE -> navController.navigateTopStore()
 //            INTERESTS -> navController.navigateToInterests(null, topLevelNavOptions)
     }
 

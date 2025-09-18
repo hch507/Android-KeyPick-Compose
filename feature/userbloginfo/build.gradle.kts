@@ -40,4 +40,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.tooling.preview)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation (libs.androidx.runtime)
+
+    implementation (libs.androidx.hilt.navigation.compose)
 }
