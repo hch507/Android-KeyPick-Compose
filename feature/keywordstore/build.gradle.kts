@@ -1,14 +1,11 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.keypick.android.feature)
 }
 
 android {
     namespace = "com.example.keywordstore"
-    compileSdk = 35
 
     defaultConfig {
-        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
