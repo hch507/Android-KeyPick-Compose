@@ -1,16 +1,28 @@
+import java.util.Properties
+
 plugins {
+
     alias(libs.plugins.keypick.android.library)
     alias(libs.plugins.ksp)
     id ("kotlin-kapt")
     alias(libs.plugins.kotlin.serialization)
 }
-
 android {
     namespace = "com.example.network"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        buildConfigField("String", "NAVER_SEARCH_AD_BASE_URL", "\"${localProperty("NAVER_SEARCH_AD_BASE_URL")}\"")
+        buildConfigField("String", "NAVER_SEARCH_AD_API_KEY", "\"${localProperty("NAVER_SEARCH_AD_API_KEY")}\"")
+        buildConfigField("String", "NAVER_SEARCH_AD_CUSTOMER_ID", "\"${localProperty("NAVER_SEARCH_AD_CUSTOMER_ID")}\"")
+        buildConfigField("String", "NAVER_SEARCH_AD_SECRET_KEY", "\"${localProperty("NAVER_SEARCH_AD_SECRET_KEY")}\"")
+        buildConfigField("String", "NAVER_API_BASE_URL", "\"${localProperty("NAVER_API_BASE_URL")}\"")
+        buildConfigField("String", "NAVER_SEARCH_CLINENT_ID", "\"${localProperty("NAVER_SEARCH_CLINENT_ID")}\"")
+        buildConfigField("String", "NAVER_SEARCH_CLIENT_PW", "\"${localProperty("NAVER_SEARCH_CLIENT_PW")}\"")
+        buildConfigField("String", "NAVER_BLOG_CLIENT_ID", "\"${localProperty("NAVER_BLOG_CLIENT_ID")}\"")
+        buildConfigField("String", "NAVER_BLOG_CLIENT_PW", "\"${localProperty("NAVER_BLOG_CLIENT_PW")}\"")
+        buildConfigField("String", "NAVER_MY_BLOG_BASE_URL", "\"${localProperty("NAVER_MY_BLOG_BASE_URL")}\"")
     }
 
     buildTypes {
@@ -22,10 +34,23 @@ android {
             )
         }
     }
+    buildFeatures {
+        buildConfig = true
+    }
     kotlinOptions {
         jvmTarget = "11"
     }
 }
+
+fun localProperty(key: String): String {
+    val properties = Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        properties.load(localPropertiesFile.inputStream())
+    }
+    return properties.getProperty(key) ?: throw GradleException("Property $key is not defined in local.properties")
+}
+
 
 dependencies {
 
