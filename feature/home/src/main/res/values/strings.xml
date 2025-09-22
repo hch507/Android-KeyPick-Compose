@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home_title">HOME</string>
-    <string name="rank_title">RANKING</string>
-    <string name="search_title">SEARCH</string>
-    <string name="store_title">STORE</string>
+    <string name="home_title">홈</string>
+    <string name="rank_title">랭킹</string>
+    <string name="search_title">검색</string>
+    <string name="store_title">보관함</string>
 </resources>

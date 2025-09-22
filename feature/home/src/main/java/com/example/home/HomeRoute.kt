@@ -1,7 +1,10 @@
 package com.example.home
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.NavigationBar
@@ -21,47 +24,69 @@ import androidx.navigation.compose.rememberNavController
 import com.example.home.navigation.HomeLevelDestination
 import com.example.home.navigation.HomeNavHost
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.remember
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import com.example.designsystem.R
 import com.example.home.navigation.isRouteInHierarchy
 import com.example.home.navigation.navigateToHomeLevelDestination
 
 @Composable
 internal fun HomeRoute(
-    onMoveToSearchClick :() -> Unit
+    onMoveToSearchClick: () -> Unit
 ) {
     val navController = rememberNavController()
-    HomeScreen(navController, onMoveToSearchClick)
+
+    val currentBackStack by navController.currentBackStackEntryAsState()
+    val currentDestination = currentBackStack?.destination
+
+    val selectedTab = remember(currentDestination) {
+        HomeLevelDestination.entries.find {
+            currentDestination.isRouteInHierarchy(it.route)
+        } ?: HomeLevelDestination.USER_BLOG_INFO
+    }
+    HomeScreen(navController, onMoveToSearchClick, selectedTab)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    onMoveToSearchClick :() -> Unit
+    onMoveToSearchClick: () -> Unit,
+    selectTab: HomeLevelDestination
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Main") },
+                title = { Text(stringResource(selectTab.titleText)) },
                 colors = TopAppBarDefaults.topAppBarColors(),
                 actions = {
-                    Button(
-                        onClick = onMoveToSearchClick
-                    ) {
-                        Text(text = "search")
-                    }
-                }
-            )
+                    Icon(
+                        painter = painterResource(R.drawable.ic_search_nav),
+                        tint = null,
+                        contentDescription = stringResource(com.example.home.R.string.search_title),
+                        modifier = Modifier.padding(horizontal = 30.dp)
+                    )
+                })
         },
-        bottomBar = {BottomNavigationBar(navController)}
-    ) { paddingValues ->
+        bottomBar = {
+            BottomNavigationBar(
+                navController = navController,
+                selectTab = selectTab
+            )
+        }) { paddingValues ->
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            HomeNavHost(navController,onMoveToSearchClick)
+            HomeNavHost(navController, onMoveToSearchClick)
         }
     }
 }
@@ -69,31 +94,43 @@ fun HomeScreen(
 @Composable
 fun BottomNavigationBar(
     navController: NavHostController,
-    destinations: List<HomeLevelDestination> = HomeLevelDestination.entries
+    destinations: List<HomeLevelDestination> = HomeLevelDestination.entries,
+    selectTab: HomeLevelDestination
 ) {
-    val currentBackStack by navController.currentBackStackEntryAsState()
-    val currentDestinationRoute = currentBackStack?.destination
 
-    NavigationBar {
-        destinations.forEach { destination ->
-
-            val isSelected = currentDestinationRoute
-                .isRouteInHierarchy(destination.route)
-
-            NavigationBarItem(
-                selected = isSelected,
-                onClick = {
-                    navigateToHomeLevelDestination(navController, destination)
-                },
-                icon = {
-                    Box(modifier = Modifier.size(0.dp))
-                },
-                label = {
-                    Text(text = stringResource(destination.titleText))
-                },
-                alwaysShowLabel = true
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
+            .background(Color.Transparent)
+            .border(
+                0.1.dp,
+                MaterialTheme.colorScheme.tertiaryContainer,
+                RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
             )
+    ) {
+        NavigationBar {
+            destinations.forEach { destination ->
+
+                val isSelected = destination == selectTab
+
+                NavigationBarItem(
+                    selected = isSelected, onClick = {
+                        navigateToHomeLevelDestination(navController, destination)
+                    }, icon = {
+                        Icon(
+                            painter = painterResource(id = destination.iconRes),
+                            contentDescription = stringResource(id = destination.titleText),
+                            tint = if (isSelected) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }, label = {
+                        Text(text = stringResource(destination.titleText))
+                    }, alwaysShowLabel = true
+                )
+            }
         }
     }
+
 }
 
