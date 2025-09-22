@@ -27,7 +27,7 @@ data class Data(
     @SerialName("ratio") val ratio: Double
 )
 
-fun MonthlySearchDto.asExternalModel(): List<MonthRatioResource> =
+fun MonthlySearchDto.asExternalBlogInfoModel(): List<MonthRatioResource> =
     results.map {
         MonthRatioResource(
             title = it.title,

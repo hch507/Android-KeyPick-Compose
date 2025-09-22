@@ -2,6 +2,7 @@ package com.example.network.model
 
 import com.keypick.core.model.BlogData
 import com.keypick.core.model.KeywordBlogInfoResource
+import com.keypick.core.model.Rank
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -24,7 +25,7 @@ data class Item(
     @SerialName("title") val title: String
 )
 
-fun BlogSearchDto.asExternalModel(): KeywordBlogInfoResource = KeywordBlogInfoResource(
+fun BlogSearchDto.asExternalBlogInfoModel(): KeywordBlogInfoResource = KeywordBlogInfoResource(
     totalCnt = total,
     blogData = items.map { item ->
         BlogData(
@@ -32,3 +33,10 @@ fun BlogSearchDto.asExternalModel(): KeywordBlogInfoResource = KeywordBlogInfoRe
         )
     }
 )
+
+fun BlogSearchDto.asExternalRankModel(): Rank {
+    val rankdata = items.map {
+        it.bloggerlink
+    }
+    return Rank(blogLink = rankdata )
+}
