@@ -1,5 +1,6 @@
 package com.example.keywordinfo
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.FetchKeywordInfoUsecase
@@ -19,7 +20,11 @@ class KeywordInfoViewModel @Inject constructor(
 
     fun fetchkeywordInfoData(keyword: String) {
         viewModelScope.launch {
-            fetchKeywordInfoUsecase(keyword = keyword)
+            val result =fetchKeywordInfoUsecase(keyword = keyword).collect { result ->
+                Log.d("fetchkeywordInfoData", "결과: $result")
+            }
+
+
         }
     }
 
