@@ -4,15 +4,21 @@ import android.util.Log
 import com.example.data.repository.KeywordRepository
 import com.example.network.NaverNetworkDataSource
 import com.example.network.NaverRelNetworkDataSource
+import com.example.network.model.asExternalModel
+import com.keypick.core.model.KeywordBlogInfoResource
+import com.keypick.core.model.MonthRatioResource
+import com.keypick.core.model.RelKewordResource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class KeywordRepositoryImpl @Inject constructor(
     private val naverNetworkDataSource: NaverNetworkDataSource,
     private val naverRelNetworkDataSource: NaverRelNetworkDataSource
 ) : KeywordRepository {
-    override suspend fun fetchMonthlySearch(keyword: String) {
+    override suspend fun fetchMonthlySearch(keyword: String) : Flow<List<MonthRatioResource>> = flow {
         val result = naverNetworkDataSource.fetchMonthlySearchVolume(keyword = keyword)
-        Log.d("test_repository", "fetchMonthlySearch:")
+        emit(result.asExternalModel())
     }
 
     override suspend fun fetchBlogPostRank(keyword: String) {
@@ -20,14 +26,15 @@ class KeywordRepositoryImpl @Inject constructor(
         Log.d("test_repository", "fetchBlogPostRank:")
     }
 
-    override suspend fun fetchBlogPostCountAndTrend(keyword: String) {
+    override suspend fun fetchBlogPostCountAndTrend(keyword: String) :Flow<KeywordBlogInfoResource> = flow{
         val result = naverNetworkDataSource.fetchBlogPostCountAndTrend(keyword = keyword)
-        Log.d("test_repository", "fetchBlogPostCountAndTrend:")
+        emit(result.asExternalModel())
     }
 
-    override suspend fun fetchKeywordRel(keyword: String) {
-        val result = naverRelNetworkDataSource.fetchKeywordRel(keyword = keyword)
-        Log.d("test_repository", "fetchKeywordRel:")
-    }
+    override suspend fun fetchKeywordRel(keyword: String): Flow<List<RelKewordResource>> = flow {
+            val result = naverRelNetworkDataSource.fetchKeywordRel(keyword = keyword)
+            emit(result.asExternalModel())
+        }
+
 
 }

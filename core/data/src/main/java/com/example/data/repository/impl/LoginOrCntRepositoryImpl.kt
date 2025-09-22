@@ -9,8 +9,8 @@ import javax.inject.Inject
 class LoginOrCntRepositoryImpl @Inject constructor(
     private val blogInfoNetworkDataSource : BlogInfoNetworkDataSource
 ): LoginOrCntRepository{
-    override suspend fun getUserBlogData(blogId: String) {
-        val result= blogInfoNetworkDataSource.getUserBlogInfo(blogId = blogId)
+    override suspend fun getUserBlogData(userBlogId: String) {
+        val result= blogInfoNetworkDataSource.getUserBlogInfo(blogId = userBlogId)
         Log.d("test_repository", "getUserBlogData: ${result.visitorcntList.get(0)}")
     }
 

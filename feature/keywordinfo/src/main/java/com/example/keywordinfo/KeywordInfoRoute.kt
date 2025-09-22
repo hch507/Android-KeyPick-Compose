@@ -37,9 +37,8 @@ import kotlinx.coroutines.launch
 internal fun KeywordInfoRoute(
     viewModel: KeywordInfoViewModel = hiltViewModel()
 ) {
-    viewModel.fetchMonthlySearchData("아이패드")
-    viewModel.fetchBlogPostCountAndTrendData("아이패드")
-    viewModel.fetchKeywordRelData("아이패드")
+    viewModel.fetchkeywordInfoData("아이패드")
+
     val pagerState = rememberPagerState(pageCount = {
         2
     })
