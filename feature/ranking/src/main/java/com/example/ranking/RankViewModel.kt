@@ -1,5 +1,6 @@
 package com.example.ranking
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.repository.KeywordRepository
@@ -15,7 +16,10 @@ class RankViewModel @Inject constructor(
 
     fun fetchBlogRankData(keyword : String){
         viewModelScope.launch {
-            keywordRepository.fetchBlogPostRank(keyword = keyword)
+            val result = keywordRepository.fetchBlogPostRank(keyword = keyword).collect{ result ->
+                Log.d("fetchBlogRankData", "결과: $result")
+            }
+
         }
     }
 }

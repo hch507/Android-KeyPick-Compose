@@ -24,7 +24,7 @@ data class Keyword(
 )
 
 
-fun RelKeywordDto.asExternalModel(): List<RelKewordResource> =
+fun RelKeywordDto.asExternalBlogInfoModel(): List<RelKewordResource> =
     keywordList.map {
         RelKewordResource(
             relKeyword = it.relKeyword,
