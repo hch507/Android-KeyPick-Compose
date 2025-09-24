@@ -31,7 +31,7 @@ android {
 }
 
 dependencies {
-
+    implementation(projects.core.designsystem)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -40,6 +40,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.tooling.preview)
+    debugImplementation(libs.androidx.ui.tooling.v161)
     implementation(platform(libs.androidx.compose.bom))
     implementation (libs.androidx.runtime)
 
