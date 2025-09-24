@@ -8,18 +8,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.repository.LoginOrCntRepository
 import com.example.domain.FetchLoginOrCntUsecase
+import com.keypick.core.model.UserBlogCntData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-//    private val loginOrCntRepository: LoginOrCntRepository
     private val fetchLoginOrCntUsecase: FetchLoginOrCntUsecase
 ) : ViewModel(){
-    private val _blogIdOrCntResult = MutableStateFlow<LoginUiState<String>>(LoginUiState.Loading)
+    private val _blogIdOrCntResult = MutableStateFlow<LoginUiState<UserBlogCntData>>(LoginUiState.Loading)
     val blogIdOrCntResult = _blogIdOrCntResult.asStateFlow()
     var blogId by mutableStateOf("")
         private set
@@ -30,10 +34,12 @@ class LoginViewModel @Inject constructor(
     }
 
     fun getUserBlogData(userId : String){
-        Log.d("getUserBlogData", "getUserBlogData: ")
+
         viewModelScope.launch {
             fetchLoginOrCntUsecase.invoke(userId)
+                .onStart { _blogIdOrCntResult.update { LoginUiState.Loading }  }
+                .catch { _blogIdOrCntResult.update { LoginUiState.Error } }
+                .collectLatest { value -> _blogIdOrCntResult.value = LoginUiState.Success(value)}
         }
     }
-
 }
