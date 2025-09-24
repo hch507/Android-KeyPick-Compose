@@ -1,13 +1,16 @@
 package com.example.userbloginfo
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -102,18 +105,16 @@ fun UserBlogInfoScreen(
 
 @Composable
 fun RecomandKeywordCard(){
-    Box(
-        modifier= Modifier
-            .shadow(4.dp, shape = RoundedCornerShape(20.dp))
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(20.dp)
-            )
-            .padding(16.dp)
-            .border(width = 2.dp, color = Color.Blue)
+    Surface(
+        color = Color.White,
+        shape = RoundedCornerShape(20.dp),
+        shadowElevation = 4.dp,
+        border = BorderStroke(2.dp, Color.Blue),
     ){
         Column(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
         ) {
 
             Text(
@@ -149,7 +150,7 @@ fun RecomandButton(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(30.dp)
+            .height(25.dp)
             .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(20.dp))
     ) {
         Button(
@@ -157,14 +158,14 @@ fun RecomandButton(
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent // 배경 없애서 겹치기 가능하게
             ),
-            elevation = null,
-            modifier = Modifier
-                .fillMaxSize()
+            contentPadding = PaddingValues(0.dp), // 내부 여백 제거
+            modifier = Modifier.defaultMinSize(1.dp)
         ) {
             Text(
                 text = text,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
+                fontSize = 10.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -173,7 +174,7 @@ fun RecomandButton(
         Box(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
-                .padding(end = 16.dp)
+                .padding(end = 10.dp)
         ) {
             icon()
         }
@@ -309,7 +310,13 @@ fun BlogProfile() {
 
     }
 }
-
+@Preview(showBackground = true)
+@Composable
+fun RecomandKeywordCardPreview(){
+    KeypickComposeTheme {
+        RecomandKeywordCard()
+    }
+}
 @Preview(showBackground = true)
 @Composable
 fun BlogProfilePreview() {
