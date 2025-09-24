@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.keypick.android.library)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -40,4 +41,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.androidx.datastore.preferences)
+
+    ksp(libs.hilt.compiler)          // Hilt 컴파일러 (ksp용)
+    implementation(libs.hilt.android)
 }
