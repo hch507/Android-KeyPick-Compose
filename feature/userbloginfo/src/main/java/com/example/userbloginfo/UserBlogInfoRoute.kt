@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.theme.KeypickComposeTheme
+import com.example.userbloginfo.chart.BlogVisitorChart
 import com.keypick.core.model.UserBlogCntData
 
 @Composable
@@ -59,7 +60,7 @@ internal fun UserBlogInfoRoute(
 fun UserBlogInfoScreen(
     blogCntUiState: BlogCntUiState<UserBlogCntData>
 ) {
-    when(blogCntUiState){
+    when (blogCntUiState) {
         BlogCntUiState.Error -> {}
         BlogCntUiState.Loading -> {}
         is BlogCntUiState.Success<*> -> {
@@ -68,6 +69,7 @@ fun UserBlogInfoScreen(
     }
 
 }
+
 @Composable
 fun UserBlogInfoContent(data: UserBlogCntData) {
     Log.d("UserBlogInfoContent", "UserBlogInfoContent: ${data} ")
@@ -124,13 +126,13 @@ fun UserBlogInfoContent(data: UserBlogCntData) {
 }
 
 @Composable
-fun RecomandKeywordCard(){
+fun RecomandKeywordCard() {
     Surface(
         color = Color.White,
         shape = RoundedCornerShape(20.dp),
         shadowElevation = 4.dp,
         border = BorderStroke(2.dp, Color.Blue),
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -149,8 +151,8 @@ fun RecomandKeywordCard(){
             Spacer(Modifier.height(7.dp))
             RecomandButton(
                 text = "추천 키워드",
-                onClick = {null},
-            ){
+                onClick = { null },
+            ) {
                 Icon(
                     painter = painterResource(id = com.example.designsystem.R.drawable.ic_logout),
                     contentDescription = "Posts",
@@ -161,6 +163,7 @@ fun RecomandKeywordCard(){
         }
     }
 }
+
 @Composable
 fun RecomandButton(
     text: String,
@@ -200,26 +203,52 @@ fun RecomandButton(
         }
     }
 }
+
 @Composable
 fun BlogInfoBody() {
     Column {
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            BlogInfoCard(modifier = Modifier.weight(1f), data = "1234", descrption = "오늘 방문자", icon = com.example.designsystem.R.drawable.ic_today_visitor)
+            BlogInfoCard(
+                modifier = Modifier.weight(1f),
+                data = "1234",
+                descrption = "오늘 방문자",
+                icon = com.example.designsystem.R.drawable.ic_today_visitor
+            )
             Spacer(Modifier.width(10.dp))
-            BlogInfoCard(modifier = Modifier.weight(1f), data = "185+", descrption = "전날 대비", icon = com.example.designsystem.R.drawable.ic_gap)
+            BlogInfoCard(
+                modifier = Modifier.weight(1f),
+                data = "185+",
+                descrption = "전날 대비",
+                icon = com.example.designsystem.R.drawable.ic_gap
+            )
         }
         Spacer(Modifier.height(10.dp))
-        Box(modifier= Modifier
-            .fillMaxWidth()
-            .height(300.dp)
-            .shadow(4.dp, shape = RoundedCornerShape(20.dp))
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(20.dp)
-            )
-            .padding(16.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(250.dp)
+                .shadow(4.dp, shape = RoundedCornerShape(20.dp))
+                .background(
+                    color = Color.White,
+                    shape = RoundedCornerShape(20.dp)
+                )
+                .padding(16.dp)
+        ){
+            Column() {
+                Text(
+                    "최근 5일 방문자 분석",
+                    color = Color.Gray,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+                BlogVisitorChart(
+                    visitors = listOf(950f, 800f, 1100f, 1200f, 1300f),
+                    labels = listOf("4일 전", "3일 전", "2일 전", "1일 전", "오늘")
+                )
+            }
+        }
 
     }
 
@@ -227,20 +256,20 @@ fun BlogInfoBody() {
 
 @Composable
 fun BlogInfoCard(
-    modifier: Modifier =Modifier,
-    data : String ,
-    descrption : String,
-    @DrawableRes icon : Int
+    modifier: Modifier = Modifier,
+    data: String,
+    descrption: String,
+    @DrawableRes icon: Int
 ) {
     Box(
-        modifier= modifier
+        modifier = modifier
             .shadow(4.dp, shape = RoundedCornerShape(20.dp))
             .background(
                 color = Color.White,
                 shape = RoundedCornerShape(20.dp)
             )
             .padding(16.dp)
-    ){
+    ) {
         Column {
             Icon(
                 painter = painterResource(id = icon),
@@ -263,11 +292,9 @@ fun BlogInfoCard(
 }
 
 
-
-
 @Composable
 fun BlogProfile(
-    blogId : String
+    blogId: String
 ) {
     Box(
         modifier = Modifier
@@ -334,13 +361,15 @@ fun BlogProfile(
 
     }
 }
+
 @Preview(showBackground = true)
 @Composable
-fun RecomandKeywordCardPreview(){
+fun RecomandKeywordCardPreview() {
     KeypickComposeTheme {
         RecomandKeywordCard()
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun BlogProfilePreview() {
@@ -351,22 +380,27 @@ fun BlogProfilePreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun BlogInfoScreenPreview(){
+fun BlogInfoScreenPreview() {
     KeypickComposeTheme {
-        UserBlogInfoScreen(
-            blogCntUiState = BlogCntUiState.Loading
+        UserBlogInfoContent(
+            data = UserBlogCntData(
+                blogId = "test",
+                visitorcntList = listOf(
+
+                )
+            )
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun BlogInfoCardPreview(){
+fun BlogInfoCardPreview() {
     KeypickComposeTheme {
-       BlogInfoCard(
-           data = "1234",
-           descrption ="오늘 방문자" ,
-           icon = com.example.designsystem.R.drawable.ic_store_nav
-       )
+        BlogInfoCard(
+            data = "1234",
+            descrption = "오늘 방문자",
+            icon = com.example.designsystem.R.drawable.ic_store_nav
+        )
     }
 }
