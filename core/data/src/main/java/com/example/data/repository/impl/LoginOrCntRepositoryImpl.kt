@@ -14,10 +14,15 @@ class LoginOrCntRepositoryImpl @Inject constructor(
     private val blogInfoNetworkDataSource: BlogInfoNetworkDataSource,
     private val userBlogPreferencesDataSource: BlogPreferencesDataSource
 ) : LoginOrCntRepository {
-    override suspend fun getUserBlogData(userBlogId: String): Flow<UserBlogCntData> = flow {
+    override fun fetchUserBlogData(): Flow<UserBlogCntData> = flow {
+        val userBlogId = userBlogPreferencesDataSource.getBlogId()
         val result = blogInfoNetworkDataSource.getUserBlogInfo(blogId = userBlogId)
-        userBlogPreferencesDataSource.saveBlogId(userBlogId)
-        emit(result.asExternalModel())
+        emit(result.asExternalModel(userBlogId))
     }
 
+    override suspend fun hasBlogId(userBlogId: String): Flow<Boolean> = flow {
+        val result = blogInfoNetworkDataSource.getUserBlogInfo(blogId = userBlogId)
+        userBlogPreferencesDataSource.saveBlogId(userBlogId)
+        emit(true)
+    }
 }

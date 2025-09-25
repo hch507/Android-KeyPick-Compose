@@ -16,7 +16,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.keypick.core.model.UserBlogCntData
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 @Composable
@@ -35,11 +34,12 @@ internal fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val blogId = viewModel.blogId
-    val loginUiState by viewModel.blogIdOrCntResult.collectAsState()
+    val loginUiState by viewModel.blogIdResult.collectAsStateWithLifecycle()
+
     LoginScreen(
         blogId = blogId,
         onLoginClick = {
-            viewModel.getUserBlogData(blogId)
+            viewModel.checkBlogIdExists(blogId)
 
         },
         onNonLoginClick = onNonLoginClick,
@@ -54,7 +54,7 @@ internal fun LoginRoute(
 @Composable
 fun LoginScreen(
     blogId: String,
-    loginUiState: LoginUiState<UserBlogCntData>,
+    loginUiState: LoginUiState<Boolean>,
     onLoginClick: () -> Unit = {},
     onNonLoginClick: () -> Unit = {},
     onBlogIdChanged: (String) -> Unit,

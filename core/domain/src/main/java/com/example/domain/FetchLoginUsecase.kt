@@ -1,13 +1,11 @@
 package com.example.domain
 
 import com.example.data.repository.LoginOrCntRepository
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class FetchLoginOrCntUsecase @Inject constructor(
+class FetchLoginUsecase @Inject constructor(
     private val loginOnCntRepository: LoginOrCntRepository
 ) {
     operator suspend fun invoke(blogId: String) =
-        loginOnCntRepository.getUserBlogData(blogId)
-
+        loginOnCntRepository.hasBlogId(blogId)
 }
