@@ -1,5 +1,6 @@
 package com.example.userbloginfo
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -26,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,20 +39,38 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.theme.KeypickComposeTheme
+import com.keypick.core.model.UserBlogCntData
 
 @Composable
 internal fun UserBlogInfoRoute(
-
+    viewModel: UserBlogInfoViewModel = hiltViewModel()
 ) {
-    UserBlogInfoScreen()
+    val blogCntUiState by viewModel.userBlogCntState.collectAsStateWithLifecycle()
+    UserBlogInfoScreen(
+        blogCntUiState = blogCntUiState
+    )
 }
 
 
 @Composable
 fun UserBlogInfoScreen(
-
+    blogCntUiState: BlogCntUiState<UserBlogCntData>
 ) {
+    when(blogCntUiState){
+        BlogCntUiState.Error -> {}
+        BlogCntUiState.Loading -> {}
+        is BlogCntUiState.Success<*> -> {
+            blogCntUiState._data?.let { UserBlogInfoContent(data = it) }
+        }
+    }
+
+}
+@Composable
+fun UserBlogInfoContent(data: UserBlogCntData) {
+    Log.d("UserBlogInfoContent", "UserBlogInfoContent: ${data} ")
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -59,7 +79,7 @@ fun UserBlogInfoScreen(
 
         LazyColumn {
             item {
-                BlogProfile()
+                BlogProfile(blogId = data.blogId)
             }
 
             item {
@@ -71,7 +91,7 @@ fun UserBlogInfoScreen(
             }
 
             item {
-                Text("ddoaak님의 블로그 현황을 알려드릴게요.", fontSize = 15.sp)
+                Text("${data.blogId}님의 블로그 현황을 알려드릴게요.", fontSize = 15.sp)
             }
 
             item {
@@ -83,7 +103,7 @@ fun UserBlogInfoScreen(
                     Text(
                         "2025.08.08",
                         fontSize = 15.sp,
-                        modifier = Modifier.align(Alignment.CenterEnd) // Box 내부 정렬
+                        modifier = Modifier.align(Alignment.CenterEnd)
                     )
                 }
             }
@@ -96,7 +116,7 @@ fun UserBlogInfoScreen(
                 Spacer(Modifier.height(15.dp))
             }
 
-            item{
+            item {
                 RecomandKeywordCard()
             }
         }
@@ -246,7 +266,9 @@ fun BlogInfoCard(
 
 
 @Composable
-fun BlogProfile() {
+fun BlogProfile(
+    blogId : String
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -262,7 +284,9 @@ fun BlogProfile() {
             painter = painterResource(id = com.example.designsystem.R.drawable.ic_logout),
             contentDescription = "logout",
             tint = Color(0xFF333366),
-            modifier = Modifier.size(20.dp).align(Alignment.TopEnd)
+            modifier = Modifier
+                .size(20.dp)
+                .align(Alignment.TopEnd)
         )
         Row() {
             Box(
@@ -277,7 +301,7 @@ fun BlogProfile() {
             Spacer(Modifier.width(10.dp))
             Column {
                 Text(
-                    text = "ddoaak님의 블로그",
+                    text = "${blogId}님의 블로그",
                     fontSize = 20.sp
                 )
                 Surface(
@@ -321,7 +345,7 @@ fun RecomandKeywordCardPreview(){
 @Composable
 fun BlogProfilePreview() {
     KeypickComposeTheme {
-        BlogProfile()
+        BlogProfile("ddoaak")
     }
 }
 
@@ -329,7 +353,9 @@ fun BlogProfilePreview() {
 @Composable
 fun BlogInfoScreenPreview(){
     KeypickComposeTheme {
-        UserBlogInfoScreen()
+        UserBlogInfoScreen(
+            blogCntUiState = BlogCntUiState.Loading
+        )
     }
 }
 

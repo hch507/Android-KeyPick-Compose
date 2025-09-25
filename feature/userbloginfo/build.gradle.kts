@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.keypick.android.feature)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -32,6 +34,8 @@ android {
 
 dependencies {
     implementation(projects.core.designsystem)
+    implementation(projects.core.domain)
+    implementation(projects.core.model)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -45,4 +49,7 @@ dependencies {
     implementation (libs.androidx.runtime)
 
     implementation (libs.androidx.hilt.navigation.compose)
+
+    ksp(libs.hilt.compiler)          // Hilt 컴파일러 (ksp용)
+    implementation(libs.hilt.android)
 }

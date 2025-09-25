@@ -22,8 +22,9 @@ data class VisitorCnt(
 )
 
 
-fun LoginOrCntDto.asExternalModel() : UserBlogCntData{
+fun LoginOrCntDto.asExternalModel(blogId : String) : UserBlogCntData{
     return UserBlogCntData(
+        blogId= blogId,
         visitorcntList = visitorcntList.map {
             VisitorCntData(
                 id = it.id,
