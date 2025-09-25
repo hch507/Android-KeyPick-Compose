@@ -6,21 +6,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.repository.LoginOrCntRepository
-import com.example.domain.FetchLoginOrCntUsecase
+import com.example.domain.FetchLoginUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-//    private val loginOrCntRepository: LoginOrCntRepository
-    private val fetchLoginOrCntUsecase: FetchLoginOrCntUsecase
+    private val fetchLoginUsecase: FetchLoginUsecase
 ) : ViewModel(){
-    private val _blogIdOrCntResult = MutableStateFlow<LoginUiState<String>>(LoginUiState.Loading)
-    val blogIdOrCntResult = _blogIdOrCntResult.asStateFlow()
+    private val _blogIdResult = MutableStateFlow<LoginUiState<Boolean>>(LoginUiState.Loading)
+    val blogIdResult = _blogIdResult.asStateFlow()
     var blogId by mutableStateOf("")
         private set
 
@@ -29,11 +31,13 @@ class LoginViewModel @Inject constructor(
         Log.d("LoginViewModel", "onBlogIdChanged: ")
     }
 
-    fun getUserBlogData(userId : String){
-        Log.d("getUserBlogData", "getUserBlogData: ")
+    fun checkBlogIdExists(userId : String){
+
         viewModelScope.launch {
-            fetchLoginOrCntUsecase.invoke(userId)
+            fetchLoginUsecase.invoke(userId)
+                .onStart { _blogIdResult.update { LoginUiState.Loading }  }
+                .catch { _blogIdResult.update { LoginUiState.Error } }
+                .collectLatest { value -> _blogIdResult.value = LoginUiState.Success(value)}
         }
     }
-
 }

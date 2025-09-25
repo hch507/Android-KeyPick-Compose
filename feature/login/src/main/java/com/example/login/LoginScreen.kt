@@ -1,5 +1,6 @@
 package com.example.login
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
@@ -21,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 
 @Composable
@@ -30,22 +34,27 @@ internal fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val blogId = viewModel.blogId
+    val loginUiState by viewModel.blogIdResult.collectAsStateWithLifecycle()
+
     LoginScreen(
         blogId = blogId,
         onLoginClick = {
-            viewModel.getUserBlogData(blogId)
+            viewModel.checkBlogIdExists(blogId)
+
         },
         onNonLoginClick = onNonLoginClick,
         onBlogIdChanged = {
             viewModel.onBlogIdChanged(it)
         },
-        moveToMain = moveToMain
-        )
+        moveToMain = moveToMain,
+        loginUiState = loginUiState
+    )
 }
 
 @Composable
 fun LoginScreen(
     blogId: String,
+    loginUiState: LoginUiState<Boolean>,
     onLoginClick: () -> Unit = {},
     onNonLoginClick: () -> Unit = {},
     onBlogIdChanged: (String) -> Unit,
@@ -65,8 +74,23 @@ fun LoginScreen(
             LoginBottom(
                 onLoginClick = onLoginClick,
                 onNonLoginClick = onNonLoginClick,
-                moveToMain= moveToMain
+                moveToMain = moveToMain
             )
+        }
+    }
+
+    when (loginUiState) {
+        is LoginUiState.Loading -> {
+            Log.d("test_LoginUiState", "LoginScreen: Loading")
+        }
+        is LoginUiState.Error -> {
+            Log.d("test_LoginUiState", "LoginScreen: Error")
+        }
+        is LoginUiState.Success -> {
+            Log.d("test_LoginUiState", "LoginScreen: Success")
+            LaunchedEffect(loginUiState) {
+                moveToMain()
+            }
         }
     }
 }
@@ -82,7 +106,7 @@ fun LoginBottom(
         modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = moveToMain,
+            onClick = onLoginClick,
             colors = ButtonDefaults.buttonColors(
                 contentColor = MaterialTheme.colorScheme.onPrimary,
                 containerColor = MaterialTheme.colorScheme.primary

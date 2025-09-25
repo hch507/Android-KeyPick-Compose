@@ -35,6 +35,11 @@ dependencies {
 
     implementation(projects.feature.userbloginfo)
     implementation(projects.feature.ranking)
+    implementation(projects.feature.search)
+    implementation(projects.feature.keywordstore)
+    implementation(projects.feature.ranking)
+    implementation(projects.core.designsystem)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

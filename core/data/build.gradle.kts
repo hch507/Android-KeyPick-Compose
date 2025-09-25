@@ -29,6 +29,8 @@ android {
 
 dependencies {
     implementation(projects.core.network)
+    implementation(projects.core.model)
+    implementation(projects.core.datastore)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

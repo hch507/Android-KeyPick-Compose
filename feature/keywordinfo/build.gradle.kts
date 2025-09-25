@@ -34,6 +34,8 @@ android {
 dependencies {
 
     implementation(projects.core.data)
+    implementation(projects.core.domain)
+    implementation(projects.core.model)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -44,6 +46,7 @@ dependencies {
 
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.tooling.preview)
+    debugImplementation(libs.androidx.ui.tooling.v161)
     implementation(libs.androidx.foundation)
 
     ksp(libs.hilt.compiler)          // Hilt

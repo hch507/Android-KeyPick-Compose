@@ -9,7 +9,7 @@ enum class KeywordInfoLevelDestination(
     KEYWORD_DETAIL(
         titleText = R.string.keyword_detail_title
     ),
-    RELETED_KEYWORDS(
+    RELATED_KEYWORDS(
         titleText = R.string.releted_keywords_title
     )
 }
