@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -47,31 +48,57 @@ import com.keypick.core.model.UserBlogCntData
 
 @Composable
 internal fun UserBlogInfoRoute(
-    viewModel: UserBlogInfoViewModel = hiltViewModel()
+    viewModel: UserBlogInfoViewModel = hiltViewModel(),
+    onMoveToLogin:() -> Unit
 ) {
     val blogCntUiState by viewModel.userBlogCntState.collectAsStateWithLifecycle()
+    val logoutState by viewModel.logoutState.collectAsStateWithLifecycle()
     UserBlogInfoScreen(
-        blogCntUiState = blogCntUiState
+        blogCntUiState = blogCntUiState,
+        logoutState = logoutState,
+        onLogoutClick = {
+            viewModel.logout()
+        },
+        onMoveToLogin = onMoveToLogin
     )
 }
 
 
 @Composable
 fun UserBlogInfoScreen(
-    blogCntUiState: BlogCntUiState<UserBlogCntData>
+    blogCntUiState: BlogCntUiState<UserBlogCntData>,
+    logoutState: LogoutState<Boolean>,
+    onLogoutClick: () -> Unit,
+    onMoveToLogin: () -> Unit
 ) {
     when (blogCntUiState) {
         BlogCntUiState.Error -> {}
         BlogCntUiState.Loading -> {}
         is BlogCntUiState.Success<*> -> {
-            blogCntUiState._data?.let { UserBlogInfoContent(data = it) }
+            blogCntUiState._data?.let {
+                UserBlogInfoContent(
+                    data = it,
+                    onLogoutClick = onLogoutClick
+                )
+            }
+        }
+    }
+    when(logoutState){
+        LogoutState.Error -> {}
+        LogoutState.Loading -> {}
+        is LogoutState.Success<*> -> {
+            Log.d("LogoutState", "UserBlogInfoScreen:Success ")
+            onMoveToLogin
         }
     }
 
 }
 
 @Composable
-fun UserBlogInfoContent(data: UserBlogCntData) {
+fun UserBlogInfoContent(
+    data: UserBlogCntData,
+    onLogoutClick: () -> Unit
+) {
     Log.d("UserBlogInfoContent", "UserBlogInfoContent: ${data} ")
     Box(
         modifier = Modifier
@@ -81,7 +108,7 @@ fun UserBlogInfoContent(data: UserBlogCntData) {
 
         LazyColumn {
             item {
-                BlogProfile(blogId = data.blogId)
+                BlogProfile(blogId = data.blogId, onLogoutClick = onLogoutClick)
             }
 
             item {
@@ -235,7 +262,7 @@ fun BlogInfoBody() {
                     shape = RoundedCornerShape(20.dp)
                 )
                 .padding(16.dp)
-        ){
+        ) {
             Column() {
                 Text(
                     "최근 5일 방문자 분석",
@@ -294,7 +321,8 @@ fun BlogInfoCard(
 
 @Composable
 fun BlogProfile(
-    blogId: String
+    blogId: String,
+    onLogoutClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -307,14 +335,18 @@ fun BlogProfile(
             .padding(16.dp)
 
     ) {
-        Icon(
-            painter = painterResource(id = com.example.designsystem.R.drawable.ic_logout),
-            contentDescription = "logout",
-            tint = Color(0xFF333366),
-            modifier = Modifier
-                .size(20.dp)
-                .align(Alignment.TopEnd)
-        )
+        IconButton(
+            onClick = onLogoutClick,
+            modifier = Modifier.align(Alignment.TopEnd)) {
+            Icon(
+                painter = painterResource(id = com.example.designsystem.R.drawable.ic_logout),
+                contentDescription = "logout",
+                tint = Color(0xFF333366),
+                modifier = Modifier
+                    .size(20.dp)
+            )
+        }
+
         Row() {
             Box(
                 modifier = Modifier
@@ -374,7 +406,7 @@ fun RecomandKeywordCardPreview() {
 @Composable
 fun BlogProfilePreview() {
     KeypickComposeTheme {
-        BlogProfile("ddoaak")
+        BlogProfile("ddoaak", onLogoutClick = {})
     }
 }
 
@@ -389,6 +421,7 @@ fun BlogInfoScreenPreview() {
 
                 )
             )
+            , onLogoutClick = {}
         )
     }
 }

@@ -13,13 +13,16 @@ import com.example.userbloginfo.navigation.userBlogInfoScreen
 @Composable
 fun HomeNavHost(
     navController: NavHostController,
-    onMoveToSearchClick :() -> Unit
+    onMoveToSearchClick :() -> Unit,
+    onMoveToLogin:() -> Unit
 ){
     NavHost(
         navController = navController,
         startDestination = UserBlogInfoRoute
     ){
-        userBlogInfoScreen()
+        userBlogInfoScreen(
+            onMoveToLogin
+        )
         rankingScreen()
         searchScreen(onMoveToSearchClick)
         keywordStoreScreen()

@@ -25,4 +25,9 @@ class LoginOrCntRepositoryImpl @Inject constructor(
         userBlogPreferencesDataSource.saveBlogId(userBlogId)
         emit(true)
     }
+
+    override suspend fun fetchlogout(): Flow<Boolean> = flow {
+        userBlogPreferencesDataSource.clearPreferences()
+        emit(true)
+    }
 }
