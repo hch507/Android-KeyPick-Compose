@@ -1,6 +1,7 @@
 package com.example.keywordinfo
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,71 +30,79 @@ import com.keypick.core.model.RelKewordResource
 
 @Composable
 fun RelatedKeywordsRoute(
-    keywordinfoState : KeywordInfoUiState<KeywordInfo>
+    keywordinfoState: KeywordInfoUiState<KeywordInfo>
 ) {
     RelatedKeywordsScreen(keywordinfoState)
 }
 
 @Composable
 fun RelatedKeywordsScreen(
-    keywordinfoState : KeywordInfoUiState<KeywordInfo>
+    keywordinfoState: KeywordInfoUiState<KeywordInfo>
 ) {
-    when(keywordinfoState){
+    when (keywordinfoState) {
         KeywordInfoUiState.Error -> {
             Log.d("keywordinfoState", "RelatedKeywordsScreen: Error")
         }
+
         KeywordInfoUiState.Loading -> {
             Log.d("keywordinfoState", "RelatedKeywordsScreen: Loading")
         }
+
         is KeywordInfoUiState.Success<*> -> {
             keywordinfoState._data?.let { KeywordInfoSuccessScreen(it.relKewordResource) }
         }
     }
 
 }
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun KeywordInfoSuccessScreen(
-    relKewordResourceList : List<RelKewordResource>
-){
+    relKewordResourceList: List<RelKewordResource>
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(15.dp)
+            .padding(vertical = 15.dp)
     ) {
-        Column {
-            KeywordTitle(relKewordResourceList[0])
-            Spacer(modifier = Modifier.height(25.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "연관 키워드", modifier = Modifier.weight(1f))
-                Text(text = "${relKewordResourceList.size-1}개")
-            }
-            RelatedKeywordContent(relKewordResourceList)
-        }
-    }
-}
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(12.dp) // 아이템 간 간격
+        ) {
 
-@Composable
-fun RelatedKeywordContent(
-    relKewordResourceList : List<RelKewordResource>
-) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-        ,
-        verticalArrangement = Arrangement.spacedBy(12.dp) // 아이템 간 간격
-    ) {
-        items(relKewordResourceList.size-1) { index ->
-            val item = relKewordResourceList[index+1]
-            RelatedItem(item)
+            item { KeywordTitle(relKewordResourceList[0]) }
+            item { Spacer(modifier = Modifier.height(25.dp)) }
+            stickyHeader {
+                Box(
+                    modifier = Modifier
+                        .background(
+                            MaterialTheme.colorScheme.background
+                        )
+                        .padding(vertical = 10.dp)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(15.dp)
+                    ) {
+                        Text(text = "연관 키워드", fontSize = 15.sp, modifier = Modifier.weight(1f))
+                        Text(text = "${relKewordResourceList.size - 1}개", fontSize = 15.sp)
+                    }
+                }
+
+            }
+            items(relKewordResourceList.size - 1) { index ->
+                val item = relKewordResourceList[index + 1]
+                RelatedItem(item)
+            }
         }
     }
 }
 
 @Composable
 fun KeywordTitle(
-    relKewordResource: RelKewordResource
+    relKewordResource: RelKewordResource,
 ) {
     RelatedItemBox {
         Column {
@@ -101,7 +111,7 @@ fun KeywordTitle(
             ) {
                 RelatedItemTitle()
                 Spacer(modifier = Modifier.weight(1f))
-                Text(text = "${relKewordResource.monthlyPcQcCnt+relKewordResource.monthlyMobileQcCnt}회")
+                Text(text = "${relKewordResource.monthlyPcQcCnt + relKewordResource.monthlyMobileQcCnt}회")
             }
             Spacer(Modifier.height(10.dp))
             Text(text = relKewordResource.relKeyword, fontSize = 20.sp)
@@ -113,8 +123,8 @@ fun KeywordTitle(
 @Composable
 fun RelatedItem(
     relKewordResource: RelKewordResource
-){
-    RelatedItemBox(){
+) {
+    RelatedItemBox() {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -123,18 +133,19 @@ fun RelatedItem(
             Text(text = relKewordResource.relKeyword, fontSize = 20.sp)
             Spacer(Modifier.height(10.dp))
             Text(
-                text = relKewordResource.monthlyPcQcCnt+relKewordResource.monthlyMobileQcCnt,
+                text = relKewordResource.monthlyPcQcCnt + relKewordResource.monthlyMobileQcCnt,
                 fontSize = 15.sp,
                 modifier = Modifier.align(Alignment.End) // 👈 이 한 줄로 오른쪽 정렬됨
             )
         }
     }
 }
+
 @Composable
 fun RelatedItemBox(
-    modifier: Modifier=Modifier,
-    content : @Composable () -> Unit
-){
+    modifier: Modifier = Modifier.padding(horizontal = 15.dp),
+    content: @Composable () -> Unit
+) {
     Box(
         modifier = modifier
             .shadow(4.dp, shape = RoundedCornerShape(20.dp))
@@ -142,16 +153,17 @@ fun RelatedItemBox(
                 color = Color.White,
                 shape = RoundedCornerShape(20.dp)
             )
-            .padding(16.dp)
-    ){
-        content()
+    ) {
+        Box(modifier = Modifier.padding(16.dp)) {
+            content()
+        }
     }
 }
 
 @Composable
 fun RelatedItemTitle(
-    modifier: Modifier =Modifier
-){
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = Modifier
             .shadow(4.dp, shape = RoundedCornerShape(20.dp))
@@ -160,8 +172,8 @@ fun RelatedItemTitle(
                 shape = RoundedCornerShape(30.dp)
             )
             .padding(vertical = 3.dp, horizontal = 10.dp)
-    ){
-       Text(text = "키워드 명", fontSize = 15.sp, color = Color.White)
+    ) {
+        Text(text = "키워드 명", fontSize = 15.sp, color = Color.White)
     }
 }
 
