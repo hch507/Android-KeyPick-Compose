@@ -35,7 +35,7 @@ internal fun LoginRoute(
 ) {
     val blogId = viewModel.blogId
     val loginUiState by viewModel.blogIdResult.collectAsStateWithLifecycle()
-
+    Log.d("LogoutState", "LoginRoute: ")
     LoginScreen(
         blogId = blogId,
         onLoginClick = {

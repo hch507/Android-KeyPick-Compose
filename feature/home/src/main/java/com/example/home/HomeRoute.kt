@@ -38,7 +38,8 @@ import com.example.home.navigation.navigateToHomeLevelDestination
 
 @Composable
 internal fun HomeRoute(
-    onMoveToSearchClick: () -> Unit
+    onMoveToSearchClick: () -> Unit,
+    onMoveToLogin: () -> Unit
 ) {
     val navController = rememberNavController()
 
@@ -50,7 +51,7 @@ internal fun HomeRoute(
             currentDestination.isRouteInHierarchy(it.route)
         } ?: HomeLevelDestination.USER_BLOG_INFO
     }
-    HomeScreen(navController, onMoveToSearchClick, selectedTab)
+    HomeScreen(navController, onMoveToSearchClick, onMoveToLogin, selectedTab)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,6 +59,7 @@ internal fun HomeRoute(
 fun HomeScreen(
     navController: NavHostController,
     onMoveToSearchClick: () -> Unit,
+    onMoveToLogin: () -> Unit,
     selectTab: HomeLevelDestination
 ) {
     Scaffold(
@@ -86,7 +88,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            HomeNavHost(navController, onMoveToSearchClick)
+            HomeNavHost(navController, onMoveToSearchClick, onMoveToLogin =onMoveToLogin)
         }
     }
 }

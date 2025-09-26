@@ -21,10 +21,11 @@ object HomeRoute
 fun NavController.navigateToHome() = navigate(route = HomeRoute)
 
 fun NavGraphBuilder.homeScreen(
-    onMoveToSearchClick :() -> Unit
+    onMoveToSearchClick :() -> Unit,
+    onMoveToLogin: () -> Unit
 ){
     composable<HomeRoute> {
-        HomeRoute(onMoveToSearchClick)
+        HomeRoute(onMoveToSearchClick,onMoveToLogin)
     }
 }
 

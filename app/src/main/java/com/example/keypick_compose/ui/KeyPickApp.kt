@@ -20,7 +20,6 @@ fun KeyPickApp() {
     val navController = rememberNavController()
 
     Scaffold(
-
         contentWindowInsets = WindowInsets(0, 0, 0, 0)
     ) { paddingValues ->
         Box(
