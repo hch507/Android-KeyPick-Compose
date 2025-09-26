@@ -18,7 +18,7 @@ class BlogPreferencs @Inject constructor(
 
     suspend fun getBlogId(): String {
         val blogId= context.dataStore.data
-            .map { preferences -> preferences[BlogPreferencesKeys.BLOG_ID].toString() }.first()
+            .map { preferences -> preferences[BlogPreferencesKeys.BLOG_ID] ?: "" }.first()
         return blogId
     }
 

@@ -35,6 +35,7 @@ internal fun LoginRoute(
 ) {
     val blogId = viewModel.blogId
     val loginUiState by viewModel.blogIdResult.collectAsStateWithLifecycle()
+    val autoLogin by viewModel.autologinState.collectAsStateWithLifecycle()
     Log.d("LogoutState", "LoginRoute: ")
     LoginScreen(
         blogId = blogId,
@@ -47,7 +48,8 @@ internal fun LoginRoute(
             viewModel.onBlogIdChanged(it)
         },
         moveToMain = moveToMain,
-        loginUiState = loginUiState
+        loginUiState = loginUiState,
+        autoLoginStatus = autoLogin
     )
 }
 
@@ -55,6 +57,7 @@ internal fun LoginRoute(
 fun LoginScreen(
     blogId: String,
     loginUiState: LoginUiState<Boolean>,
+    autoLoginStatus: AutoLoginStatus,
     onLoginClick: () -> Unit = {},
     onNonLoginClick: () -> Unit = {},
     onBlogIdChanged: (String) -> Unit,
@@ -77,6 +80,13 @@ fun LoginScreen(
                 moveToMain = moveToMain
             )
         }
+    }
+    when(autoLoginStatus){
+        AutoLoginStatus.LOADING -> {}
+        AutoLoginStatus.LOGGED_IN -> {
+            moveToMain()
+        }
+        AutoLoginStatus.NOT_LOGGED_IN -> {}
     }
 
     when (loginUiState) {

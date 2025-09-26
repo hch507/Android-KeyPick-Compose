@@ -30,4 +30,8 @@ class LoginOrCntRepositoryImpl @Inject constructor(
         userBlogPreferencesDataSource.clearPreferences()
         emit(true)
     }
+
+    override fun getBlogId(): Flow<String> = flow{
+        emit(userBlogPreferencesDataSource.getBlogId())
+    }
 }
