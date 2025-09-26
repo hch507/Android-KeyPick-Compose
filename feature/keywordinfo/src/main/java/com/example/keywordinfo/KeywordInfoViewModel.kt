@@ -1,6 +1,9 @@
 package com.example.keywordinfo
 
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.FetchKeywordInfoUsecase
@@ -22,6 +25,13 @@ class KeywordInfoViewModel @Inject constructor(
     private val _keywordInfoState =
         MutableStateFlow<KeywordInfoUiState<KeywordInfo>>(KeywordInfoUiState.Loading)
     val keywordInfoState = _keywordInfoState.asStateFlow()
+    var search by mutableStateOf("")
+        private set
+
+    fun onSearchChanged(search: String){
+        this.search= search
+        Log.d("LoginViewModel", "onBlogIdChanged: ")
+    }
 
     fun fetchkeywordInfoData(keyword: String) {
         viewModelScope.launch {

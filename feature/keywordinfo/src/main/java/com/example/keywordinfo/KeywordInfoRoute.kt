@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.unit.dp
@@ -59,28 +62,40 @@ internal fun KeywordInfoRoute(
     LaunchedEffect(Unit) {
         viewModel.fetchkeywordInfoData("아이패드")
     }
-
+    val search = viewModel.search
     val keywordInfoState by viewModel.keywordInfoState.collectAsStateWithLifecycle()
-    KeywordInfoScreen(keywordInfoState)
+    KeywordInfoScreen(
+        keywordinfoState = keywordInfoState,
+        search = search,
+        onQueryChange = {
+            viewModel.onSearchChanged(it)
+        },
+        onSearchClick = {
+            viewModel.fetchkeywordInfoData(search)
+        },
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KeywordInfoScreen(
-    keywordinfoState: KeywordInfoUiState<KeywordInfo>
+    keywordinfoState: KeywordInfoUiState<KeywordInfo>,
+    search: String,
+    onQueryChange: (String) -> Unit,
+    onSearchClick: () -> Unit
 ) {
     Scaffold(
         contentWindowInsets = ScaffoldDefaults.contentWindowInsets,
         topBar = {
             KeywordInfoTopBar(
-                query = "",
-                onQueryChange = {},
-                onSearchClick = {},
+                query = search,
+                onQueryChange = onQueryChange,
+                onSearchClick = onSearchClick,
                 onBackClick = {}
             )
         },
 
-    ) { innerPadding ->
+        ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -177,13 +192,25 @@ fun KeywordInfoTopBar(
             Row() {
                 TextField(
                     value = query,
-                    onValueChange = onQueryChange,
+                    onValueChange = { newValue ->
+                        onQueryChange(newValue)
+                    },
                     modifier = Modifier
                         .weight(1f),
                     // 배경 제거
                     placeholder = {
                         Text("검색어를 입력해 주세요")
                     },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done // 또는 Search 등 원하는 타입
+                    ),
+
+
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            onSearchClick()
+                        }
+                    ),
                     singleLine = true,
                     colors = TextFieldDefaults.colors(
 
