@@ -88,7 +88,7 @@ fun UserBlogInfoScreen(
         LogoutState.Loading -> {}
         is LogoutState.Success<*> -> {
             Log.d("LogoutState", "UserBlogInfoScreen:Success ")
-            onMoveToLogin
+            onMoveToLogin()
         }
     }
 
