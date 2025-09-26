@@ -1,5 +1,6 @@
 package com.example.keywordinfo
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,49 +23,77 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.designsystem.theme.KeypickComposeTheme
+import com.keypick.core.model.KeywordInfo
+import com.keypick.core.model.RelKewordResource
 
 @Composable
-fun RelatedKeywordsRoute() {
-    RelatedKeywordsScreen()
+fun RelatedKeywordsRoute(
+    keywordinfoState : KeywordInfoUiState<KeywordInfo>
+) {
+    RelatedKeywordsScreen(keywordinfoState)
 }
 
 @Composable
-fun RelatedKeywordsScreen() {
+fun RelatedKeywordsScreen(
+    keywordinfoState : KeywordInfoUiState<KeywordInfo>
+) {
+    when(keywordinfoState){
+        KeywordInfoUiState.Error -> {
+            Log.d("keywordinfoState", "RelatedKeywordsScreen: Error")
+        }
+        KeywordInfoUiState.Loading -> {
+            Log.d("keywordinfoState", "RelatedKeywordsScreen: Loading")
+        }
+        is KeywordInfoUiState.Success<*> -> {
+            keywordinfoState._data?.let { KeywordInfoSuccessScreen(it.relKewordResource) }
+        }
+    }
+
+}
+@Composable
+fun KeywordInfoSuccessScreen(
+    relKewordResourceList : List<RelKewordResource>
+){
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(15.dp)
     ) {
         Column {
-            KeywordTitle()
+            KeywordTitle(relKewordResourceList[0])
             Spacer(modifier = Modifier.height(25.dp))
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = "연관 키워드", modifier = Modifier.weight(1f))
-                Text(text = "6개")
+                Text(text = "${relKewordResourceList.size-1}개")
             }
-            RelatedKeywordContent()
+            RelatedKeywordContent(relKewordResourceList)
         }
     }
 }
 
 @Composable
-fun RelatedKeywordContent() {
+fun RelatedKeywordContent(
+    relKewordResourceList : List<RelKewordResource>
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
         ,
         verticalArrangement = Arrangement.spacedBy(12.dp) // 아이템 간 간격
     ) {
-        items(30) { index ->
-            RelatedItem()
+        items(relKewordResourceList.size-1) { index ->
+            val item = relKewordResourceList[index+1]
+            RelatedItem(item)
         }
     }
 }
 
 @Composable
-fun KeywordTitle() {
+fun KeywordTitle(
+    relKewordResource: RelKewordResource
+) {
     RelatedItemBox {
         Column {
             Row(
@@ -72,27 +101,29 @@ fun KeywordTitle() {
             ) {
                 RelatedItemTitle()
                 Spacer(modifier = Modifier.weight(1f))
-                Text(text = "643회")
+                Text(text = "${relKewordResource.monthlyPcQcCnt+relKewordResource.monthlyMobileQcCnt}회")
             }
             Spacer(Modifier.height(10.dp))
-            Text(text = "아이패드", fontSize = 20.sp)
+            Text(text = relKewordResource.relKeyword, fontSize = 20.sp)
         }
 
     }
 }
 
 @Composable
-fun RelatedItem(){
+fun RelatedItem(
+    relKewordResource: RelKewordResource
+){
     RelatedItemBox(){
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
             RelatedItemTitle()
             Spacer(Modifier.height(10.dp))
-            Text(text = "아이패드", fontSize = 20.sp)
+            Text(text = relKewordResource.relKeyword, fontSize = 20.sp)
             Spacer(Modifier.height(10.dp))
             Text(
-                text = "검색 5000회",
+                text = relKewordResource.monthlyPcQcCnt+relKewordResource.monthlyMobileQcCnt,
                 fontSize = 15.sp,
                 modifier = Modifier.align(Alignment.End) // 👈 이 한 줄로 오른쪽 정렬됨
             )
@@ -153,24 +184,24 @@ fun RelatedItemTitlePreview() {
     }
 
 }
-@Preview(showBackground = true)
-@Composable
-fun RelatedItemPreview() {
-    KeypickComposeTheme {
-        RelatedItem()
-    }
+//@Preview(showBackground = true)
+//@Composable
+//fun RelatedItemPreview() {
+//    KeypickComposeTheme {
+//        RelatedItem()
+//    }
+//
+//}
 
-}
 
-
-@Preview(showBackground = true)
-@Composable
-fun RelatedKeywordsScreenPreview() {
-    KeypickComposeTheme {
-        RelatedKeywordsScreen()
-    }
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun RelatedKeywordsScreenPreview() {
+//    KeypickComposeTheme {
+//        RelatedKeywordsScreen()
+//    }
+//
+//}
 
 
 

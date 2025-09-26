@@ -18,6 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,34 +27,27 @@ import androidx.compose.ui.res.stringResource
 
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.keywordinfo.navigation.KeywordInfoLevelDestination
+import com.keypick.core.model.KeywordInfo
 import kotlinx.coroutines.launch
 
 @Composable
 internal fun KeywordInfoRoute(
     viewModel: KeywordInfoViewModel = hiltViewModel()
 ) {
-    viewModel.fetchkeywordInfoData("아이패드")
+    LaunchedEffect(Unit) {
+        viewModel.fetchkeywordInfoData("아이패드")
+    }
 
-    val pagerState = rememberPagerState(pageCount = {
-        2
-    })
-    val coroutineScope = rememberCoroutineScope()
-    KeywordInfoScreen(
-        onTabSelected = { index ->
-            coroutineScope.launch {
-                pagerState.animateScrollToPage(index)
-            }
-        },
-        pagerState = pagerState
-    )
+    val keywordInfoState by viewModel.keywordInfoState.collectAsStateWithLifecycle()
+    KeywordInfoScreen(keywordInfoState)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KeywordInfoScreen(
-    onTabSelected: (Int) -> Unit,
-    pagerState: PagerState
+    keywordinfoState : KeywordInfoUiState<KeywordInfo>
 ) {
     Scaffold(
         topBar = {
@@ -67,10 +62,7 @@ fun KeywordInfoScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            KeywordInfoTabLayout(
-                onTabSelected = onTabSelected,
-                pagerState = pagerState
-            )
+            KeywordInfoTabLayout(keywordinfoState=keywordinfoState)
         }
     }
 
@@ -79,9 +71,10 @@ fun KeywordInfoScreen(
 @Composable
 fun KeywordInfoTabLayout(
     tablist: List<KeywordInfoLevelDestination> = KeywordInfoLevelDestination.entries,
-    onTabSelected: (Int) -> Unit,
-    pagerState: PagerState
+    keywordinfoState : KeywordInfoUiState<KeywordInfo>
 ) {
+    val pagerState = rememberPagerState(pageCount = { tablist.size })
+    val coroutineScope = rememberCoroutineScope()
     Spacer(modifier = Modifier.height(10.dp))
     Column(modifier = Modifier.fillMaxSize()) {
         TabRow(
@@ -94,7 +87,11 @@ fun KeywordInfoTabLayout(
                 Tab(
                     modifier = Modifier,
                     selected = pagerState.currentPage == index,
-                    onClick = { onTabSelected(index) },
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    },
                     text = {
                         Text(
                             text = stringResource(item.titleText),
@@ -114,7 +111,7 @@ fun KeywordInfoTabLayout(
                 }
 
                 KeywordInfoLevelDestination.RELATED_KEYWORDS -> {
-                    RelatedKeywordsRoute()
+                    RelatedKeywordsRoute(keywordinfoState)
                 }
             }
         }
