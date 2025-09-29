@@ -7,20 +7,19 @@ import com.example.common.NavOptionProvider
 import com.example.home.navigation.HomeRoute
 import com.example.home.navigation.homeScreen
 
-import com.example.home.navigation.homeSection
+
 import com.example.home.navigation.navigateToHome
 import com.example.keywordinfo.navigation.keywordInfoScreen
 import com.example.keywordinfo.navigation.navigateToKeywordInfo
-import com.example.keywordstore.navigation.keywordStoreScreen
+
 import com.example.login.navigation.LoginRoute
 import com.example.login.navigation.loginScreen
 import com.example.login.navigation.navigateToLogin
 import com.example.nonlogin.navigation.navigateToNonLogin
 import com.example.nonlogin.navigation.nonLoginScreen
-import com.example.ranking.navigation.rankingScreen
 import com.example.search.navigation.navigateToSearch
 import com.example.search.navigation.searchScreen
-import com.example.userbloginfo.navigation.userBlogInfoScreen
+
 
 @Composable
 fun KeypickNavHost(

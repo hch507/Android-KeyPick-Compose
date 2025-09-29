@@ -12,9 +12,10 @@ import com.example.ranking.navigation.RankingRoute
 
 @Composable
 internal fun RankingRoute(
+    blogId: String,
     viewModel: RankViewModel = hiltViewModel()
 ){
-    viewModel.fetchBlogRankData("아이패드")
+    viewModel.fetchBlogRankData("아이패드",blogId= blogId)
     RankingScreen()
 }
 
@@ -25,7 +26,9 @@ fun RankingScreen(){
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center
-        ) {  }
+        ) {
+
+        }
         Text(text = "RankingRoute")
     }
 }

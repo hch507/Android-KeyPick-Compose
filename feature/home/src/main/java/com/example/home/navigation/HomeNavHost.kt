@@ -14,7 +14,8 @@ import com.example.userbloginfo.navigation.userBlogInfoScreen
 fun HomeNavHost(
     navController: NavHostController,
     onMoveToSearchClick :() -> Unit,
-    onMoveToLogin:() -> Unit
+    onMoveToLogin:() -> Unit,
+    blogId : String
 ){
     NavHost(
         navController = navController,
@@ -23,7 +24,7 @@ fun HomeNavHost(
         userBlogInfoScreen(
             onMoveToLogin
         )
-        rankingScreen()
+        rankingScreen(blogId)
         searchScreen(onMoveToSearchClick)
         keywordStoreScreen()
     }

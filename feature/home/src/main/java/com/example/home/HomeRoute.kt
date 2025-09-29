@@ -32,17 +32,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.R
 import com.example.home.navigation.isRouteInHierarchy
 import com.example.home.navigation.navigateToHomeLevelDestination
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.home.navigation.HomeUiState
 
 @Composable
 internal fun HomeRoute(
     onMoveToSearchClick: () -> Unit,
-    onMoveToLogin: () -> Unit
+    onMoveToLogin: () -> Unit,
+    homeViewModel: HomeViewModel= hiltViewModel()
 ) {
     val navController = rememberNavController()
 
+    val blogId by homeViewModel.blogIdState.collectAsStateWithLifecycle()
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStack?.destination
 
@@ -51,7 +56,7 @@ internal fun HomeRoute(
             currentDestination.isRouteInHierarchy(it.route)
         } ?: HomeLevelDestination.USER_BLOG_INFO
     }
-    HomeScreen(navController, onMoveToSearchClick, onMoveToLogin, selectedTab)
+    HomeScreen(navController, onMoveToSearchClick, onMoveToLogin, selectedTab,blogId= blogId)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +65,8 @@ fun HomeScreen(
     navController: NavHostController,
     onMoveToSearchClick: () -> Unit,
     onMoveToLogin: () -> Unit,
-    selectTab: HomeLevelDestination
+    selectTab: HomeLevelDestination,
+    blogId : HomeUiState<String>
 ) {
     Scaffold(
         topBar = {
@@ -88,7 +94,14 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            HomeNavHost(navController, onMoveToSearchClick, onMoveToLogin =onMoveToLogin)
+            when(blogId){
+                HomeUiState.Error -> {}
+                HomeUiState.Loading -> {}
+                is HomeUiState.Success<*> -> {
+                    HomeNavHost(navController, onMoveToSearchClick, onMoveToLogin =onMoveToLogin, blogId = blogId._data!!)
+                }
+            }
+
         }
     }
 }
