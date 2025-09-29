@@ -6,20 +6,32 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import com.example.home.HomeRoute
+import com.example.home.HomeScreen
+import com.example.keywordstore.navigation.keywordStoreScreen
 import com.example.keywordstore.navigation.navigateTopStore
 import com.example.ranking.navigation.navigateToRanking
+import com.example.ranking.navigation.rankingScreen
 import com.example.search.navigation.navigateToSearch
+import com.example.search.navigation.searchScreen
+import com.example.userbloginfo.navigation.UserBlogInfoRoute
 import com.example.userbloginfo.navigation.navigateToUserBlogInfo
+import com.example.userbloginfo.navigation.userBlogInfoScreen
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
 @Serializable
 object HomeRoute
 
-fun NavController.navigateToHome() = navigate(route = HomeRoute)
-
+fun NavController.navigateToHome(
+    navOptions: NavOptions? = null
+) {
+    navigate(route = HomeRoute, navOptions = navOptions)
+}
 fun NavGraphBuilder.homeScreen(
     onMoveToSearchClick :() -> Unit,
     onMoveToLogin: () -> Unit
@@ -39,19 +51,6 @@ fun navigateToHomeLevelDestination(
     navController: NavHostController,
     homeLevelDestination: HomeLevelDestination
 ) {
-//        val topLevelNavOptions = navOptions {
-//            // Pop up to the start destination of the graph to
-//            // avoid building up a large stack of destinations
-//            // on the back stack as users select items
-//            popUpTo(navController.graph.findStartDestination().id) {
-//                saveState = true
-//            }
-//            // Avoid multiple copies of the same destination when
-//            // reselecting the same item
-//            launchSingleTop = true
-//            // Restore state when reselecting a previously selected item
-//            restoreState = true
-//        }
 
     when (homeLevelDestination) {
         HomeLevelDestination.USER_BLOG_INFO -> navController.navigateToUserBlogInfo()

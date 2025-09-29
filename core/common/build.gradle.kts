@@ -1,11 +1,9 @@
 plugins {
-    alias(libs.plugins.keypick.android.feature)
-    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.keypick.android.library)
 }
 
 android {
-    namespace = "com.example.home"
-
+    namespace = "com.example.common"
 
     defaultConfig {
 
@@ -33,20 +31,12 @@ android {
 
 dependencies {
 
-    implementation(projects.feature.userbloginfo)
-    implementation(projects.feature.ranking)
-    implementation(projects.feature.search)
-    implementation(projects.feature.keywordstore)
-    implementation(projects.core.designsystem)
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.ui.tooling.preview)
 
     implementation(libs.androidx.navigation.compose)
 }
