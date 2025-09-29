@@ -3,17 +3,24 @@ package com.example.keypick_compose.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.example.common.NavOptionProvider
+import com.example.home.navigation.HomeRoute
 import com.example.home.navigation.homeScreen
+
+import com.example.home.navigation.homeSection
 import com.example.home.navigation.navigateToHome
 import com.example.keywordinfo.navigation.keywordInfoScreen
 import com.example.keywordinfo.navigation.navigateToKeywordInfo
+import com.example.keywordstore.navigation.keywordStoreScreen
 import com.example.login.navigation.LoginRoute
 import com.example.login.navigation.loginScreen
 import com.example.login.navigation.navigateToLogin
 import com.example.nonlogin.navigation.navigateToNonLogin
 import com.example.nonlogin.navigation.nonLoginScreen
+import com.example.ranking.navigation.rankingScreen
 import com.example.search.navigation.navigateToSearch
 import com.example.search.navigation.searchScreen
+import com.example.userbloginfo.navigation.userBlogInfoScreen
 
 @Composable
 fun KeypickNavHost(
@@ -21,11 +28,17 @@ fun KeypickNavHost(
 ) {
 
     NavHost(
-        navController=navController,
+        navController = navController,
         startDestination = LoginRoute
-    ){
+    ) {
         loginScreen(
-            moveToMain = navController::navigateToHome,
+            moveToMain = {
+                navController.navigateToHome(
+                    navOptions = NavOptionProvider.clearBackStackAndLaunchSingle<LoginRoute>(
+                        LoginRoute::class
+                    )
+                )
+            },
             onNonLoginClick = navController::navigateToNonLogin
         )
         nonLoginScreen(
@@ -33,7 +46,7 @@ fun KeypickNavHost(
         )
         homeScreen(
             onMoveToSearchClick = navController::navigateToSearch,
-            onMoveToLogin = navController::navigateToLogin
+            onMoveToLogin = navController::popBackStack
         )
         searchScreen(
             onSearchClick = navController::navigateToKeywordInfo
