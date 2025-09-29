@@ -37,7 +37,6 @@ dependencies {
     implementation(projects.feature.ranking)
     implementation(projects.feature.search)
     implementation(projects.feature.keywordstore)
-    implementation(projects.feature.ranking)
     implementation(projects.core.designsystem)
 
     implementation(libs.androidx.core.ktx)
@@ -48,4 +47,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.ui.tooling.preview)
+
+    implementation(libs.androidx.navigation.compose)
 }

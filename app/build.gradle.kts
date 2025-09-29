@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.feature.home)
     implementation(projects.feature.search)
     implementation(projects.feature.keywordinfo)
+    implementation(projects.core.common)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
