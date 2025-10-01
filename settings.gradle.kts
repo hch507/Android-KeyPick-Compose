@@ -31,7 +31,7 @@ include(":app")
 include(":core:designsystem")
 include(":feature:login")
 include(":core:data")
-//include(":core:domain")
+include(":core:domain")
 include(":core:network")
 //include(":build-logic:convention")
 

@@ -11,8 +11,8 @@ object RankingRoute
 
 fun NavController.navigateToRanking() = navigate(route = RankingRoute)
 
-fun NavGraphBuilder.rankingScreen(){
+fun NavGraphBuilder.rankingScreen(blogId : String){
     composable<RankingRoute>{
-        RankingRoute()
+        RankingRoute(blogId)
     }
 }

@@ -4,22 +4,33 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.repository.KeywordRepository
+import com.example.data.repository.LoginOrCntRepository
+import com.example.domain.FetchRankUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class RankViewModel @Inject constructor(
-    private val keywordRepository: KeywordRepository
+    private val fetchRankUsecase: FetchRankUsecase,
+
 ) : ViewModel() {
-
-    fun fetchBlogRankData(keyword : String){
+    private val _rankResult = MutableStateFlow<RankUiState<Int>>(RankUiState.Loading)
+    val rankResult = _rankResult.asStateFlow()
+    fun fetchBlogRankData(keyword : String, blogId : String){
+        Log.d("fetchBlogRankData", "fetchBlogRankData:${keyword} ${blogId}")
         viewModelScope.launch {
-            val result = keywordRepository.fetchBlogPostRank(keyword = keyword).collect{ result ->
-                Log.d("fetchBlogRankData", "결과: $result")
-            }
-
+            fetchRankUsecase.invoke(keyword=keyword , blogId = blogId)
+                .onStart { _rankResult.update { RankUiState.Loading } }
+                .catch { _rankResult.update { RankUiState.Error } }
+                .collectLatest { value -> _rankResult.value = RankUiState.Success(value) }
         }
     }
 }
