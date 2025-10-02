@@ -56,11 +56,12 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-internal fun KeywordInfoRoute(
+internal fun KeywordInfoScreen(
+    keyword : String,
     viewModel: KeywordInfoViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        viewModel.fetchkeywordInfoData("아이패드")
+        viewModel.fetchkeywordInfoData(keyword)
     }
     val search = viewModel.search
     val keywordInfoState by viewModel.keywordInfoState.collectAsStateWithLifecycle()

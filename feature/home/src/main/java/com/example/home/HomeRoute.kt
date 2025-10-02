@@ -41,7 +41,7 @@ import com.example.home.navigation.HomeUiState
 
 @Composable
 internal fun HomeRoute(
-    onMoveToSearchClick: () -> Unit,
+    onMoveToSearchClick: (String) -> Unit,
     onMoveToLogin: () -> Unit,
     homeViewModel: HomeViewModel= hiltViewModel()
 ) {
@@ -63,7 +63,7 @@ internal fun HomeRoute(
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    onMoveToSearchClick: () -> Unit,
+    onMoveToSearchClick: (String) -> Unit,
     onMoveToLogin: () -> Unit,
     selectTab: HomeLevelDestination,
     blogId : HomeUiState<String>
