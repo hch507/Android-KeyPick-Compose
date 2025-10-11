@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -14,16 +16,19 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 internal fun SearchRoute(
-    onSearchClick: () -> Unit,
+    onSearchClick: (String) -> Unit,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     val searchKeyword = viewModel.searchKeyword
     SearchScreen(
-        onSearchClick = onSearchClick,
+        onSearchClick ={
+            onSearchClick(searchKeyword)
+        } ,
         onSearchKeywordChange = {
             viewModel.onSearchKeywordChanged(it)
         },
@@ -43,13 +48,7 @@ fun SearchScreen(
             TopAppBar(
                 title = { Text("Main") },
                 colors = TopAppBarDefaults.topAppBarColors(),
-                actions = {
-                    Button(
-                        onClick = onSearchClick
-                    ) {
-                        Text(text = "KeywordInfo")
-                    }
-                }
+
             )
         }
     ) { innerPadding ->
@@ -69,6 +68,17 @@ fun SearchScreen(
 //            textStyle = TextStyle(
 //                fontFamily = neoRegular
 //            )
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done // 또는 Search 등 원하는 타입
+                ),
+
+
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        onSearchClick()
+                    }
+                ),
+                singleLine = true,
             )
         }
     }

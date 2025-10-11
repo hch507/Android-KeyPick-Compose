@@ -33,7 +33,7 @@ fun NavController.navigateToHome(
     navigate(route = HomeRoute, navOptions = navOptions)
 }
 fun NavGraphBuilder.homeScreen(
-    onMoveToSearchClick :() -> Unit,
+    onMoveToSearchClick :(String) -> Unit,
     onMoveToLogin: () -> Unit
 ){
     composable<HomeRoute> {

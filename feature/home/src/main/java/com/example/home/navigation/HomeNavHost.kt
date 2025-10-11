@@ -13,7 +13,7 @@ import com.example.userbloginfo.navigation.userBlogInfoScreen
 @Composable
 fun HomeNavHost(
     navController: NavHostController,
-    onMoveToSearchClick :() -> Unit,
+    onMoveToSearchClick :(String) -> Unit,
     onMoveToLogin:() -> Unit,
     blogId : String
 ){
