@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.google.service)
 }
 //hilt {
 //    enableAggregatingTask = false
@@ -65,4 +66,5 @@ dependencies {
 
     ksp(libs.hilt.compiler)          // Hilt 컴파일러 (ksp용)
     implementation(libs.hilt.android)
+
 }
