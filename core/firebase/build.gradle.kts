@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.keypick.android.library)
     alias(libs.plugins.google.service)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -39,6 +41,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(libs.firebase.bom)
+    implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
+    implementation(libs.kotlinx.coroutines.play.services)
+
+    ksp(libs.hilt.compiler)          // Hilt 컴파일러 (ksp용)
+    implementation(libs.hilt.android)
 }
