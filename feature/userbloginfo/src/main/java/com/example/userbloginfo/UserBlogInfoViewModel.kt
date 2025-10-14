@@ -1,10 +1,12 @@
 package com.example.userbloginfo
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.domain.FetchBlogCntUsecase
 import com.example.domain.FetchLogoutUsecase
+import com.example.firebase.FirebaseKeywordDataSource
 import com.keypick.core.model.UserBlogCntData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class UserBlogInfoViewModel @Inject constructor(
     private val fetchBlogCntUsecase: FetchBlogCntUsecase,
-    private val fetchLogoutUsecase: FetchLogoutUsecase
+    private val fetchLogoutUsecase: FetchLogoutUsecase,
+    private val firebaseKeywordDataSource: FirebaseKeywordDataSource
 ) : ViewModel() {
 
     var userBlogCntState: StateFlow<BlogCntUiState<UserBlogCntData>> = fetchBlogCntUsecase()
@@ -40,6 +43,9 @@ class UserBlogInfoViewModel @Inject constructor(
     private val _logoutState = MutableStateFlow<LogoutState<Boolean>>(LogoutState.Loading)
     val logoutState = _logoutState.asStateFlow()
 
+    private val _recommendKeyword = MutableStateFlow<String?>(null)
+    val recommendKeyword: StateFlow<String?> = _recommendKeyword.asStateFlow()
+
     fun logout() {
         viewModelScope.launch {
             fetchLogoutUsecase.invoke()
@@ -50,5 +56,12 @@ class UserBlogInfoViewModel @Inject constructor(
                 }
         }
 
+    }
+    fun getRecommendKeyword() {
+        viewModelScope.launch {
+            val keyword =  firebaseKeywordDataSource.fetchTodayKeyword()
+            Log.d("test_getRecommend", "getRecommendKeyword: ${keyword}")
+            // 키워드 처리
+        }
     }
 }

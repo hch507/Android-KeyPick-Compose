@@ -49,7 +49,7 @@ import com.keypick.core.model.UserBlogCntData
 @Composable
 internal fun UserBlogInfoRoute(
     viewModel: UserBlogInfoViewModel = hiltViewModel(),
-    onMoveToLogin:() -> Unit
+    onMoveToLogin: () -> Unit
 ) {
     val blogCntUiState by viewModel.userBlogCntState.collectAsStateWithLifecycle()
     val logoutState by viewModel.logoutState.collectAsStateWithLifecycle()
@@ -59,7 +59,8 @@ internal fun UserBlogInfoRoute(
         onLogoutClick = {
             viewModel.logout()
         },
-        onMoveToLogin = onMoveToLogin
+        onMoveToLogin = onMoveToLogin,
+        onRecommendClick = { viewModel.getRecommendKeyword() }
     )
 }
 
@@ -69,7 +70,8 @@ fun UserBlogInfoScreen(
     blogCntUiState: BlogCntUiState<UserBlogCntData>,
     logoutState: LogoutState<Boolean>,
     onLogoutClick: () -> Unit,
-    onMoveToLogin: () -> Unit
+    onMoveToLogin: () -> Unit,
+    onRecommendClick: () -> Unit
 ) {
     when (blogCntUiState) {
         BlogCntUiState.Error -> {}
@@ -78,12 +80,13 @@ fun UserBlogInfoScreen(
             blogCntUiState._data?.let {
                 UserBlogInfoContent(
                     data = it,
-                    onLogoutClick = onLogoutClick
+                    onLogoutClick = onLogoutClick,
+                    onRecommendClick = onRecommendClick
                 )
             }
         }
     }
-    when(logoutState){
+    when (logoutState) {
         LogoutState.Error -> {}
         LogoutState.Loading -> {}
         is LogoutState.Success<*> -> {
@@ -97,7 +100,8 @@ fun UserBlogInfoScreen(
 @Composable
 fun UserBlogInfoContent(
     data: UserBlogCntData,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    onRecommendClick: () -> Unit
 ) {
     Log.d("UserBlogInfoContent", "UserBlogInfoContent: ${data} ")
     Box(
@@ -146,14 +150,16 @@ fun UserBlogInfoContent(
             }
 
             item {
-                RecomandKeywordCard()
+                RecomandKeywordCard(onRecommendClick)
             }
         }
     }
 }
 
 @Composable
-fun RecomandKeywordCard() {
+fun RecomandKeywordCard(
+    onRecommendClick: () -> Unit
+) {
     Surface(
         color = Color.White,
         shape = RoundedCornerShape(20.dp),
@@ -178,7 +184,7 @@ fun RecomandKeywordCard() {
             Spacer(Modifier.height(7.dp))
             RecomandButton(
                 text = "추천 키워드",
-                onClick = { null },
+                onClick = onRecommendClick,
             ) {
                 Icon(
                     painter = painterResource(id = com.example.designsystem.R.drawable.ic_logout),
@@ -337,7 +343,8 @@ fun BlogProfile(
     ) {
         IconButton(
             onClick = onLogoutClick,
-            modifier = Modifier.align(Alignment.TopEnd)) {
+            modifier = Modifier.align(Alignment.TopEnd)
+        ) {
             Icon(
                 painter = painterResource(id = com.example.designsystem.R.drawable.ic_logout),
                 contentDescription = "logout",
@@ -398,7 +405,9 @@ fun BlogProfile(
 @Composable
 fun RecomandKeywordCardPreview() {
     KeypickComposeTheme {
-        RecomandKeywordCard()
+        RecomandKeywordCard(
+            onRecommendClick = {}
+        )
     }
 }
 
@@ -420,8 +429,9 @@ fun BlogInfoScreenPreview() {
                 visitorcntList = listOf(
 
                 )
-            )
-            , onLogoutClick = {}
+            ),
+            onLogoutClick = {},
+            onRecommendClick = {},
         )
     }
 }
