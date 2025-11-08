@@ -47,7 +47,7 @@ fun KeypickNavHost(
             onMoveToSearchClick = { keyword ->
                 navController.navigateToKeywordInfo(keyword)
             },
-            onMoveToLogin = navController::popBackStack
+            onMoveToLogin = navController::navigateToLogin
         )
 //        searchScreen(
 //            onSearchClick = { keyword ->
