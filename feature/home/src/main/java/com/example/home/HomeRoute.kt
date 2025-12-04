@@ -56,7 +56,7 @@ internal fun HomeRoute(
             currentDestination.isRouteInHierarchy(it.route)
         } ?: HomeLevelDestination.USER_BLOG_INFO
     }
-    HomeScreen(navController, onMoveToSearchClick, onMoveToLogin, selectedTab,blogId= blogId)
+    HomeScreen(navController, onMoveToSearchClick, onMoveToLogin, selectedTab,blogId= blogId,)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

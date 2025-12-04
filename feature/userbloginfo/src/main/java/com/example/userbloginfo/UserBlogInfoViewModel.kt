@@ -1,8 +1,10 @@
 package com.example.userbloginfo
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.data.repository.KeywordRepository
 import com.example.domain.FetchBlogCntUsecase
 import com.example.domain.FetchLogoutUsecase
 import com.keypick.core.model.UserBlogCntData
@@ -23,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class UserBlogInfoViewModel @Inject constructor(
     private val fetchBlogCntUsecase: FetchBlogCntUsecase,
-    private val fetchLogoutUsecase: FetchLogoutUsecase
+    private val fetchLogoutUsecase: FetchLogoutUsecase,
+    private val keywordRepository: KeywordRepository
 ) : ViewModel() {
 
     var userBlogCntState: StateFlow<BlogCntUiState<UserBlogCntData>> = fetchBlogCntUsecase()
@@ -40,6 +43,9 @@ class UserBlogInfoViewModel @Inject constructor(
     private val _logoutState = MutableStateFlow<LogoutState<Boolean>>(LogoutState.Loading)
     val logoutState = _logoutState.asStateFlow()
 
+    private val _recommendKeywordState = MutableStateFlow<RecommendUiState<String?>>(RecommendUiState.Loading)
+    val recommendKeywordState = _recommendKeywordState.asStateFlow()
+
     fun logout() {
         viewModelScope.launch {
             fetchLogoutUsecase.invoke()
@@ -50,5 +56,17 @@ class UserBlogInfoViewModel @Inject constructor(
                 }
         }
 
+    }
+    fun getRecommendKeyword() {
+        viewModelScope.launch {
+            keywordRepository.getRecommendKeyword()
+                .onStart { _recommendKeywordState.update { RecommendUiState.Loading } }
+                .catch {_recommendKeywordState.update { RecommendUiState.Error }  }
+                .collectLatest { value ->
+                    _recommendKeywordState.value = RecommendUiState.Success(value)
+                }
+
+            // 키워드 처리
+        }
     }
 }

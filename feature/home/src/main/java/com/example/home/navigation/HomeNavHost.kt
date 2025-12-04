@@ -22,7 +22,8 @@ fun HomeNavHost(
         startDestination = UserBlogInfoRoute
     ){
         userBlogInfoScreen(
-            onMoveToLogin
+            onMoveToLogin = onMoveToLogin,
+            onRecommendKeywordSearch = onMoveToSearchClick
         )
         rankingScreen(blogId)
         searchScreen(onMoveToSearchClick)

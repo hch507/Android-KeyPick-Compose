@@ -18,4 +18,6 @@ interface KeywordRepository {
     suspend fun fetchBlogPostCountAndTrend(keyword: String) : Flow<KeywordBlogInfoResource>
 
     suspend fun fetchKeywordRel(keyword: String) : Flow< List<RelKewordResource>>
+
+    suspend fun getRecommendKeyword() : Flow<String?>
 }

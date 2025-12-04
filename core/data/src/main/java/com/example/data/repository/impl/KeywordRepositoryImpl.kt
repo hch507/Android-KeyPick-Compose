@@ -2,6 +2,7 @@ package com.example.data.repository.impl
 
 import android.util.Log
 import com.example.data.repository.KeywordRepository
+import com.example.firebase.FirebaseKeywordDataSource
 import com.example.network.NaverNetworkDataSource
 import com.example.network.NaverRelNetworkDataSource
 import com.example.network.model.asExternalBlogInfoModel
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 class KeywordRepositoryImpl @Inject constructor(
     private val naverNetworkDataSource: NaverNetworkDataSource,
-    private val naverRelNetworkDataSource: NaverRelNetworkDataSource
+    private val naverRelNetworkDataSource: NaverRelNetworkDataSource,
+    private val firebaseKeywordDataSource: FirebaseKeywordDataSource
 ) : KeywordRepository {
     override suspend fun fetchMonthlySearch(keyword: String): Flow<List<MonthRatioResource>> =
         flow {
@@ -38,6 +40,11 @@ class KeywordRepositoryImpl @Inject constructor(
     override suspend fun fetchKeywordRel(keyword: String): Flow<List<RelKewordResource>> = flow {
         val result = naverRelNetworkDataSource.fetchKeywordRel(keyword = keyword)
         emit(result.asExternalBlogInfoModel())
+    }
+
+    override suspend fun getRecommendKeyword(): Flow<String?> = flow{
+        val result = firebaseKeywordDataSource.fetchTodayKeyword()
+        emit(result)
     }
 
 

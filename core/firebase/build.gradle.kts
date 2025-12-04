@@ -1,13 +1,15 @@
 plugins {
     alias(libs.plugins.keypick.android.library)
+    alias(libs.plugins.google.service)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
 
 android {
-    namespace = "com.example.data"
+    namespace = "com.example.firebase"
 
     defaultConfig {
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -21,17 +23,17 @@ android {
             )
         }
     }
-
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
     kotlinOptions {
         jvmTarget = "11"
     }
 }
 
 dependencies {
-    implementation(projects.core.network)
-    implementation(projects.core.model)
-    implementation(projects.core.datastore)
-    implementation(projects.core.firebase)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -39,8 +41,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
+    implementation(libs.kotlinx.coroutines.play.services)
+
     ksp(libs.hilt.compiler)          // Hilt 컴파일러 (ksp용)
     implementation(libs.hilt.android)
-
-
 }

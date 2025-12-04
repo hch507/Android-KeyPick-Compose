@@ -12,9 +12,10 @@ object UserBlogInfoRoute
 fun NavController.navigateToUserBlogInfo() = navigate(route = UserBlogInfoRoute)
 
 fun NavGraphBuilder.userBlogInfoScreen(
-    onMoveToLogin:() -> Unit
+    onMoveToLogin : () -> Unit,
+    onRecommendKeywordSearch : (String)-> Unit
 ){
     composable<UserBlogInfoRoute> {
-        UserBlogInfoRoute(onMoveToLogin = onMoveToLogin)
+        UserBlogInfoRoute(onMoveToLogin = onMoveToLogin, onRecommendKeywordSearch = onRecommendKeywordSearch)
     }
 }
