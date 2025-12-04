@@ -29,8 +29,6 @@ class LoginViewModel @Inject constructor(
 ) : ViewModel(){
     private val _blogIdResult = MutableStateFlow<LoginUiState<Boolean>>(LoginUiState.Loading)
     val blogIdResult = _blogIdResult.asStateFlow()
-    var blogId by mutableStateOf("")
-        private set
 
     val autologinState: StateFlow<AutoLoginStatus> = checkLoginedUsecase.invoke()
         .map { blogId ->
@@ -43,13 +41,7 @@ class LoginViewModel @Inject constructor(
             initialValue = AutoLoginStatus.LOADING
         )
 
-    fun onBlogIdChanged(blogId: String){
-        this.blogId= blogId
-        Log.d("LoginViewModel", "onBlogIdChanged: ")
-    }
-
     fun checkBlogIdExists(userId : String){
-
         viewModelScope.launch {
             fetchLoginUsecase.invoke(userId)
                 .onStart { _blogIdResult.update { LoginUiState.Loading }  }

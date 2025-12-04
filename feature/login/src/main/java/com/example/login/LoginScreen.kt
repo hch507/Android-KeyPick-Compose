@@ -17,6 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
@@ -33,35 +36,50 @@ internal fun LoginRoute(
     onNonLoginClick: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    val blogId = viewModel.blogId
     val loginUiState by viewModel.blogIdResult.collectAsStateWithLifecycle()
     val autoLogin by viewModel.autologinState.collectAsStateWithLifecycle()
     Log.d("LogoutState", "LoginRoute: ")
-    LoginScreen(
-        blogId = blogId,
-        onLoginClick = {
-            viewModel.checkBlogIdExists(blogId)
 
+    when (autoLogin) {
+        AutoLoginStatus.LOADING -> {}
+        AutoLoginStatus.LOGGED_IN -> {
+            LaunchedEffect(autoLogin) {
+                moveToMain()
+            }
+        }
+
+        AutoLoginStatus.NOT_LOGGED_IN -> {}
+    }
+
+    when (loginUiState) {
+        is LoginUiState.Loading -> {
+            Log.d("test_LoginUiState", "LoginScreen: Loading")
+        }
+
+        is LoginUiState.Error -> {
+            Log.d("test_LoginUiState", "LoginScreen: Error")
+        }
+
+        is LoginUiState.Success -> {
+            Log.d("test_LoginUiState", "LoginScreen: Success")
+            LaunchedEffect(loginUiState) {
+                moveToMain()
+            }
+        }
+    }
+
+    LoginScreen(
+        onLoginClick = { blogId ->
+            viewModel.checkBlogIdExists(blogId)
         },
-        onNonLoginClick = onNonLoginClick,
-        onBlogIdChanged = {
-            viewModel.onBlogIdChanged(it)
-        },
-        moveToMain = moveToMain,
-        loginUiState = loginUiState,
-        autoLoginStatus = autoLogin
+        onNonLoginClick = onNonLoginClick
     )
 }
 
 @Composable
 fun LoginScreen(
-    blogId: String,
-    loginUiState: LoginUiState<Boolean>,
-    autoLoginStatus: AutoLoginStatus,
-    onLoginClick: () -> Unit = {},
+    onLoginClick: (String) -> Unit = {},
     onNonLoginClick: () -> Unit = {},
-    onBlogIdChanged: (String) -> Unit,
-    moveToMain: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
@@ -71,38 +89,13 @@ fun LoginScreen(
             LoginTitle()
             Spacer(modifier = Modifier.height(60.dp))
             LoginBody(
-                blogId = blogId, onBlogIdChange = onBlogIdChanged
-            )
-            Spacer(modifier = Modifier.height(30.dp))
-            LoginBottom(
                 onLoginClick = onLoginClick,
-                onNonLoginClick = onNonLoginClick,
-                moveToMain = moveToMain
+                onNonLoginClick = onNonLoginClick
             )
         }
-    }
-    when(autoLoginStatus){
-        AutoLoginStatus.LOADING -> {}
-        AutoLoginStatus.LOGGED_IN -> {
-            moveToMain()
-        }
-        AutoLoginStatus.NOT_LOGGED_IN -> {}
     }
 
-    when (loginUiState) {
-        is LoginUiState.Loading -> {
-            Log.d("test_LoginUiState", "LoginScreen: Loading")
-        }
-        is LoginUiState.Error -> {
-            Log.d("test_LoginUiState", "LoginScreen: Error")
-        }
-        is LoginUiState.Success -> {
-            Log.d("test_LoginUiState", "LoginScreen: Success")
-            LaunchedEffect(loginUiState) {
-                moveToMain()
-            }
-        }
-    }
+
 }
 
 
@@ -110,7 +103,6 @@ fun LoginScreen(
 fun LoginBottom(
     onLoginClick: () -> Unit,
     onNonLoginClick: () -> Unit,
-    moveToMain: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
@@ -140,11 +132,16 @@ fun LoginBottom(
 }
 
 @Composable
-fun LoginBody(blogId: String, onBlogIdChange: (String) -> Unit) {
+fun LoginBody(
+    onLoginClick: (String) -> Unit,
+    onNonLoginClick: () -> Unit,
+) {
     Column(modifier = Modifier.padding(40.dp)) {
+        var blogId by remember { mutableStateOf("") }
+
         OutlinedTextField(
             value = blogId,
-            onValueChange = { newValue -> onBlogIdChange(newValue) },
+            onValueChange = { blogId = it },
             label = { Text(text = stringResource(R.string.login_id_hint)) },
 //            textStyle = TextStyle(
 //                fontFamily = neoRegular
@@ -155,6 +152,11 @@ fun LoginBody(blogId: String, onBlogIdChange: (String) -> Unit) {
             text = stringResource(R.string.login_id_helper),
 //            fontFamily = neoRegular,
             fontSize = 12.sp,
+        )
+        Spacer(modifier = Modifier.height(30.dp))
+        LoginBottom(
+            onLoginClick = { onLoginClick(blogId) },
+            onNonLoginClick = onNonLoginClick,
         )
     }
 }
