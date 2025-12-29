@@ -9,9 +9,11 @@ import com.example.domain.FetchBlogCntUsecase
 import com.example.domain.FetchLogoutUsecase
 import com.keypick.core.model.UserBlogCntData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
@@ -28,6 +30,13 @@ class UserBlogInfoViewModel @Inject constructor(
     private val fetchLogoutUsecase: FetchLogoutUsecase,
     private val keywordRepository: KeywordRepository
 ) : ViewModel() {
+
+    private val _logoutEvent = MutableSharedFlow<Unit>()
+    val logoutEvent = _logoutEvent.asSharedFlow()
+
+    private val _recommendEvent = MutableSharedFlow<String?>()
+    val recommendEvent = _recommendEvent.asSharedFlow()
+
 
     var userBlogCntState: StateFlow<BlogCntUiState<UserBlogCntData>> = fetchBlogCntUsecase()
         .map<UserBlogCntData, BlogCntUiState<UserBlogCntData>> { data ->
@@ -53,6 +62,7 @@ class UserBlogInfoViewModel @Inject constructor(
                 .catch { _logoutState.update { LogoutState.Error } }
                 .collectLatest { value ->
                     _logoutState.value = LogoutState.Success(value)
+                    _logoutEvent.emit(Unit)
                 }
         }
 
@@ -64,9 +74,11 @@ class UserBlogInfoViewModel @Inject constructor(
                 .catch {_recommendKeywordState.update { RecommendUiState.Error }  }
                 .collectLatest { value ->
                     _recommendKeywordState.value = RecommendUiState.Success(value)
+                    _recommendEvent.emit(value)
                 }
 
             // 키워드 처리
         }
     }
+
 }

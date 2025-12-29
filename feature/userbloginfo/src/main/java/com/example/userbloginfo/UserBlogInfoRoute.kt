@@ -29,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,7 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.theme.KeypickComposeTheme
 import com.example.userbloginfo.chart.BlogVisitorChart
 import com.keypick.core.model.UserBlogCntData
-import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun UserBlogInfoRoute(
@@ -56,18 +57,32 @@ internal fun UserBlogInfoRoute(
     onRecommendKeywordSearch: (String) -> Unit
 ) {
     val blogCntUiState by viewModel.userBlogCntState.collectAsStateWithLifecycle()
-    val logoutState by viewModel.logoutState.collectAsStateWithLifecycle()
-    val recommendKeyword by viewModel.recommendKeywordState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.logoutEvent.collectLatest {
+            onMoveToLogin()
+        }
+    }
+    LaunchedEffect(Unit) {
+        viewModel.recommendEvent.collectLatest { keyword ->
+            if (keyword == null) {
+                Toast.makeText(
+                    context,
+                    "추천 키워드가 없습니다.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                onRecommendKeywordSearch(keyword)
+            }
+        }
+    }
     UserBlogInfoScreen(
         blogCntUiState = blogCntUiState,
-        logoutState = logoutState,
-        recommendUiState = recommendKeyword,
         onLogoutClick = {
             viewModel.logout()
         },
-        onMoveToLogin = onMoveToLogin,
         onRecommendClick = { viewModel.getRecommendKeyword() },
-        onRecommendKeywordSearch = onRecommendKeywordSearch
     )
 }
 
@@ -75,12 +90,9 @@ internal fun UserBlogInfoRoute(
 @Composable
 fun UserBlogInfoScreen(
     blogCntUiState: BlogCntUiState<UserBlogCntData>,
-    logoutState: LogoutState<Boolean>,
-    recommendUiState: RecommendUiState<String?>,
     onLogoutClick: () -> Unit,
-    onMoveToLogin: () -> Unit,
     onRecommendClick: () -> Unit,
-    onRecommendKeywordSearch: (String) -> Unit
+
 ) {
     when (blogCntUiState) {
         BlogCntUiState.Error -> {}
@@ -93,27 +105,6 @@ fun UserBlogInfoScreen(
                     onRecommendClick = onRecommendClick
                 )
             }
-        }
-    }
-    when (logoutState) {
-        LogoutState.Error -> {}
-        LogoutState.Loading -> {}
-        is LogoutState.Success<*> -> {
-            Log.d("LogoutState", "UserBlogInfoScreen:Success ")
-            onMoveToLogin()
-        }
-    }
-
-    when(recommendUiState){
-        RecommendUiState.Error -> {}
-        RecommendUiState.Loading -> {}
-        is RecommendUiState.Success<*> -> {
-            if (recommendUiState._data==null){
-                Toast.makeText(LocalContext.current, "추천 키워드가 없습니다.", Toast.LENGTH_SHORT).show()
-            }else{
-                onRecommendKeywordSearch(recommendUiState._data)
-            }
-
         }
     }
 
