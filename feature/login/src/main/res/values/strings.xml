@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="login_title">안녕하세요.</string>
-    <string name="login_sub_title">네이버 블로그ID를 입력 하여 \n다양한 서비스를 이용하세요.</string>
+    <string name="common_app_name">블로그 ID</string>
     <string name="login_id_hint">BlogID를 입력하세요</string>
     <string name="login_register">등록</string>
     <string name="login_non_regsiter">ID등록 없이 시작하기</string>

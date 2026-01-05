@@ -1,6 +1,7 @@
 package com.example.login
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,8 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,14 +80,21 @@ fun LoginScreen(
     Box(
         modifier = Modifier
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Spacer(modifier = Modifier.height(180.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFF0F0F3))
+                .padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(40.dp))
             LoginTitle()
-            Spacer(modifier = Modifier.height(60.dp))
-            LoginBody(
+            Spacer(modifier = Modifier.height(40.dp))
+            LoginSection(
                 onLoginClick = onLoginClick,
-                onNonLoginClick = onNonLoginClick
             )
+            Spacer(modifier = Modifier.height(40.dp))
+            NonLoginSection(onNonLoginClick)
         }
     }
 
@@ -93,92 +103,104 @@ fun LoginScreen(
 
 
 @Composable
-fun LoginBottom(
-    onLoginClick: () -> Unit,
-    onNonLoginClick: () -> Unit,
-) {
-    Column(
-        modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Button(
-            onClick = onLoginClick,
-            colors = ButtonDefaults.buttonColors(
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                containerColor = MaterialTheme.colorScheme.primary
-            ),
-            shape = RoundedCornerShape(15)
-        ) {
-            Text(text = stringResource(R.string.login_register))
-        }
-        Spacer(modifier = Modifier.height(5.dp))
-        Button(
-            onClick = onNonLoginClick,
-            colors = ButtonDefaults.buttonColors(
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                containerColor = MaterialTheme.colorScheme.primary
-            ),
-            shape = RoundedCornerShape(15)
-        ) {
-            Text(text = stringResource(R.string.login_non_regsiter))
-        }
-    }
-}
-
-@Composable
-fun LoginBody(
+fun LoginSection(
     onLoginClick: (String) -> Unit,
-    onNonLoginClick: () -> Unit,
 ) {
-    Column(modifier = Modifier.padding(40.dp)) {
-        var blogId by remember { mutableStateOf("") }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White, RoundedCornerShape(12.dp))
+            .padding(20.dp)
+    ) {
+        Column(modifier = Modifier) {
+            var blogId by remember { mutableStateOf("") }
+            Text(
+//                text = stringResource(R.string.common_app_name),
+                text = "블로그 ID",
+                fontSize = 12.sp,
+            )
 
-        OutlinedTextField(
-            value = blogId,
-            onValueChange = { blogId = it },
-            label = { Text(text = stringResource(R.string.login_id_hint)) },
-//            textStyle = TextStyle(
-//                fontFamily = neoRegular
-//            )
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = stringResource(R.string.login_id_helper),
-//            fontFamily = neoRegular,
-            fontSize = 12.sp,
-        )
-        Spacer(modifier = Modifier.height(30.dp))
-        LoginBottom(
-            onLoginClick = { onLoginClick(blogId) },
-            onNonLoginClick = onNonLoginClick,
-        )
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = blogId,
+                onValueChange = { blogId = it },
+                label = { Text(text = stringResource(R.string.login_id_hint)) }
+            )
+            Spacer(modifier = Modifier.height(15.dp))
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { onLoginClick(blogId) },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = MaterialTheme.colorScheme.primary
+                ),
+                shape = RoundedCornerShape(15)
+            ) {
+                Text(text = stringResource(R.string.login_register))
+            }
+        }
+    }
+
+}
+
+@Composable
+fun NonLoginSection(
+    onNonLoginClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White, RoundedCornerShape(12.dp))
+            .padding(20.dp)
+    ) {
+        Column {
+            Text(
+                text = "키워드 검색",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+            Spacer(modifier = Modifier.height(5.dp))
+            Text(
+                text = "블로그 없이 검색만 가능해요.",
+                fontSize = 12.sp,
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onNonLoginClick,
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = MaterialTheme.colorScheme.primary
+                ),
+                shape = RoundedCornerShape(15)
+            ) {
+                Text(text = stringResource(R.string.login_register))
+            }
+        }
+
     }
 }
 
 @Composable
 fun LoginTitle() {
     Text(
-        modifier = Modifier.padding(start = 30.dp),
-        text = stringResource(id = R.string.login_title),
-        fontSize = 50.sp,
-        color = MaterialTheme.colorScheme.onSurface,
-//        fontFamily = neoBold
-    )
-    Text(
-        modifier = Modifier.padding(top = 15.dp, start = 30.dp),
-        text = stringResource(id = R.string.login_sub_title),
-//        fontFamily = neoRegular
+        text = "KEYPICK",
+        fontSize = 44.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color.Black
     )
 }
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewLoginScreen(){
-//    MaterialTheme {
-//        LoginScreen(
-//            onLoginClick = {},
-//            onNonLoginClick = {}
-//        )
-//    }
-//}
-//
-//
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewLoginScreen() {
+    MaterialTheme {
+        LoginScreen(
+            onLoginClick = {},
+            onNonLoginClick = {}
+        )
+    }
+}
+
+
