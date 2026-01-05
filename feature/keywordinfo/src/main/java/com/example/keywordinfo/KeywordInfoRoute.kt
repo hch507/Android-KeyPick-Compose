@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,7 +16,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,8 +26,6 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -63,34 +59,26 @@ internal fun KeywordInfoScreen(
     LaunchedEffect(Unit) {
         viewModel.fetchkeywordInfoData(keyword)
     }
-    val search = viewModel.search
+
     val keywordInfoState by viewModel.keywordInfoState.collectAsStateWithLifecycle()
     KeywordInfoScreen(
-        keywordinfoState = keywordInfoState,
-        search = search,
-        onQueryChange = {
-            viewModel.onSearchChanged(it)
-        },
-        onSearchClick = {
+        keywordInfoState = keywordInfoState,
+        onSearchClick = { search ->
             viewModel.fetchkeywordInfoData(search)
         },
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun KeywordInfoScreen(
-    keywordinfoState: KeywordInfoUiState<KeywordInfo>,
-    search: String,
-    onQueryChange: (String) -> Unit,
-    onSearchClick: () -> Unit
+    keywordInfoState: KeywordInfoUiState<KeywordInfo>,
+    onSearchClick: (String) -> Unit
 ) {
     Scaffold(
         contentWindowInsets = ScaffoldDefaults.contentWindowInsets,
         topBar = {
             KeywordInfoTopBar(
-                query = search,
-                onQueryChange = onQueryChange,
                 onSearchClick = onSearchClick,
                 onBackClick = {}
             )
@@ -102,7 +90,7 @@ fun KeywordInfoScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            KeywordInfoTabLayout(keywordinfoState = keywordinfoState)
+            KeywordInfoTabLayout(keywordinfoState = keywordInfoState)
         }
     }
 
@@ -162,11 +150,10 @@ fun KeywordInfoTabLayout(
 
 @Composable
 fun KeywordInfoTopBar(
-    query: String,
-    onQueryChange: (String) -> Unit,
-    onSearchClick: () -> Unit,
+    onSearchClick: (String) -> Unit,
     onBackClick: () -> Unit
 ) {
+    var query by remember { mutableStateOf("") }
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -194,7 +181,7 @@ fun KeywordInfoTopBar(
                 TextField(
                     value = query,
                     onValueChange = { newValue ->
-                        onQueryChange(newValue)
+                        query=newValue
                     },
                     modifier = Modifier
                         .weight(1f),
@@ -209,7 +196,7 @@ fun KeywordInfoTopBar(
 
                     keyboardActions = KeyboardActions(
                         onDone = {
-                            onSearchClick()
+                            onSearchClick(query)
                         }
                     ),
                     singleLine = true,
@@ -229,7 +216,7 @@ fun KeywordInfoTopBar(
 
                 // 검색 아이콘
                 IconButton(
-                    onClick = onSearchClick,
+                    onClick = { onSearchClick(query) },
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                 ) {
@@ -250,11 +237,9 @@ fun KeywordInfoTopBar(
 @Preview(showBackground = true)
 @Composable
 fun KeywordInfoTopBarPreview() {
-    var query by remember { mutableStateOf("") }
     KeypickComposeTheme {
         KeywordInfoTopBar(
-            query = query,
-            onQueryChange = { query = it },
+
             onSearchClick = { /* 검색 버튼 클릭 */ },
             onBackClick = { /* 뒤로가기 클릭 */ }
         )

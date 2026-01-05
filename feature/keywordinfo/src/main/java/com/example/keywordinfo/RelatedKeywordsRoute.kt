@@ -60,6 +60,7 @@ fun RelatedKeywordsScreen(
 fun KeywordInfoSuccessScreen(
     relKewordResourceList: List<RelKewordResource>
 ) {
+    if (relKewordResourceList.isEmpty()) return
     Box(
         modifier = Modifier
             .fillMaxSize()
