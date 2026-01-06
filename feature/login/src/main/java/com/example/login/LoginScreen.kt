@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.material3.CircularProgressIndicator
 
 
 @Composable
@@ -48,10 +49,15 @@ internal fun LoginRoute(
             moveToMain()
         }
     }
-
+    LoginScreen(
+        onLoginClick = { blogId ->
+            viewModel.checkBlogIdExists(blogId)
+        },
+        onNonLoginClick = onNonLoginClick
+    )
     when (loginUiState) {
         is LoginUiState.Loading -> {
-            Log.d("test_LoginUiState", "LoginScreen: Loading")
+            LoadingOverlay()
         }
 
         is LoginUiState.Error -> {
@@ -64,12 +70,7 @@ internal fun LoginRoute(
         }
     }
 
-    LoginScreen(
-        onLoginClick = { blogId ->
-            viewModel.checkBlogIdExists(blogId)
-        },
-        onNonLoginClick = onNonLoginClick
-    )
+
 }
 
 @Composable
@@ -100,7 +101,17 @@ fun LoginScreen(
 
 
 }
-
+@Composable
+fun LoadingOverlay() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.3f)),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(color = Color.White)
+    }
+}
 
 @Composable
 fun LoginSection(
