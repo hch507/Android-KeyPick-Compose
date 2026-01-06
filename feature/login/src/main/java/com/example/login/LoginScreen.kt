@@ -2,6 +2,7 @@ package com.example.login
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -79,16 +80,16 @@ fun LoginScreen(
     onNonLoginClick: () -> Unit = {},
 ) {
     Box(
-        modifier = Modifier
+        modifier = Modifier.fillMaxSize()
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xFFF0F0F3))
                 .padding(20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
             LoginTitle()
             Spacer(modifier = Modifier.height(40.dp))
             LoginSection(
