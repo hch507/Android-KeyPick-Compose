@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.FetchKeywordInfoUsecase
+import com.example.domain.SaveKeywordUsecase
 import com.keypick.core.model.KeywordInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,11 +21,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class KeywordInfoViewModel @Inject constructor(
-    private val fetchKeywordInfoUsecase: FetchKeywordInfoUsecase
+    private val fetchKeywordInfoUsecase: FetchKeywordInfoUsecase,
+    private val saveKeywordUsecase: SaveKeywordUsecase
 ) : ViewModel() {
     private val _keywordInfoState =
         MutableStateFlow<KeywordInfoUiState<KeywordInfo>>(KeywordInfoUiState.Loading)
     val keywordInfoState = _keywordInfoState.asStateFlow()
+
+    private val _keywordSaveState =
+        MutableStateFlow<KeywordInfoUiState<Boolean>>(KeywordInfoUiState.Loading)
+    val keywordSaveState = _keywordSaveState.asStateFlow()
+
+
     var search by mutableStateOf("")
         private set
 
@@ -33,12 +41,21 @@ class KeywordInfoViewModel @Inject constructor(
         Log.d("LoginViewModel", "onBlogIdChanged: ")
     }
 
-    fun fetchkeywordInfoData(keyword: String) {
+    fun fetchKeywordInfoData(keyword: String) {
         viewModelScope.launch {
             fetchKeywordInfoUsecase(keyword = keyword)
                 .onStart { _keywordInfoState.update { KeywordInfoUiState.Loading }  }
                 .catch { _keywordInfoState.update { KeywordInfoUiState.Error } }
                 .collectLatest { value -> _keywordInfoState.value = KeywordInfoUiState.Success(value) }
+        }
+    }
+
+    fun saveKeyword(keyword : String){
+        viewModelScope.launch {
+            saveKeywordUsecase(keyword = keyword)
+                .onStart { _keywordSaveState.update { KeywordInfoUiState.Loading }  }
+                .catch { _keywordSaveState.update { KeywordInfoUiState.Error } }
+                .collectLatest { value -> _keywordSaveState.value = KeywordInfoUiState.Success(value) }
         }
     }
 

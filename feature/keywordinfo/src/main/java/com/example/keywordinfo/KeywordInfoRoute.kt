@@ -43,11 +43,9 @@ import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.R
 import com.example.designsystem.theme.KeypickComposeTheme
 import com.example.keywordinfo.navigation.KeywordInfoLevelDestination
-import com.keypick.core.model.KeywordInfo
 import kotlinx.coroutines.launch
 
 
@@ -57,23 +55,23 @@ internal fun KeywordInfoScreen(
     viewModel: KeywordInfoViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        viewModel.fetchkeywordInfoData(keyword)
+        viewModel.fetchKeywordInfoData(keyword)
     }
 
-    val keywordInfoState by viewModel.keywordInfoState.collectAsStateWithLifecycle()
     KeywordInfoScreen(
-        keywordInfoState = keywordInfoState,
         onSearchClick = { search ->
-            viewModel.fetchkeywordInfoData(search)
+            viewModel.fetchKeywordInfoData(search)
         },
+        viewModel = viewModel
     )
 }
 
 
 @Composable
 fun KeywordInfoScreen(
-    keywordInfoState: KeywordInfoUiState<KeywordInfo>,
-    onSearchClick: (String) -> Unit
+
+    onSearchClick: (String) -> Unit,
+    viewModel : KeywordInfoViewModel
 ) {
     Scaffold(
         contentWindowInsets = ScaffoldDefaults.contentWindowInsets,
@@ -90,7 +88,7 @@ fun KeywordInfoScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            KeywordInfoTabLayout(keywordinfoState = keywordInfoState)
+            KeywordInfoTabLayout( viewModel = viewModel)
         }
     }
 
@@ -98,10 +96,10 @@ fun KeywordInfoScreen(
 
 @Composable
 fun KeywordInfoTabLayout(
-    tablist: List<KeywordInfoLevelDestination> = KeywordInfoLevelDestination.entries,
-    keywordinfoState: KeywordInfoUiState<KeywordInfo>
+    tabList: List<KeywordInfoLevelDestination> = KeywordInfoLevelDestination.entries,
+    viewModel : KeywordInfoViewModel
 ) {
-    val pagerState = rememberPagerState(pageCount = { tablist.size })
+    val pagerState = rememberPagerState(pageCount = { tabList.size })
     val coroutineScope = rememberCoroutineScope()
     Spacer(modifier = Modifier.height(10.dp))
     Column(modifier = Modifier.fillMaxSize()) {
@@ -111,7 +109,7 @@ fun KeywordInfoTabLayout(
             selectedTabIndex = pagerState.currentPage
         ) {
 
-            tablist.forEachIndexed { index, item ->
+            tabList.forEachIndexed { index, item ->
                 Tab(
                     modifier = Modifier,
                     selected = pagerState.currentPage == index,
@@ -133,13 +131,13 @@ fun KeywordInfoTabLayout(
         HorizontalPager(
             state = pagerState
         ) { index ->
-            when (tablist[index]) {
+            when (tabList[index]) {
                 KeywordInfoLevelDestination.KEYWORD_DETAIL -> {
-                    KeywordDetailRoute()
+                    KeywordDetailRoute(viewModel = viewModel)
                 }
 
                 KeywordInfoLevelDestination.RELATED_KEYWORDS -> {
-                    RelatedKeywordsRoute(keywordinfoState)
+                    RelatedKeywordsRoute(viewModel = viewModel)
                 }
             }
         }

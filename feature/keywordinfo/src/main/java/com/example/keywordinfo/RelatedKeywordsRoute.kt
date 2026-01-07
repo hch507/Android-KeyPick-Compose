@@ -14,9 +14,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -24,22 +26,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.theme.KeypickComposeTheme
 import com.keypick.core.model.KeywordInfo
 import com.keypick.core.model.RelKewordResource
 
 @Composable
 fun RelatedKeywordsRoute(
-    keywordinfoState: KeywordInfoUiState<KeywordInfo>
+    viewModel: KeywordInfoViewModel
 ) {
-    RelatedKeywordsScreen(keywordinfoState)
+    val keywordInfoState by viewModel.keywordInfoState.collectAsStateWithLifecycle()
+    RelatedKeywordsScreen(keywordInfoState, onSaveClick = {
+        viewModel.saveKeyword(it)
+    })
 }
 
 @Composable
 fun RelatedKeywordsScreen(
-    keywordinfoState: KeywordInfoUiState<KeywordInfo>
+    keywordInfoState: KeywordInfoUiState<KeywordInfo>,
+    onSaveClick: (String) -> Unit
 ) {
-    when (keywordinfoState) {
+    when (keywordInfoState) {
         KeywordInfoUiState.Error -> {
             Log.d("keywordinfoState", "RelatedKeywordsScreen: Error")
         }
@@ -49,7 +56,12 @@ fun RelatedKeywordsScreen(
         }
 
         is KeywordInfoUiState.Success<*> -> {
-            keywordinfoState._data?.let { KeywordInfoSuccessScreen(it.relKewordResource) }
+            keywordInfoState._data?.let {
+                KeywordInfoSuccessScreen(
+                    it.relKewordResource,
+                    onSaveClick
+                )
+            }
         }
     }
 
@@ -58,9 +70,10 @@ fun RelatedKeywordsScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun KeywordInfoSuccessScreen(
-    relKewordResourceList: List<RelKewordResource>
+    relKeywordResourceList: List<RelKewordResource>,
+    onSaveClick: (String) -> Unit
 ) {
-    if (relKewordResourceList.isEmpty()) return
+    if (relKeywordResourceList.isEmpty()) return
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -72,7 +85,7 @@ fun KeywordInfoSuccessScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp) // 아이템 간 간격
         ) {
 
-            item { KeywordTitle(relKewordResourceList[0]) }
+            item { KeywordTitle(relKeywordResourceList[0]) }
             item { Spacer(modifier = Modifier.height(25.dp)) }
             stickyHeader {
                 Box(
@@ -88,14 +101,14 @@ fun KeywordInfoSuccessScreen(
                             .padding(15.dp)
                     ) {
                         Text(text = "연관 키워드", fontSize = 15.sp, modifier = Modifier.weight(1f))
-                        Text(text = "${relKewordResourceList.size - 1}개", fontSize = 15.sp)
+                        Text(text = "${relKeywordResourceList.size - 1}개", fontSize = 15.sp)
                     }
                 }
 
             }
-            items(relKewordResourceList.size - 1) { index ->
-                val item = relKewordResourceList[index + 1]
-                RelatedItem(item)
+            items(relKeywordResourceList.size - 1) { index ->
+                val item = relKeywordResourceList[index + 1]
+                RelatedItem(item, onSaveClick = onSaveClick)
             }
         }
     }
@@ -103,7 +116,7 @@ fun KeywordInfoSuccessScreen(
 
 @Composable
 fun KeywordTitle(
-    relKewordResource: RelKewordResource,
+    relKeywordResource: RelKewordResource,
 ) {
     RelatedItemBox {
         Column {
@@ -112,10 +125,10 @@ fun KeywordTitle(
             ) {
                 RelatedItemTitle()
                 Spacer(modifier = Modifier.weight(1f))
-                Text(text = "${relKewordResource.monthlyPcQcCnt + relKewordResource.monthlyMobileQcCnt}회")
+                Text(text = "${relKeywordResource.monthlyPcQcCnt + relKeywordResource.monthlyMobileQcCnt}회")
             }
             Spacer(Modifier.height(10.dp))
-            Text(text = relKewordResource.relKeyword, fontSize = 20.sp)
+            Text(text = relKeywordResource.relKeyword, fontSize = 20.sp)
         }
 
     }
@@ -123,7 +136,8 @@ fun KeywordTitle(
 
 @Composable
 fun RelatedItem(
-    relKewordResource: RelKewordResource
+    relKeywordResource: RelKewordResource,
+    onSaveClick: (String) -> Unit
 ) {
     RelatedItemBox() {
         Column(
@@ -131,13 +145,20 @@ fun RelatedItem(
         ) {
             RelatedItemTitle()
             Spacer(Modifier.height(10.dp))
-            Text(text = relKewordResource.relKeyword, fontSize = 20.sp)
+            Text(text = relKeywordResource.relKeyword, fontSize = 20.sp)
             Spacer(Modifier.height(10.dp))
             Text(
-                text = relKewordResource.monthlyPcQcCnt + relKewordResource.monthlyMobileQcCnt,
+                text = relKeywordResource.monthlyPcQcCnt + relKeywordResource.monthlyMobileQcCnt,
                 fontSize = 15.sp,
                 modifier = Modifier.align(Alignment.End) // 👈 이 한 줄로 오른쪽 정렬됨
             )
+            Spacer(Modifier.height(10.dp))
+            Button(
+                onClick = { onSaveClick(relKeywordResource.relKeyword) }
+            ) {
+                Text("Save")
+            }
+
         }
     }
 }
