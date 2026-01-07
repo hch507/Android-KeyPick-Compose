@@ -1,20 +1,19 @@
-package com.example.datastore
+package com.example.datastore.blogprerf
 
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class BlogPreferencesDataSource @Inject constructor(
-    private val blogPreferencs: BlogPreferencs
+    private val blogPreferences: BlogPreferences
 ) {
 
     suspend fun getBlogId() : String{
-        return blogPreferencs.getBlogId()
+        return blogPreferences.getBlogId()
     }
     suspend fun saveBlogId(blogId: String) {
-        blogPreferencs.setBlogId(blogId)
+        blogPreferences.setBlogId(blogId)
     }
 
     suspend fun clearPreferences() {
-        blogPreferencs.clear()
+        blogPreferences.clear()
     }
 }

@@ -1,7 +1,7 @@
 package com.example.data.repository.impl
 
 import com.example.data.repository.LoginOrCntRepository
-import com.example.datastore.BlogPreferencesDataSource
+import com.example.datastore.blogprerf.BlogPreferencesDataSource
 import com.example.network.BlogInfoNetworkDataSource
 import com.example.network.model.asExternalModel
 import com.keypick.core.model.UserBlogCntData
@@ -26,7 +26,7 @@ class LoginOrCntRepositoryImpl @Inject constructor(
         emit(true)
     }
 
-    override suspend fun fetchlogout(): Flow<Boolean> = flow {
+    override suspend fun fetchLogout(): Flow<Boolean> = flow {
         userBlogPreferencesDataSource.clearPreferences()
         emit(true)
     }

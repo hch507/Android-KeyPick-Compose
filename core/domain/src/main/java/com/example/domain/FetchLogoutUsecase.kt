@@ -7,5 +7,5 @@ class FetchLogoutUsecase @Inject constructor(
     private val loginOnCntRepository: LoginOrCntRepository
 ) {
     suspend operator fun invoke() =
-        loginOnCntRepository.fetchlogout()
+        loginOnCntRepository.fetchLogout()
 }

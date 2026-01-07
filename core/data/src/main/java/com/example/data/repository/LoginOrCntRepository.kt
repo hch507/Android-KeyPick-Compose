@@ -8,7 +8,7 @@ interface LoginOrCntRepository {
 
     suspend fun hasBlogId(userId: String): Flow<Boolean>
 
-    suspend fun fetchlogout(): Flow<Boolean>
+    suspend fun fetchLogout(): Flow<Boolean>
 
     fun getBlogId(): Flow<String>
 
