@@ -1,8 +1,9 @@
-package com.example.datastore
+package com.example.datastore.blogprerf
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.datastore.KeypickPreferencesKeys
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -12,20 +13,20 @@ private const val DATASTORE_NAME = "blog_preferences"
 
 private val Context.dataStore by preferencesDataStore(name = DATASTORE_NAME)
 
-class BlogPreferencs @Inject constructor(
+class BlogPreferences @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
 
     suspend fun getBlogId(): String {
         val blogId= context.dataStore.data
-            .map { preferences -> preferences[BlogPreferencesKeys.BLOG_ID] ?: "" }.first()
+            .map { preferences -> preferences[KeypickPreferencesKeys.BLOG_ID] ?: "" }.first()
         return blogId
     }
 
 
     suspend fun setBlogId(blogId: String) {
         context.dataStore.edit { preferences ->
-            preferences[BlogPreferencesKeys.BLOG_ID] = blogId
+            preferences[KeypickPreferencesKeys.BLOG_ID] = blogId
         }
     }
 
