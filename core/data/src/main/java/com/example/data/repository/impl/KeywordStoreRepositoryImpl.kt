@@ -11,8 +11,8 @@ import javax.inject.Inject
 class KeywordStoreRepositoryImpl @Inject constructor(
     private val keywordStorePreferencesDataSource: KeywordStorePreferencesDataSource
 ) : KeywordStoreRepository{
-    override suspend fun getKeywords(): List<String> {
-        return keywordStorePreferencesDataSource.getKeywords()
+    override suspend fun getKeywords(): Flow<List<String>> = flow {
+        emit(keywordStorePreferencesDataSource.getKeywords())
     }
 
     override suspend fun addKeyword(keyword: String) : Flow<Boolean> = flow{

@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface KeywordStoreRepository {
 
-    suspend fun getKeywords() : List<String>
+    suspend fun getKeywords() : Flow<List<String>>
 
     suspend fun addKeyword(keyword : String) : Flow<Boolean>
 
