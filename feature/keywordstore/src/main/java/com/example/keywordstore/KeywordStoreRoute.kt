@@ -31,6 +31,7 @@ internal fun KeywordStoreRoute(
      viewModel: KeywordStoreViewModel = hiltViewModel()
 ) {
     val keywordState by viewModel.keywordSaveState.collectAsStateWithLifecycle()
+    viewModel.getStoredKeywords()
     KeywordStoreScreen(keywordState)
 }
 
@@ -129,6 +130,7 @@ fun KeywordItemBox(
                 color = Color.White,
                 shape = RoundedCornerShape(20.dp)
             )
+            .fillMaxWidth()
     ) {
         Box(modifier = Modifier.padding(16.dp)) {
             content()

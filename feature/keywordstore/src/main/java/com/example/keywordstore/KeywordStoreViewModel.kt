@@ -14,9 +14,11 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+
 @HiltViewModel
 class KeywordStoreViewModel @Inject constructor(
-    private val deleteKeywordUsecase: DeleteKeywordUsecase,
+//    private val deleteKeywordUsecase: DeleteKeywordUsecase,
     private val getStoredKeywordUsecase: GetStoredKeywordUsecase
 ) :ViewModel(){
     private val _keywordSaveState =
