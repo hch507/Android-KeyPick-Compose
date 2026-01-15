@@ -69,6 +69,10 @@ internal fun LoginRoute(
             Log.d("test_LoginUiState", "LoginScreen: Success")
 
         }
+
+        is LoginUiState.Idle -> {
+
+        }
     }
 
 

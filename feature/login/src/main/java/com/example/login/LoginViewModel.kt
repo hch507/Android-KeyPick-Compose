@@ -30,7 +30,7 @@ class LoginViewModel @Inject constructor(
     private val fetchLoginUsecase: FetchLoginUsecase,
     private val checkLoginedUsecase: CheckLoginedUsecase
 ) : ViewModel() {
-    private val _blogIdResult = MutableStateFlow<LoginUiState<Boolean>>(LoginUiState.Loading)
+    private val _blogIdResult = MutableStateFlow<LoginUiState<Boolean>>(LoginUiState.Idle)
     val blogIdResult = _blogIdResult.asStateFlow()
 
     private val _navigationEvent = MutableSharedFlow<Unit>()
