@@ -24,11 +24,6 @@ enum class HomeLevelDestination(
         route = RankingRoute::class,
         iconRes = com.example.designsystem.R.drawable.ic_rank_nav
     ),
-    SEARCH(
-        titleText = R.string.search_title,
-        route = SearchRoute::class,
-        iconRes = com.example.designsystem.R.drawable.ic_search_nav
-    ),
     STORE(
         titleText = R.string.store_title,
         route = KeywordStoreRoute::class,

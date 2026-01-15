@@ -55,7 +55,6 @@ fun navigateToHomeLevelDestination(
     when (homeLevelDestination) {
         HomeLevelDestination.USER_BLOG_INFO -> navController.navigateToUserBlogInfo()
         HomeLevelDestination.RANKING -> navController.navigateToRanking()
-        HomeLevelDestination.SEARCH -> navController.navigateToSearch()
         HomeLevelDestination.STORE -> navController.navigateTopStore()
 //            INTERESTS -> navController.navigateToInterests(null, topLevelNavOptions)
     }
