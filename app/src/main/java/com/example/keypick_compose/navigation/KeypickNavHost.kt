@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.example.common.NavOptionProvider
-import com.example.home.navigation.HomeRoute
 import com.example.home.navigation.homeScreen
 
 
@@ -44,16 +43,17 @@ fun KeypickNavHost(
             onMoveToLoginClick = navController::navigateToLogin
         )
         homeScreen(
-            onMoveToSearchClick = { keyword ->
+            onRecommendKeywordClick = { keyword ->
                 navController.navigateToKeywordInfo(keyword)
             },
+            onMoveToSearch = navController::navigateToSearch,
             onMoveToLogin = navController::navigateToLogin
         )
-//        searchScreen(
-//            onSearchClick = { keyword ->
-//                navController.navigateToKeywordInfo(keyword)
-//            }
-//        )
+        searchScreen(
+            onSearchClick = { keyword ->
+                navController.navigateToKeywordInfo(keyword)
+            }
+        )
         keywordInfoScreen()
 
     }

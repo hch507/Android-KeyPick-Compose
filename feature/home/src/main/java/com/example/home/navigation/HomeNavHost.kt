@@ -13,7 +13,7 @@ import com.example.userbloginfo.navigation.userBlogInfoScreen
 @Composable
 fun HomeNavHost(
     navController: NavHostController,
-    onMoveToSearchClick :(String) -> Unit,
+    onRecommendKeywordSearch :(String) -> Unit,
     onMoveToLogin:() -> Unit,
     blogId : String
 ){
@@ -23,10 +23,9 @@ fun HomeNavHost(
     ){
         userBlogInfoScreen(
             onMoveToLogin = onMoveToLogin,
-            onRecommendKeywordSearch = onMoveToSearchClick
+            onRecommendKeywordSearch =onRecommendKeywordSearch
         )
         rankingScreen(blogId)
-        searchScreen(onMoveToSearchClick)
         keywordStoreScreen()
     }
 }

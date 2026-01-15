@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
@@ -41,7 +42,8 @@ import com.example.home.navigation.HomeUiState
 
 @Composable
 internal fun HomeRoute(
-    onMoveToSearchClick: (String) -> Unit,
+    onMoveToSearchClick: () -> Unit,
+    onRecommendKeywordClick : (String) -> Unit,
     onMoveToLogin: () -> Unit,
     homeViewModel: HomeViewModel= hiltViewModel()
 ) {
@@ -56,14 +58,15 @@ internal fun HomeRoute(
             currentDestination.isRouteInHierarchy(it.route)
         } ?: HomeLevelDestination.USER_BLOG_INFO
     }
-    HomeScreen(navController, onMoveToSearchClick, onMoveToLogin, selectedTab,blogId= blogId,)
+    HomeScreen(navController, onRecommendKeywordClick, onMoveToSearchClick, onMoveToLogin, selectedTab,blogId= blogId,)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    onMoveToSearchClick: (String) -> Unit,
+    onRecommendKeywordClick: (String) -> Unit,
+    onMoveToSearchClick: () -> Unit,
     onMoveToLogin: () -> Unit,
     selectTab: HomeLevelDestination,
     blogId : HomeUiState<String>
@@ -74,12 +77,15 @@ fun HomeScreen(
                 title = { Text(stringResource(selectTab.titleText)) },
                 colors = TopAppBarDefaults.topAppBarColors(),
                 actions = {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_search_nav),
-                        tint = null,
-                        contentDescription = stringResource(com.example.home.R.string.search_title),
-                        modifier = Modifier.padding(horizontal = 30.dp)
-                    )
+                    IconButton(onClick = {
+                        onMoveToSearchClick()
+                    }) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_search_nav),
+                            contentDescription = stringResource(com.example.home.R.string.search_title),
+                            tint = Color.Unspecified
+                        )
+                    }
                 })
         },
         bottomBar = {
@@ -98,7 +104,13 @@ fun HomeScreen(
                 HomeUiState.Error -> {}
                 HomeUiState.Loading -> {}
                 is HomeUiState.Success<*> -> {
-                    HomeNavHost(navController, onMoveToSearchClick, onMoveToLogin =onMoveToLogin, blogId = blogId._data!!)
+                    HomeNavHost(
+                        navController = navController,
+                        onRecommendKeywordSearch =onRecommendKeywordClick,
+                        onMoveToLogin = onMoveToLogin,
+                        blogId = blogId._data!!,
+
+                    )
                 }
             }
 
