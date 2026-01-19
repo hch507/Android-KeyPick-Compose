@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.data.repository.KeywordRepository
+import com.example.domain.CheckLoginedUsecase
 import com.example.domain.FetchBlogCntUsecase
 import com.example.domain.FetchLogoutUsecase
 import com.keypick.core.model.UserBlogCntData
@@ -28,7 +29,7 @@ import javax.inject.Inject
 class UserBlogInfoViewModel @Inject constructor(
     private val fetchBlogCntUsecase: FetchBlogCntUsecase,
     private val fetchLogoutUsecase: FetchLogoutUsecase,
-    private val keywordRepository: KeywordRepository
+    private val keywordRepository: KeywordRepository,
 ) : ViewModel() {
 
     private val _logoutEvent = MutableSharedFlow<Unit>()

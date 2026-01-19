@@ -4,9 +4,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -93,7 +94,7 @@ fun UserBlogInfoScreen(
     onLogoutClick: () -> Unit,
     onRecommendClick: () -> Unit,
 
-) {
+    ) {
     when (blogCntUiState) {
         BlogCntUiState.Error -> {}
         BlogCntUiState.Loading -> {}
@@ -155,7 +156,7 @@ fun UserBlogInfoContent(
             }
 
             item {
-                BlogInfoBody()
+                BlogInfoBody(data)
             }
 
             item {
@@ -163,111 +164,82 @@ fun UserBlogInfoContent(
             }
 
             item {
-                RecomandKeywordCard(onRecommendClick)
+                RecommendKeywordCard(onRecommendClick)
             }
         }
     }
 }
 
 @Composable
-fun RecomandKeywordCard(
+fun RecommendKeywordCard(
     onRecommendClick: () -> Unit
-) {
-    Surface(
-        color = Color.White,
-        shape = RoundedCornerShape(20.dp),
-        shadowElevation = 4.dp,
-        border = BorderStroke(2.dp, Color.Blue),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-
-            Text(
-                text = "추천 키워드",
-                fontSize = 25.sp
-            )
-            Spacer(Modifier.height(7.dp))
-            Text(
-                text = "오늘의 추천 키워드를 확인해보세요",
-                fontSize = 15.sp
-            )
-            Spacer(Modifier.height(7.dp))
-            RecomandButton(
-                text = "추천 키워드",
-                onClick = onRecommendClick,
-            ) {
-                Icon(
-                    painter = painterResource(id = com.example.designsystem.R.drawable.ic_logout),
-                    contentDescription = "Posts",
-                    tint = Color(0xFF333366),
-                    modifier = Modifier.size(15.dp)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun RecomandButton(
-    text: String,
-    onClick: () -> Unit,
-    icon: @Composable () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(25.dp)
-            .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(20.dp))
-    ) {
-        Button(
-            onClick = onClick,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Transparent // 배경 없애서 겹치기 가능하게
-            ),
-            contentPadding = PaddingValues(0.dp), // 내부 여백 제거
-            modifier = Modifier.defaultMinSize(1.dp)
-        ) {
-            Text(
-                text = text,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                fontSize = 10.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+            .clip(RoundedCornerShape(20.dp))
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        Color(0xFF1F1F88),
+                        Color(0xFF728AFF)
+                    )
+                )
             )
+            .clickable { onRecommendClick() }
+
+    ) {
+        Row(
+
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+
+                Text(
+                    text = "오늘의 키워드가 \n도착했어요.",
+                    fontSize = 25.sp,
+                    color = Color.White
+
+                )
+                Spacer(Modifier.height(7.dp))
+                Text(
+                    text = "지금 참여하고 선물을 받으세요.",
+                    fontSize = 15.sp,
+                    color = Color.White
+                )
+                Spacer(Modifier.height(7.dp))
+
+            }
         }
 
-        Box(
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(end = 10.dp)
-        ) {
-            icon()
-        }
     }
 }
 
 @Composable
-fun BlogInfoBody() {
+fun BlogInfoBody(
+    data: UserBlogCntData,
+) {
+    val todayCnt = data.visitorcntList[0].cnt
+    val gapCnt = data.visitorcntList[0].cnt.toInt() - data.visitorcntList[1].cnt.toInt()
     Column {
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
             BlogInfoCard(
                 modifier = Modifier.weight(1f),
-                data = "1234",
+                data = todayCnt,
                 descrption = "오늘 방문자",
-                icon = com.example.designsystem.R.drawable.ic_today_visitor
+                icon = com.example.designsystem.R.drawable.ic_home_today
             )
             Spacer(Modifier.width(10.dp))
             BlogInfoCard(
                 modifier = Modifier.weight(1f),
-                data = "185+",
+                data = gapCnt.toString(),
                 descrption = "전날 대비",
-                icon = com.example.designsystem.R.drawable.ic_gap
+                icon = com.example.designsystem.R.drawable.ic_home_yesterday
             )
         }
         Spacer(Modifier.height(10.dp))
@@ -290,7 +262,7 @@ fun BlogInfoBody() {
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 BlogVisitorChart(
-                    visitors = listOf(950f, 800f, 1100f, 1200f, 1300f),
+                    visitors = listOf(data.visitorcntList[4].cnt.toFloat(), data.visitorcntList[3].cnt.toFloat(), data.visitorcntList[2].cnt.toFloat(), data.visitorcntList[1].cnt.toFloat(), data.visitorcntList[0].cnt.toFloat()),
                     labels = listOf("4일 전", "3일 전", "2일 전", "1일 전", "오늘")
                 )
             }
@@ -317,10 +289,9 @@ fun BlogInfoCard(
             .padding(16.dp)
     ) {
         Column {
-            Icon(
+            Image(
                 painter = painterResource(id = icon),
                 contentDescription = "Posts",
-                tint = Color(0xFF333366),
                 modifier = Modifier.size(30.dp)
             )
             Spacer(Modifier.height(7.dp))
@@ -353,6 +324,7 @@ fun BlogProfile(
             )
             .padding(16.dp)
 
+
     ) {
         IconButton(
             onClick = onLogoutClick,
@@ -367,49 +339,13 @@ fun BlogProfile(
             )
         }
 
-        Row() {
-            Box(
-                modifier = Modifier
-                    .size(width = 30.dp, height = 30.dp)
-                    .background(
-                        color = Color.LightGray,
-                        shape = RoundedCornerShape(50)
-                    )
-                    .align(Alignment.CenterVertically)
-            ) {}
-            Spacer(Modifier.width(10.dp))
-            Column {
-                Text(
-                    text = "${blogId}님의 블로그",
-                    fontSize = 20.sp
-                )
-                Surface(
-                    shape = RoundedCornerShape(10.dp),
-                    color = Color.White,
-                    shadowElevation = 2.dp
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            painter = painterResource(id = com.example.designsystem.R.drawable.ic_store_nav),
-                            contentDescription = "Posts",
-                            tint = Color(0xFF333366),
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "12",
-                            fontSize = 12.sp,
-                            color = Color(0xFF333366)
-                        )
-                    }
-                }
+        Spacer(Modifier.width(10.dp))
+        Text(
+            modifier = Modifier.align(Alignment.CenterStart),
+            text = "${blogId}님의 블로그",
+            fontSize = 20.sp
+        )
 
-            }
-
-        }
 
     }
 }
@@ -418,7 +354,7 @@ fun BlogProfile(
 @Composable
 fun RecomandKeywordCardPreview() {
     KeypickComposeTheme {
-        RecomandKeywordCard(
+        RecommendKeywordCard(
             onRecommendClick = {}
         )
     }
