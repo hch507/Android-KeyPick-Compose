@@ -4,7 +4,7 @@ package com.keypick.core.model
 
 data class UserBlogCntData(
     val blogId : String,
-    val visitorcntList: List<VisitorCntData>
+    val visitorCntList: List<VisitorCntData>
 )
 
 data class VisitorCntData(
