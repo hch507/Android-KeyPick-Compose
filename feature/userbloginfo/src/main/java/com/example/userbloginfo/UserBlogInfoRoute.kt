@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.designsystem.card.AppCard
 import com.example.designsystem.theme.KeypickComposeTheme
 import com.example.userbloginfo.chart.BlogVisitorChart
 import com.keypick.core.model.UserBlogCntData
@@ -235,16 +236,8 @@ fun BlogInfoBody(
             )
         }
         Spacer(Modifier.height(10.dp))
-        Box(
+        AppCard (
             modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp)
-                .shadow(4.dp, shape = RoundedCornerShape(20.dp))
-                .background(
-                    color = Color.White,
-                    shape = RoundedCornerShape(20.dp)
-                )
-                .padding(16.dp)
         ) {
             Column() {
                 Text(
@@ -255,7 +248,10 @@ fun BlogInfoBody(
                 Spacer(modifier = Modifier.height(20.dp))
                 BlogVisitorChart(
                     visitors = listOf(data.visitorCntList[4].cnt.toFloat(), data.visitorCntList[3].cnt.toFloat(), data.visitorCntList[2].cnt.toFloat(), data.visitorCntList[1].cnt.toFloat(), data.visitorCntList[0].cnt.toFloat()),
-                    labels = listOf("4일 전", "3일 전", "2일 전", "1일 전", "오늘")
+                    labels = listOf("4일 전", "3일 전", "2일 전", "1일 전", "오늘"),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
                 )
             }
         }
@@ -271,14 +267,8 @@ fun BlogInfoCard(
     descrption: String,
     @DrawableRes icon: Int
 ) {
-    Box(
+    AppCard(
         modifier = modifier
-            .shadow(4.dp, shape = RoundedCornerShape(20.dp))
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(20.dp)
-            )
-            .padding(16.dp)
     ) {
         Column {
             Image(
@@ -299,6 +289,9 @@ fun BlogInfoCard(
         }
     }
 }
+
+
+
 
 
 @Composable

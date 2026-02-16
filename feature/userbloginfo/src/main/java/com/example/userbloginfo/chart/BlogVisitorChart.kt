@@ -33,8 +33,7 @@ fun BlogVisitorChart(
     labels : List<String>
 ) {
     AndroidView(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier,
         factory = { context ->
             LineChart(context).apply {
                 layoutParams = ViewGroup.LayoutParams(
