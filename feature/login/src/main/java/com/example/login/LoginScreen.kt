@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,6 +35,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import com.example.designsystem.button.AppButton
+import com.example.designsystem.card.AppCard
 
 
 @Composable
@@ -54,25 +59,11 @@ internal fun LoginRoute(
         onLoginClick = { blogId ->
             viewModel.checkBlogIdExists(blogId)
         },
-        onNonLoginClick = onNonLoginClick
+        onNonLoginClick = onNonLoginClick,
+        loginUiState = loginUiState
     )
-    when (loginUiState) {
-        is LoginUiState.Loading -> {
-            LoadingOverlay()
-        }
-
-        is LoginUiState.Error -> {
-            Log.d("test_LoginUiState", "LoginScreen: Error")
-        }
-
-        is LoginUiState.Success -> {
-            Log.d("test_LoginUiState", "LoginScreen: Success")
-
-        }
-
-        is LoginUiState.Idle -> {
-
-        }
+    if (loginUiState is LoginUiState.Loading){
+        LoadingOverlay()
     }
 
 
@@ -82,6 +73,7 @@ internal fun LoginRoute(
 fun LoginScreen(
     onLoginClick: (String) -> Unit = {},
     onNonLoginClick: () -> Unit = {},
+    loginUiState : LoginUiState<*>
 ) {
     Box(
         modifier = Modifier.fillMaxSize()
@@ -98,14 +90,21 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(40.dp))
             LoginSection(
                 onLoginClick = onLoginClick,
+                modifier = Modifier.fillMaxWidth(),
+                isLoginError = loginUiState is LoginUiState.Error
             )
-            Spacer(modifier = Modifier.height(40.dp))
-            NonLoginSection(onNonLoginClick)
+            OrDivider()
+            NonLoginButton(
+                text = stringResource(R.string.login_move_to_search),
+                modifier = Modifier.padding(horizontal = 20.dp),
+                onClick = onNonLoginClick,
+            )
         }
     }
 
 
 }
+
 @Composable
 fun LoadingOverlay() {
     Box(
@@ -121,87 +120,125 @@ fun LoadingOverlay() {
 @Composable
 fun LoginSection(
     onLoginClick: (String) -> Unit,
+    modifier: Modifier,
+    isLoginError : Boolean
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White, RoundedCornerShape(12.dp))
-            .padding(20.dp)
+    AppCard(
+        modifier = modifier
     ) {
-        Column(modifier = Modifier) {
+        Column(modifier = modifier) {
             var blogId by remember { mutableStateOf("") }
+
             Text(
-//                text = stringResource(R.string.common_app_name),
-                text = "블로그 ID",
-                fontSize = 12.sp,
+                text = stringResource(R.string.login_id_title),
+                fontSize = 20.sp,
+                color = Color.Black
             )
 
             OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = modifier,
                 value = blogId,
                 onValueChange = { blogId = it },
-                label = { Text(text = stringResource(R.string.login_id_hint)) }
+                label = { Text(text = stringResource(R.string.login_id_hint)) },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = if (isLoginError) Color.Red else Color(0xFF5B6FEF),
+                    focusedLabelColor = if (isLoginError) Color.Red else Color(0xFF5B6FEF),
+                    cursorColor = if (isLoginError) Color.Red else Color(0xFF5B6FEF),
+                    focusedSupportingTextColor = Color.Red,
+                    errorBorderColor = Color.Red,
+                    errorLabelColor = Color.Red
+                )
             )
-            Spacer(modifier = Modifier.height(15.dp))
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { onLoginClick(blogId) },
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    containerColor = MaterialTheme.colorScheme.primary
-                ),
-                shape = RoundedCornerShape(15)
-            ) {
-                Text(text = stringResource(R.string.login_register))
+            if (isLoginError) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.login_error_message),
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
+            Spacer(modifier = Modifier.height(15.dp))
+            AppButton(
+                text = stringResource(R.string.login_confirm),
+                modifier = Modifier,
+                enabled = blogId.isNotBlank(),
+                onClick = { onLoginClick(blogId) }
+            )
         }
     }
 
 }
 
 @Composable
-fun NonLoginSection(
-    onNonLoginClick: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White, RoundedCornerShape(12.dp))
-            .padding(20.dp)
-    ) {
-        Column {
-            Text(
-                text = "키워드 검색",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-            Text(
-                text = "블로그 없이 검색만 가능해요.",
-                fontSize = 12.sp,
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onNonLoginClick,
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    containerColor = MaterialTheme.colorScheme.primary
-                ),
-                shape = RoundedCornerShape(15)
-            ) {
-                Text(text = stringResource(R.string.login_register))
-            }
-        }
+fun OrDivider(
+    modifier: Modifier = Modifier,
 
+    ) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 24.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Divider(
+            modifier = Modifier
+                .weight(1f)
+                .height(1.dp),
+            color = Color.LightGray
+        )
+
+        Text(
+            text = stringResource(R.string.login_divider),
+            modifier = Modifier.padding(horizontal = 12.dp),
+            color = Color.Gray,
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+        Divider(
+            modifier = Modifier
+                .weight(1f)
+                .height(1.dp),
+            color = Color.LightGray
+        )
     }
 }
+
+@Composable
+fun NonLoginButton(
+    text : String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+){
+    Button(
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor =  Color(0xFF717379),
+            contentColor =  Color.White ,
+            disabledContainerColor = Color(0xFFE3E5EC),
+            disabledContentColor = Color(0xFF5B6FEF)
+        ),
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = 4.dp
+        )
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+
+}
+
 
 @Composable
 fun LoginTitle() {
     Text(
-        text = "KEYPICK",
+        text = stringResource(R.string.common_app_name),
         fontSize = 44.sp,
         fontWeight = FontWeight.Bold,
         color = Color.Black
@@ -214,9 +251,35 @@ fun PreviewLoginScreen() {
     MaterialTheme {
         LoginScreen(
             onLoginClick = {},
-            onNonLoginClick = {}
+            onNonLoginClick = {},
+            loginUiState = LoginUiState.Error
         )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewLoginSection() {
+    MaterialTheme {
+        LoginSection(
+            onLoginClick = {},
+            modifier = Modifier,
+            isLoginError = true
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewNonLoginButton(){
+    MaterialTheme{
+        NonLoginButton(
+            text = stringResource(R.string.login_move_to_search),
+            modifier = Modifier,
+            onClick = {}
+        )
+    }
+}
+
 
 

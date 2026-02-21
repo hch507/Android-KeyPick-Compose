@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="common_app_name">블로그 ID</string>
+    <string name="login_id_title">블로그 ID</string>
     <string name="login_id_hint">BlogID를 입력하세요</string>
     <string name="login_register">등록</string>
     <string name="login_non_regsiter">ID등록 없이 시작하기</string>
     <string name="login_id_helper">blog.naver.com/xxxxx/ x부분 입력</string>
+    <string name="login_move_to_search">검색하러 가기</string>
+    <string name="login_confirm">로그인</string>
+    <string name="login_divider">또는</string>
+    <string name="common_app_name">KEYPICK</string>
+    <string name="login_error_message">존재하지 않는 블로그 아이디입니다.</string>
+
 </resources>
