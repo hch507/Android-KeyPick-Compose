@@ -12,6 +12,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -23,12 +24,13 @@ fun AppCard(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(20.dp),
-        tonalElevation = 2.dp
+        tonalElevation = 2.dp,
+        color = Color.White
     ) {
         Box(
             modifier = Modifier.padding(16.dp)
         ) {
-            content
+            content()
         }
 
     }
@@ -37,13 +39,13 @@ fun AppCard(
 @Preview(showBackground = true)
 @Composable
 private fun AppCardPreview() {
-    AppCard(modifier = Modifier.size(200.dp, 120.dp)) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(text = "Title", style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Subtitle", style = MaterialTheme.typography.bodyMedium)
+    MaterialTheme {
+        AppCard(modifier = Modifier.size(200.dp, 120.dp)) {
+            Column {
+                Text(text = "Title", style = MaterialTheme.typography.titleMedium)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = "Subtitle", style = MaterialTheme.typography.bodyMedium)
+            }
         }
     }
 }
