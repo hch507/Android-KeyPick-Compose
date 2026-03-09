@@ -43,9 +43,9 @@ import com.example.home.navigation.HomeUiState
 @Composable
 internal fun HomeRoute(
     onMoveToSearchClick: () -> Unit,
-    onRecommendKeywordClick : (String) -> Unit,
+    onRecommendKeywordClick: (String) -> Unit,
     onMoveToLogin: () -> Unit,
-    homeViewModel: HomeViewModel= hiltViewModel()
+    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
 
@@ -58,7 +58,14 @@ internal fun HomeRoute(
             currentDestination.isRouteInHierarchy(it.route)
         } ?: HomeLevelDestination.USER_BLOG_INFO
     }
-    HomeScreen(navController, onRecommendKeywordClick, onMoveToSearchClick, onMoveToLogin, selectedTab,blogId= blogId,)
+    HomeScreen(
+        navController,
+        onRecommendKeywordClick,
+        onMoveToSearchClick,
+        onMoveToLogin,
+        selectedTab,
+        blogId = blogId,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,13 +76,25 @@ fun HomeScreen(
     onMoveToSearchClick: () -> Unit,
     onMoveToLogin: () -> Unit,
     selectTab: HomeLevelDestination,
-    blogId : HomeUiState<String>
+    blogId: HomeUiState<String>
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(selectTab.titleText)) },
-                colors = TopAppBarDefaults.topAppBarColors(),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor =
+                        if (selectTab == HomeLevelDestination.RANKING)
+                            Color(0xFFC5C9FE)// 원하는 색
+                        else
+                            MaterialTheme.colorScheme.surface,
+                    titleContentColor =
+                        if (selectTab == HomeLevelDestination.RANKING)
+                            Color.White
+                        else
+                            MaterialTheme.colorScheme.onSurface
+                ),
+
                 actions = {
                     IconButton(onClick = {
                         onMoveToSearchClick()
@@ -100,17 +119,17 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            when(blogId){
+            when (blogId) {
                 HomeUiState.Error -> {}
                 HomeUiState.Loading -> {}
                 is HomeUiState.Success<*> -> {
                     HomeNavHost(
                         navController = navController,
-                        onRecommendKeywordSearch =onRecommendKeywordClick,
+                        onRecommendKeywordSearch = onRecommendKeywordClick,
                         onMoveToLogin = onMoveToLogin,
                         blogId = blogId._data!!,
 
-                    )
+                        )
                 }
             }
 
