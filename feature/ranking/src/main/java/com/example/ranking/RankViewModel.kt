@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.log
 
 
 @HiltViewModel
@@ -29,8 +30,12 @@ class RankViewModel @Inject constructor(
         viewModelScope.launch {
             fetchRankUsecase.invoke(keyword=keyword , blogId = blogId)
                 .onStart { _rankResult.update { RankUiState.Loading } }
-                .catch { _rankResult.update { RankUiState.Error } }
-                .collectLatest { value -> _rankResult.value = RankUiState.Success(value) }
+                .catch { throwable ->
+                    Log.d("DEBUG_RANK", "Error occurred", throwable)
+                    _rankResult.update { RankUiState.Error } }
+                .collectLatest { value ->
+                    _rankResult.value = RankUiState.Success(value)
+                }
         }
     }
 }

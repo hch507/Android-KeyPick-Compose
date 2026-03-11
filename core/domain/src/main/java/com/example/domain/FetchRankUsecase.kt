@@ -11,15 +11,15 @@ class FetchRankUsecase @Inject constructor(
 ) {
 
     suspend operator fun invoke(keyword: String, blogId: String): Flow<Int> {
-        return keywordRepository.fetchBlogPostRank(keyword)
-            .map { rank: Rank -> // 👈 Rank 타입 명시 (optional)
+        return keywordRepository.fetchBlogPostRank(blogId)
+            .map { rank: Rank ->
                 val index = rank.blogLink.indexWithKeyword(keyword)
-                index!!
+                index ?: -1
             }
     }
 
-    private fun List<String>.indexWithKeyword(keyword: String): Int? {
-        return this.indexOfFirst { it.contains(keyword, ignoreCase = true) }
+    private fun List<String>.indexWithKeyword(blogId: String): Int? {
+        return this.indexOfFirst { it.contains(blogId, ignoreCase = true) }
             .takeIf { it != -1 }
     }
 }
