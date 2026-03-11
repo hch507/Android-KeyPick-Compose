@@ -42,7 +42,8 @@ import com.example.designsystem.textfield.SearchTextField
 @Composable
 internal fun SearchRoute(
     onSearchClick: (String) -> Unit,
-    viewModel: SearchViewModel = hiltViewModel()
+    viewModel: SearchViewModel = hiltViewModel(),
+    onBackClick: () -> Unit
 ) {
     val searchKeyword = viewModel.searchKeyword
     SearchScreen(
@@ -52,6 +53,7 @@ internal fun SearchRoute(
         onSearchKeywordChange = {
             viewModel.onSearchKeywordChanged(it)
         },
+        onBackClick = onBackClick,
         searchKeyword = searchKeyword
     )
 }
@@ -61,12 +63,13 @@ internal fun SearchRoute(
 fun SearchScreen(
     onSearchClick: () -> Unit,
     onSearchKeywordChange: (String) -> Unit,
+    onBackClick: () -> Unit,
     searchKeyword: String
 ) {
     Scaffold(
         topBar = {
             SearchTopBar(
-                onBackClick = {}
+                onBackClick = onBackClick
             )
         }
     ) { innerPadding ->
@@ -176,7 +179,7 @@ fun RecentSearchItem(
 @Composable
 fun SearchTopBar(
     onBackClick: () -> Unit
-){
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -184,7 +187,7 @@ fun SearchTopBar(
             .statusBarsPadding()
             .padding(vertical = 8.dp, horizontal = 12.dp),
 
-    ) {
+        ) {
         IconButton(onClick = onBackClick) {
             Icon(
                 painter = painterResource(R.drawable.ic_back),

@@ -52,6 +52,9 @@ fun KeypickNavHost(
         searchScreen(
             onSearchClick = { keyword ->
                 navController.navigateToKeywordInfo(keyword)
+            },
+            onBackClick = {
+                navController.popBackStack()
             }
         )
         keywordInfoScreen(

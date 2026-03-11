@@ -13,9 +13,13 @@ object SearchRoute
 fun NavController.navigateToSearch() = navigate(route = SearchRoute)
 
 fun NavGraphBuilder.searchScreen(
-    onSearchClick: (String) -> Unit
-){
-    composable<SearchRoute>{
-        SearchRoute(onSearchClick)
+    onSearchClick: (String) -> Unit,
+    onBackClick: () -> Unit
+) {
+    composable<SearchRoute> {
+        SearchRoute(
+            onSearchClick = onSearchClick,
+            onBackClick = onBackClick
+        )
     }
 }
