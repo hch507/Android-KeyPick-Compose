@@ -12,13 +12,16 @@ data class KeywordInfoRoute(val keyword : String)
 
 fun NavController.navigateToKeywordInfo(keyword : String) = navigate(route = KeywordInfoRoute(keyword) )
 
-fun NavGraphBuilder.keywordInfoScreen(){
+fun NavGraphBuilder.keywordInfoScreen(
+    onBackClick : () -> Unit
+){
     composable<KeywordInfoRoute> { backStackEntry ->
         // keyword 포함된 route 정보 가져오기
         val route = backStackEntry.toRoute<KeywordInfoRoute>()
 
         // 실제 화면에 keyword 전달
-        KeywordInfoScreen(keyword = route.keyword)
+        KeywordInfoScreen(keyword = route.keyword,
+            onBackClick = onBackClick)
 
     }
 }

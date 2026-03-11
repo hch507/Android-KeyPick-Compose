@@ -51,8 +51,9 @@ import kotlinx.coroutines.launch
 
 @Composable
 internal fun KeywordInfoScreen(
-    keyword : String,
-    viewModel: KeywordInfoViewModel = hiltViewModel()
+    keyword: String,
+    viewModel: KeywordInfoViewModel = hiltViewModel(),
+    onBackClick: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.fetchKeywordInfoData(keyword)
@@ -62,23 +63,24 @@ internal fun KeywordInfoScreen(
         onSearchClick = { search ->
             viewModel.fetchKeywordInfoData(search)
         },
-        viewModel = viewModel
+        viewModel = viewModel,
+        onBackClick = onBackClick
     )
 }
 
 
 @Composable
 fun KeywordInfoScreen(
-
     onSearchClick: (String) -> Unit,
-    viewModel : KeywordInfoViewModel
+    viewModel: KeywordInfoViewModel,
+    onBackClick: () -> Unit
 ) {
     Scaffold(
         contentWindowInsets = ScaffoldDefaults.contentWindowInsets,
         topBar = {
             KeywordInfoTopBar(
                 onSearchClick = onSearchClick,
-                onBackClick = {}
+                onBackClick = onBackClick
             )
         },
 
@@ -88,7 +90,7 @@ fun KeywordInfoScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            KeywordInfoTabLayout( viewModel = viewModel)
+            KeywordInfoTabLayout(viewModel = viewModel)
         }
     }
 
@@ -97,7 +99,7 @@ fun KeywordInfoScreen(
 @Composable
 fun KeywordInfoTabLayout(
     tabList: List<KeywordInfoLevelDestination> = KeywordInfoLevelDestination.entries,
-    viewModel : KeywordInfoViewModel
+    viewModel: KeywordInfoViewModel
 ) {
     val pagerState = rememberPagerState(pageCount = { tabList.size })
     val coroutineScope = rememberCoroutineScope()
@@ -179,7 +181,7 @@ fun KeywordInfoTopBar(
                 TextField(
                     value = query,
                     onValueChange = { newValue ->
-                        query=newValue
+                        query = newValue
                     },
                     modifier = Modifier
                         .weight(1f),
