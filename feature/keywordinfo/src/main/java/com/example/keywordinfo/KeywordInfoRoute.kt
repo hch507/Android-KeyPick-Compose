@@ -1,6 +1,5 @@
 package com.example.keywordinfo
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,9 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -24,8 +20,6 @@ import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,12 +32,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
-
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.designsystem.R
+import com.example.designsystem.textfield.SearchTextField
 import com.example.designsystem.theme.KeypickComposeTheme
 import com.example.keywordinfo.navigation.KeywordInfoLevelDestination
 import kotlinx.coroutines.launch
@@ -168,68 +161,15 @@ fun KeywordInfoTopBar(
                 modifier = Modifier.size(30.dp)
             )
         }
-        Box(
-            modifier = Modifier
-                .weight(1f)
-                .background(
-                    shape = RoundedCornerShape(20f),
-                    color = Color(0xFFE0E0E0)
-                )
 
-        ) {
-            Row() {
-                TextField(
-                    value = query,
-                    onValueChange = { newValue ->
-                        query = newValue
-                    },
-                    modifier = Modifier
-                        .weight(1f),
-                    // 배경 제거
-                    placeholder = {
-                        Text("검색어를 입력해 주세요")
-                    },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done // 또는 Search 등 원하는 타입
-                    ),
+        SearchTextField(
+            value = query,
+            onValueChange = { newValue ->
+                query = newValue
+            },
+            onSearch = { onSearchClick(query) }
+        )
 
-
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            onSearchClick(query)
-                        }
-                    ),
-                    singleLine = true,
-                    colors = TextFieldDefaults.colors(
-
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        disabledContainerColor = Color.Transparent,
-                        errorContainerColor = Color.Transparent,
-
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Transparent
-                    )
-                )
-
-                // 검색 아이콘
-                IconButton(
-                    onClick = { onSearchClick(query) },
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                ) {
-                    Icon(
-                        modifier = Modifier.size(15.dp),
-                        painter = painterResource(R.drawable.ic_search_nav),
-                        contentDescription = "Search"
-                    )
-                }
-            }
-            // 입력창
-
-        }
 
     }
 }
