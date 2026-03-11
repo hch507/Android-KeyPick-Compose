@@ -12,11 +12,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -28,9 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.designsystem.R
 import com.example.designsystem.textfield.SearchTextField
 
 @Composable
@@ -59,9 +65,8 @@ fun SearchScreen(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("검색") },
-                colors = TopAppBarDefaults.topAppBarColors(),
+            SearchTopBar(
+                onBackClick = {}
             )
         }
     ) { innerPadding ->
@@ -69,7 +74,7 @@ fun SearchScreen(
         Box(
             modifier = Modifier
                 .padding(innerPadding),
-        ){
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -80,7 +85,7 @@ fun SearchScreen(
 
                 SearchTextField(
                     value = searchKeyword,
-                    onValueChange = {newValue -> onSearchKeywordChange(newValue) },
+                    onValueChange = { newValue -> onSearchKeywordChange(newValue) },
                     onSearch = onSearchClick
                 )
 
@@ -94,7 +99,7 @@ fun SearchScreen(
 
 @Composable
 fun RecentSearchSection(
-){
+) {
     val recentSearches = remember {
         mutableStateListOf(
             "블로그 상위 노출",
@@ -102,7 +107,7 @@ fun RecentSearchSection(
             "블로그 수익 키워드"
         )
     }
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp)
@@ -142,6 +147,7 @@ fun RecentSearchSection(
     }
 
 }
+
 @Composable
 fun RecentSearchItem(
     text: String,
@@ -165,4 +171,33 @@ fun RecentSearchItem(
             tint = Color.Gray
         )
     }
+}
+
+@Composable
+fun SearchTopBar(
+    onBackClick: () -> Unit
+){
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFFF7F7F7))
+            .statusBarsPadding()
+            .padding(vertical = 8.dp, horizontal = 12.dp),
+
+    ) {
+        IconButton(onClick = onBackClick) {
+            Icon(
+                painter = painterResource(R.drawable.ic_back),
+                contentDescription = "Back",
+                modifier = Modifier.size(30.dp)
+            )
+        }
+        Text(
+            "검색",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            fontSize = 25.sp,
+        )
+    }
+
 }
