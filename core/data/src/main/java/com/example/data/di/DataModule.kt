@@ -3,9 +3,11 @@ package com.example.data.di
 import com.example.data.repository.KeywordRepository
 import com.example.data.repository.KeywordStoreRepository
 import com.example.data.repository.LoginOrCntRepository
+import com.example.data.repository.SearchRepository
 import com.example.data.repository.impl.KeywordRepositoryImpl
 import com.example.data.repository.impl.KeywordStoreRepositoryImpl
 import com.example.data.repository.impl.LoginOrCntRepositoryImpl
+import com.example.data.repository.impl.SearchRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -29,4 +31,9 @@ abstract class DataModule {
     abstract fun bindKeywordDataStoreRepository(
         keywordStoreRepository: KeywordStoreRepositoryImpl
     ): KeywordStoreRepository
+
+    @Binds
+    abstract fun bindSearchRepository(
+        searchRepository: SearchRepositoryImpl
+    ): SearchRepository
 }
