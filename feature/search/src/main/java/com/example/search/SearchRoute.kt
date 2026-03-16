@@ -68,7 +68,8 @@ internal fun SearchRoute(
         },
         onBackClick = onBackClick,
         searchKeyword = searchKeyword,
-        recentSearchsUiState = recentSearches
+        recentSearchsUiState = recentSearches,
+        onDeleteRecentSearch = {viewModel.deleteRecentSearch(it)}
     )
 }
 
@@ -79,7 +80,8 @@ fun SearchScreen(
     onSearchKeywordChange: (String) -> Unit,
     onBackClick: () -> Unit,
     searchKeyword: String,
-    recentSearchsUiState: SearchUiState<List<RecentSearch>>
+    recentSearchsUiState: SearchUiState<List<RecentSearch>>,
+    onDeleteRecentSearch: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -109,7 +111,8 @@ fun SearchScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
                 RecentSearchSection(
-                    recentSearchsUiState = recentSearchsUiState
+                    recentSearchsUiState = recentSearchsUiState,
+                    onDeleteRecentSearch = onDeleteRecentSearch
                 )
             }
         }
@@ -119,7 +122,8 @@ fun SearchScreen(
 
 @Composable
 fun RecentSearchSection(
-    recentSearchsUiState: SearchUiState<List<RecentSearch>>
+    recentSearchsUiState: SearchUiState<List<RecentSearch>>,
+    onDeleteRecentSearch: (String) -> Unit
 ) {
 
     when (recentSearchsUiState) {
@@ -157,11 +161,11 @@ fun RecentSearchSection(
                 ) {
                     items(
                         items = recentSearchsUiState.data,
-                        key = { it.keyword}
+                        key = { it.keyword }
                     ) { search ->
                         RecentSearchItem(
                             text = search.keyword,
-                            onRemove = { {} }
+                            onDeleteItem = onDeleteRecentSearch
                         )
                     }
                 }
@@ -174,7 +178,7 @@ fun RecentSearchSection(
 @Composable
 fun RecentSearchItem(
     text: String,
-    onRemove: () -> Unit
+    onDeleteItem: (String) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -190,7 +194,7 @@ fun RecentSearchItem(
             contentDescription = "remove",
             modifier = Modifier
                 .size(18.dp)
-                .clickable { onRemove() },
+                .clickable { onDeleteItem(text) },
             tint = Color.Gray
         )
     }
@@ -219,6 +223,7 @@ fun RecentSearchHeader(
         )
     }
 }
+
 @Composable
 fun SearchTopBar(
     onBackClick: () -> Unit

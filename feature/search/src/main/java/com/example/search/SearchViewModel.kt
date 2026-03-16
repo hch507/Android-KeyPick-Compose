@@ -58,4 +58,10 @@ class SearchViewModel @Inject constructor(
             _navigateEvent.emit(searchKeyword)
         }
     }
+    fun deleteRecentSearch(keyword: String) {
+        viewModelScope.launch {
+            searchRepository.deleteSearch(keyword)
+        }
+    }
+
 }
