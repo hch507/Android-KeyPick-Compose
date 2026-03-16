@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -24,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,8 +39,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.R
 import com.example.designsystem.textfield.SearchTextField
+import com.keypick.core.model.RecentSearch
 
 @Composable
 internal fun SearchRoute(
@@ -46,6 +51,8 @@ internal fun SearchRoute(
     onBackClick: () -> Unit
 ) {
     val searchKeyword = viewModel.searchKeyword
+    val recentSearches by viewModel.recentSearches.collectAsStateWithLifecycle()
+
     SearchScreen(
         onSearchClick = {
             onSearchClick(searchKeyword)
@@ -54,7 +61,8 @@ internal fun SearchRoute(
             viewModel.onSearchKeywordChanged(it)
         },
         onBackClick = onBackClick,
-        searchKeyword = searchKeyword
+        searchKeyword = searchKeyword,
+        recentSearchsUiState = recentSearches
     )
 }
 
@@ -64,7 +72,8 @@ fun SearchScreen(
     onSearchClick: () -> Unit,
     onSearchKeywordChange: (String) -> Unit,
     onBackClick: () -> Unit,
-    searchKeyword: String
+    searchKeyword: String,
+    recentSearchsUiState: SearchUiState<List<RecentSearch>>
 ) {
     Scaffold(
         topBar = {
@@ -93,7 +102,9 @@ fun SearchScreen(
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
-                RecentSearchSection()
+                RecentSearchSection(
+                    recentSearchsUiState = recentSearchsUiState
+                )
             }
         }
     }
@@ -102,50 +113,53 @@ fun SearchScreen(
 
 @Composable
 fun RecentSearchSection(
+    recentSearchsUiState: SearchUiState<List<RecentSearch>>
 ) {
-    val recentSearches = remember {
-        mutableStateListOf(
-            "블로그 상위 노출",
-            "온라인 마케팅 창출",
-            "블로그 수익 키워드"
-        )
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(250.dp)
-            .shadow(4.dp, shape = RoundedCornerShape(20.dp))
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(20.dp)
-            )
-            .padding(16.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = "최근 검색어",
-                fontWeight = FontWeight.Bold
-            )
 
-            Text(
-                text = "전체 삭제",
-                color = Color.Gray,
-                modifier = Modifier.clickable {
-                    recentSearches.clear()
-                }
-            )
+    when (recentSearchsUiState) {
+
+        SearchUiState.Idle -> {}
+
+        SearchUiState.Loading -> {
+            Text("로딩중...")
         }
-        recentSearches.forEach { keyword ->
-            RecentSearchItem(
-                text = keyword,
-                onRemove = {
-                    recentSearches.remove(keyword)
+
+        SearchUiState.Error -> {
+            Text("최근 검색어를 불러오지 못했습니다.")
+        }
+
+        is SearchUiState.Success -> {
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(250.dp)
+                    .shadow(4.dp, shape = RoundedCornerShape(20.dp))
+                    .background(
+                        color = Color.White,
+                        shape = RoundedCornerShape(20.dp)
+                    )
+                    .padding(16.dp)
+            ) {
+
+                RecentSearchHeader(onDeleteAll = {})
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    items(
+                        items = recentSearchsUiState.data,
+                        key = { it.keyword}
+                    ) { search ->
+                        RecentSearchItem(
+                            text = search.keyword,
+                            onRemove = { {} }
+                        )
+                    }
                 }
-            )
+            }
         }
     }
 
@@ -176,6 +190,29 @@ fun RecentSearchItem(
     }
 }
 
+@Composable
+fun RecentSearchHeader(
+    onDeleteAll: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+
+        Text(
+            text = "최근 검색어",
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            text = "전체 삭제",
+            color = Color.Gray,
+            modifier = Modifier.clickable {
+                onDeleteAll()
+            }
+        )
+    }
+}
 @Composable
 fun SearchTopBar(
     onBackClick: () -> Unit
