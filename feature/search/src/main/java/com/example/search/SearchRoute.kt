@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
@@ -53,9 +54,14 @@ internal fun SearchRoute(
     val searchKeyword = viewModel.searchKeyword
     val recentSearches by viewModel.recentSearches.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.navigateEvent.collect { keyword ->
+            onSearchClick(keyword) // insert 완료 후 화면 이동
+        }
+    }
     SearchScreen(
         onSearchClick = {
-            onSearchClick(searchKeyword)
+            viewModel.onSearchClick(searchKeyword)
         },
         onSearchKeywordChange = {
             viewModel.onSearchKeywordChanged(it)

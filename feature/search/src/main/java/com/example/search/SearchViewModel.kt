@@ -9,12 +9,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.data.repository.SearchRepository
 import com.keypick.core.model.RecentSearch
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,12 +43,19 @@ class SearchViewModel @Inject constructor(
                 initialValue = SearchUiState.Idle
             )
 
+    private val _navigateEvent = MutableSharedFlow<String>()
+    val navigateEvent = _navigateEvent.asSharedFlow()
+
     fun onSearchKeywordChanged(searchKeyword: String){
         this.searchKeyword= searchKeyword
         Log.d("LoginViewModel", "onBlogIdChanged: ")
     }
 
-    fun getRecentSearch(){
-
+    fun onSearchClick(searchKeyword: String) {
+        viewModelScope.launch {
+            searchRepository.insertSearch(searchKeyword, System.currentTimeMillis())
+            // DB insert 끝나면 이벤트 발생
+            _navigateEvent.emit(searchKeyword)
+        }
     }
 }
