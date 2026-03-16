@@ -64,4 +64,10 @@ class SearchViewModel @Inject constructor(
         }
     }
 
+    fun deleteAll(){
+        viewModelScope.launch {
+            searchRepository.deleteAll()
+        }
+    }
+
 }

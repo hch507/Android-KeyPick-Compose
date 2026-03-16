@@ -69,7 +69,8 @@ internal fun SearchRoute(
         onBackClick = onBackClick,
         searchKeyword = searchKeyword,
         recentSearchsUiState = recentSearches,
-        onDeleteRecentSearch = {viewModel.deleteRecentSearch(it)}
+        onDeleteRecentSearch = { viewModel.deleteRecentSearch(it) },
+        onDeleteAll = {viewModel.deleteAll()}
     )
 }
 
@@ -81,7 +82,8 @@ fun SearchScreen(
     onBackClick: () -> Unit,
     searchKeyword: String,
     recentSearchsUiState: SearchUiState<List<RecentSearch>>,
-    onDeleteRecentSearch: (String) -> Unit
+    onDeleteRecentSearch: (String) -> Unit,
+    onDeleteAll: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -112,7 +114,8 @@ fun SearchScreen(
                 Spacer(modifier = Modifier.height(12.dp))
                 RecentSearchSection(
                     recentSearchsUiState = recentSearchsUiState,
-                    onDeleteRecentSearch = onDeleteRecentSearch
+                    onDeleteRecentSearch = onDeleteRecentSearch,
+                    onDeleteAll = onDeleteAll
                 )
             }
         }
@@ -123,7 +126,8 @@ fun SearchScreen(
 @Composable
 fun RecentSearchSection(
     recentSearchsUiState: SearchUiState<List<RecentSearch>>,
-    onDeleteRecentSearch: (String) -> Unit
+    onDeleteRecentSearch: (String) -> Unit,
+    onDeleteAll: () -> Unit
 ) {
 
     when (recentSearchsUiState) {
@@ -152,7 +156,7 @@ fun RecentSearchSection(
                     .padding(16.dp)
             ) {
 
-                RecentSearchHeader(onDeleteAll = {})
+                RecentSearchHeader(onDeleteAll = onDeleteAll)
 
                 Spacer(modifier = Modifier.height(8.dp))
 
