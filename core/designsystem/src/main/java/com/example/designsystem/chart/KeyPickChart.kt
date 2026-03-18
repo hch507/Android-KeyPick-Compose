@@ -1,4 +1,4 @@
-package com.example.userbloginfo.chart
+package com.example.designsystem.chart
 
 import android.graphics.drawable.GradientDrawable
 import android.view.ViewGroup
@@ -27,7 +27,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 
 @Composable
-fun BlogVisitorChart(
+fun KeyPickChart(
     modifier: Modifier =Modifier,
     visitors : List<Float>,
     labels : List<String>
@@ -109,7 +109,7 @@ fun VisitorLineChartPreview() {
                 style = MaterialTheme.typography.bodyMedium
             )
             Spacer(modifier = Modifier.height(8.dp))
-            BlogVisitorChart(
+            KeyPickChart(
                 visitors = listOf(950f, 800f, 1100f, 1200f, 1300f),
                 labels = listOf("4일 전", "3일 전", "2일 전", "1일 전", "오늘")
             )

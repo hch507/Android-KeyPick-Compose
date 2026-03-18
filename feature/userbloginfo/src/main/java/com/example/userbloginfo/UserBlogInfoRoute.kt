@@ -39,8 +39,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.card.AppCard
+import com.example.designsystem.chart.KeyPickChart
 import com.example.designsystem.theme.KeypickComposeTheme
-import com.example.userbloginfo.chart.BlogVisitorChart
 import com.keypick.core.model.UserBlogCntData
 import kotlinx.coroutines.flow.collectLatest
 
@@ -246,7 +246,7 @@ fun BlogInfoBody(
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                BlogVisitorChart(
+                KeyPickChart(
                     visitors = listOf(data.visitorCntList[4].cnt.toFloat(), data.visitorCntList[3].cnt.toFloat(), data.visitorCntList[2].cnt.toFloat(), data.visitorCntList[1].cnt.toFloat(), data.visitorCntList[0].cnt.toFloat()),
                     labels = listOf("4일 전", "3일 전", "2일 전", "1일 전", "오늘"),
                     modifier = Modifier

@@ -54,5 +54,4 @@ dependencies {
     ksp(libs.hilt.compiler)          // Hilt 컴파일러 (ksp용)
     implementation(libs.hilt.android)
 
-    implementation(libs.mpandroidchart)
 }
