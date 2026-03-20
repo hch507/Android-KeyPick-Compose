@@ -1,7 +1,7 @@
 package com.example.network.model
 
 import com.example.network.utils.StringAsAnySerializer
-import com.keypick.core.model.RelKewordResource
+import com.keypick.core.model.RelKeywordResource
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -24,9 +24,9 @@ data class Keyword(
 )
 
 
-fun RelKeywordDto.asExternalBlogInfoModel(): List<RelKewordResource> =
+fun RelKeywordDto.asExternalBlogInfoModel(): List<RelKeywordResource> =
     keywordList.map {
-        RelKewordResource(
+        RelKeywordResource(
             relKeyword = it.relKeyword,
             monthlyPcQcCnt = it.monthlyPcQcCnt,
             monthlyMobileQcCnt = it.monthlyMobileQcCnt

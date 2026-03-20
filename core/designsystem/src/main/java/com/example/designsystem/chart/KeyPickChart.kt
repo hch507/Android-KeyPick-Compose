@@ -25,12 +25,14 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 
 @Composable
 fun KeyPickChart(
     modifier: Modifier =Modifier,
     visitors : List<Float>,
-    labels : List<String>
+    labels : List<String>,
+    showAllLabels: Boolean = true
 ) {
     AndroidView(
         modifier = modifier,
@@ -47,11 +49,28 @@ fun KeyPickChart(
                 xAxis.apply {
                     position = XAxis.XAxisPosition.BOTTOM
                     setDrawGridLines(false)
-                    valueFormatter = IndexAxisValueFormatter(labels)
+                    valueFormatter = object : ValueFormatter() {
+                        override fun getFormattedValue(value: Float): String {
+                            val index = value.toInt()
+
+                            if (index !in labels.indices) return ""
+
+                            return if (showAllLabels) {
+                                labels[index]
+                            } else {
+                                if (index == 0 || index == labels.lastIndex) {
+                                    labels[index]
+                                } else {
+                                    ""
+                                }
+                            }
+                        }
+                    }
                     textColor = Color.Black.toArgb()
-                    granularity = 1f                // x 값 간격을 1로 설정
-                    labelCount = labels.size        // 라벨 개수 강제
+                    granularity = 1f
+                    labelCount = labels.size
                     isGranularityEnabled = true
+
                 }
 
                 axisLeft.apply {

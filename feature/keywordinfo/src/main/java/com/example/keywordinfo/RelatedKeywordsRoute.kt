@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.card.AppCard
 import com.keypick.core.model.KeywordInfo
-import com.keypick.core.model.RelKewordResource
+import com.keypick.core.model.RelKeywordResource
 
 
 @Composable
@@ -68,8 +68,8 @@ fun RelatedKeywordsScreen(
 
         is KeywordInfoUiState.Success<*> -> {
             keywordInfoState._data?.let {
-                KeywordInfoSuccessScreen(
-                    it.relKewordResource,
+                RelKeywordInfoSuccessScreen(
+                    it.relKeywordResource,
                     onSaveClick
                 )
             }
@@ -80,8 +80,8 @@ fun RelatedKeywordsScreen(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun KeywordInfoSuccessScreen(
-    relKeywordResourceList: List<RelKewordResource>,
+fun RelKeywordInfoSuccessScreen(
+    relKeywordResourceList: List<RelKeywordResource>,
     onSaveClick: (String) -> Unit
 ) {
     if (relKeywordResourceList.isEmpty()) return
@@ -185,7 +185,7 @@ fun RelKeywordCard(
 
 @Composable
 fun RelatedItem(
-    relKeywordResource: RelKewordResource,
+    relKeywordResource: RelKeywordResource,
     onSaveClick: (String) -> Unit
 ) {
     AppCard(

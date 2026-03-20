@@ -1,5 +1,6 @@
 package com.example.keywordinfo
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -30,17 +30,61 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.card.AppCard
 import com.example.designsystem.chart.KeyPickChart
+import com.keypick.core.model.KeywordBlogCountInfo
+import com.keypick.core.model.KeywordBlogInfoResource
+import com.keypick.core.model.KeywordInfo
+import com.keypick.core.model.MonthRatioResource
+import com.keypick.core.model.RelKeywordResource
 
 
 @Composable
 fun KeywordDetailRoute(viewModel: KeywordInfoViewModel){
     val keywordInfoState by viewModel.keywordInfoState.collectAsStateWithLifecycle()
-    KeywordDetailScreen()
+    KeywordDetailScreen(keywordInfoState)
 }
 @Composable
 fun KeywordDetailScreen(
+    keywordInfoState: KeywordInfoUiState<KeywordInfo>,
 ){
+    when (keywordInfoState) {
+        KeywordInfoUiState.Error -> {
+            Log.d("keywordinfoState", "RelatedKeywordsScreen: Error")
+        }
 
+        KeywordInfoUiState.Loading -> {
+            Log.d("keywordinfoState", "RelatedKeywordsScreen: Loading")
+        }
+
+        is KeywordInfoUiState.Success<*> -> {
+            keywordInfoState._data?.let {
+                KeywordInfoScreen(
+                    it.keywordBlogInfoResource,
+                    it.relKeywordResource,
+                    it.monthRatioResource
+                )
+            }
+        }
+    }
+
+}
+
+@Composable
+fun KeywordInfoScreen(
+    keywordBlogInfoResource: KeywordBlogCountInfo,
+    relKeywordResource: List<RelKeywordResource>,
+    monthRatioResource: MonthRatioResource
+){
+    val keyword = relKeywordResource[0].relKeyword
+    val pcCnt = relKeywordResource[0].monthlyPcQcCnt
+    val mobileCnt = relKeywordResource[0].monthlyMobileQcCnt
+    val postingCnt =keywordBlogInfoResource.postingCnt
+
+    val period = monthRatioResource.ratioData?.map {
+        it.period?:" "
+    }
+    var rate = monthRatioResource.ratioData?.map {
+        it.rate?.toFloat() ?:0f
+    }
     Box(
 
     ){
@@ -52,26 +96,26 @@ fun KeywordDetailScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             item {
-                KeywordCard(keyword = "베이퍼 맥스")
+                KeywordCard(keyword = keyword)
             }
             item {
                 StatRow(
                     leftTitle = "PC 검색",
-                    leftValue = "4241",
+                    leftValue =pcCnt ,
                     leftIcon =  painterResource(com.example.designsystem.R.drawable.ic_pc_item),
                     rightTitle = "모바일 검색",
-                    rightValue = "4135",
+                    rightValue = mobileCnt,
                     rightIcon = painterResource(com.example.designsystem.R.drawable.ic_mobile_item),
 
-                )
+                    )
             }
             item {
                 StatRow(
                     leftTitle = "블로그",
-                    leftValue = "14856121",
+                    leftValue = keywordBlogInfoResource.totalCnt.toString(),
                     leftIcon = painterResource(com.example.designsystem.R.drawable.ic_blog_item),
                     rightTitle = "포스팅",
-                    rightValue = "855",
+                    rightValue = if (postingCnt == 100) "+$postingCnt" else "$postingCnt" ,
                     rightIcon = painterResource(com.example.designsystem.R.drawable.ic_posting_tiem)
                 )
             }
@@ -86,13 +130,16 @@ fun KeywordDetailScreen(
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Spacer(modifier = Modifier.height(20.dp))
-                        KeyPickChart(
-                            visitors = listOf(10.0f,10.0f,10.0f,10.0f,10.0f,),
-                            labels = listOf("4일 전", "3일 전", "2일 전", "1일 전", "오늘"),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(250.dp)
-                        )
+                        if (rate != null && period != null) {
+                            KeyPickChart(
+                                visitors = rate,
+                                labels = period,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(250.dp),
+                                showAllLabels = false
+                            )
+                        }
                     }
                 }
             }
@@ -110,7 +157,9 @@ fun KeywordCard(keyword: String){
 
             // 제목 + 아이콘
             Row(
-                modifier = Modifier.fillMaxWidth().height(30.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(30.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {

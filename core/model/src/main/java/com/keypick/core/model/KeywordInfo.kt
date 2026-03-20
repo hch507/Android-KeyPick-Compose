@@ -1,12 +1,12 @@
 package com.keypick.core.model
 
 data class KeywordInfo(
-    val keywordBlogInfoResource: KeywordBlogInfoResource,
-    val relKewordResource: List<RelKewordResource>,
+    val keywordBlogInfoResource: KeywordBlogCountInfo,
+    val relKeywordResource: List<RelKeywordResource>,
     val monthRatioResource: MonthRatioResource
 )
 
-data class RelKewordResource(
+data class RelKeywordResource(
     val relKeyword: String,
     val monthlyPcQcCnt: String,
     val monthlyMobileQcCnt: String
@@ -15,6 +15,11 @@ data class RelKewordResource(
 data class KeywordBlogInfoResource(
     var totalCnt: Int,
     var blogData: List<BlogData>
+)
+
+data class KeywordBlogCountInfo(
+    val totalCnt: Int,
+    val postingCnt: Int
 )
 
 data class BlogData(

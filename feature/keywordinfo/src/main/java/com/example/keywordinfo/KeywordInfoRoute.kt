@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Icon
@@ -19,20 +21,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.designsystem.R
@@ -70,6 +79,7 @@ fun KeywordInfoScreen(
 ) {
     Scaffold(
         contentWindowInsets = ScaffoldDefaults.contentWindowInsets,
+        containerColor = Color(0xFFF4F6FB),
         topBar = {
             KeywordInfoTopBar(
                 onSearchClick = onSearchClick,
@@ -96,13 +106,36 @@ fun KeywordInfoTabLayout(
 ) {
     val pagerState = rememberPagerState(pageCount = { tabList.size })
     val coroutineScope = rememberCoroutineScope()
+    val tabWidths = remember(tabList.size) {
+        MutableList(tabList.size) { 0.dp }.toMutableStateList()
+    }
+    val density = LocalDensity.current
+
+
     Spacer(modifier = Modifier.height(10.dp))
     Column(modifier = Modifier.fillMaxSize()) {
         TabRow(
             modifier = Modifier
                 .padding(horizontal = 8.dp),
-            selectedTabIndex = pagerState.currentPage
-        ) {
+            selectedTabIndex = pagerState.currentPage,
+            containerColor = Color(0xFFF4F6FB),
+            indicator = { tabPositions ->
+                val currentIndex = pagerState.currentPage
+                val currentTab = tabPositions[currentIndex]
+
+                val indicatorWidth = tabWidths.getOrNull(currentIndex) ?: 0.dp
+
+                TabRowDefaults.Indicator(
+                    modifier = Modifier
+                        .tabIndicatorOffset(currentTab)
+                        .wrapContentSize(Alignment.BottomCenter)
+                        .width(indicatorWidth + 15.dp), // 👉 살짝 여유
+                    color = Color.Black,
+                    height = 2.dp
+                )
+            },
+
+            ) {
 
             tabList.forEachIndexed { index, item ->
                 Tab(
@@ -116,7 +149,12 @@ fun KeywordInfoTabLayout(
                     text = {
                         Text(
                             text = stringResource(item.titleText),
-                            color = if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary else Color.LightGray
+                            color = if (pagerState.currentPage == index) Color.Black else Color.LightGray,
+                            modifier = Modifier.onGloballyPositioned { coordinates ->
+                                tabWidths[index] = with(density) {
+                                    coordinates.size.width.toDp()
+                                }
+                            }
                         )
                     }
                 )

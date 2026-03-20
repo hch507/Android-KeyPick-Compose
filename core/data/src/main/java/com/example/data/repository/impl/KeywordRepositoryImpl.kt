@@ -1,6 +1,5 @@
 package com.example.data.repository.impl
 
-import android.util.Log
 import com.example.data.repository.KeywordRepository
 import com.example.firebase.FirebaseKeywordDataSource
 import com.example.network.NaverNetworkDataSource
@@ -10,7 +9,7 @@ import com.example.network.model.asExternalRankModel
 import com.keypick.core.model.KeywordBlogInfoResource
 import com.keypick.core.model.MonthRatioResource
 import com.keypick.core.model.Rank
-import com.keypick.core.model.RelKewordResource
+import com.keypick.core.model.RelKeywordResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -37,7 +36,7 @@ class KeywordRepositoryImpl @Inject constructor(
             emit(result.asExternalBlogInfoModel())
         }
 
-    override suspend fun fetchKeywordRel(keyword: String): Flow<List<RelKewordResource>> = flow {
+    override suspend fun fetchKeywordRel(keyword: String): Flow<List<RelKeywordResource>> = flow {
         val result = naverRelNetworkDataSource.fetchKeywordRel(keyword = keyword)
         emit(result.asExternalBlogInfoModel())
     }
