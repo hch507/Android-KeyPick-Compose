@@ -39,6 +39,7 @@ import com.example.home.navigation.isRouteInHierarchy
 import com.example.home.navigation.navigateToHomeLevelDestination
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.home.navigation.HomeUiState
+import androidx.compose.ui.draw.shadow
 
 @Composable
 internal fun HomeRoute(
@@ -79,6 +80,7 @@ fun HomeScreen(
     blogId: HomeUiState<String>
 ) {
     Scaffold(
+        containerColor = Color(0xFFF4F6FB), // 여기 추가
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(selectTab.titleText)) },
@@ -87,7 +89,7 @@ fun HomeScreen(
                         if (selectTab == HomeLevelDestination.RANKING)
                             Color(0xFFC5C9FE)// 원하는 색
                         else
-                            MaterialTheme.colorScheme.surface,
+                            Color(0xFFF4F6FB),
                     titleContentColor =
                         if (selectTab == HomeLevelDestination.RANKING)
                             Color.White
@@ -147,15 +149,18 @@ fun BottomNavigationBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
+            .shadow(12.dp, RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
             .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
-            .background(Color.Transparent)
+            .background(Color(0xFFF4F6FB))
             .border(
                 0.1.dp,
                 MaterialTheme.colorScheme.tertiaryContainer,
                 RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
             )
     ) {
-        NavigationBar {
+        NavigationBar(
+            containerColor = Color(0xFFF4F6FB)
+        ) {
             destinations.forEach { destination ->
 
                 val isSelected = destination == selectTab
@@ -167,7 +172,7 @@ fun BottomNavigationBar(
                         Icon(
                             painter = painterResource(id = destination.iconRes),
                             contentDescription = stringResource(id = destination.titleText),
-                            tint = if (isSelected) MaterialTheme.colorScheme.primary
+                            tint = if (isSelected) Color.Black
                             else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }, label = {

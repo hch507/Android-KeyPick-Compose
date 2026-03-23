@@ -1,8 +1,10 @@
 package com.example.userbloginfo
 
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -43,6 +46,12 @@ import com.example.designsystem.chart.KeyPickChart
 import com.example.designsystem.theme.KeypickComposeTheme
 import com.keypick.core.model.UserBlogCntData
 import kotlinx.coroutines.flow.collectLatest
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
+
 
 @Composable
 internal fun UserBlogInfoRoute(
@@ -81,6 +90,7 @@ internal fun UserBlogInfoRoute(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun UserBlogInfoScreen(
     blogCntUiState: BlogCntUiState<UserBlogCntData>,
@@ -103,6 +113,7 @@ fun UserBlogInfoScreen(
     }
 
 }
+
 
 @Composable
 fun UserBlogInfoContent(
@@ -135,13 +146,15 @@ fun UserBlogInfoContent(
             }
 
             item {
+                val today = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+                    .format(Date())
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
                 ) {
                     Text(
-                        "2025.08.08",
+                        today,
                         fontSize = 15.sp,
                         modifier = Modifier.align(Alignment.CenterEnd)
                     )
@@ -183,29 +196,39 @@ fun RecommendKeywordCard(
 
     ) {
         Row(
-
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
+                modifier = Modifier.weight(1f)
             ) {
 
                 Text(
                     text = "오늘의 키워드가 \n도착했어요.",
-                    fontSize = 25.sp,
+                    fontSize = 20.sp,
                     color = Color.White
 
                 )
                 Spacer(Modifier.height(7.dp))
                 Text(
                     text = "지금 참여하고 선물을 받으세요.",
-                    fontSize = 15.sp,
+                    fontSize = 10.sp,
                     color = Color.White
                 )
                 Spacer(Modifier.height(7.dp))
 
             }
+
+            Image(
+                painter = painterResource(id = com.example.designsystem.R.drawable.ic_home_gift), // 네 이미지로 교체
+                contentDescription = "gift",
+                modifier = Modifier
+                    .height(100.dp)     // 적당한 고정 높이 지정
+                    .aspectRatio(1f)  // 크기 조절
+            )
+
         }
 
     }
@@ -251,7 +274,8 @@ fun BlogInfoBody(
                     labels = listOf("4일 전", "3일 전", "2일 전", "1일 전", "오늘"),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(250.dp)
+                        .height(250.dp),
+                    showAllLabels = true
                 )
             }
         }
@@ -353,6 +377,7 @@ fun BlogProfilePreview() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun BlogInfoScreenPreview() {

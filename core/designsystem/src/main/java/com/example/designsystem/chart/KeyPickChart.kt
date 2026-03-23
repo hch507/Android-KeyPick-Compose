@@ -89,18 +89,18 @@ fun KeyPickChart(
                 Entry(index.toFloat(), value)
             }
             val dataSet = LineDataSet(entries, "Visitor").apply {
-                color = Color(0xFF3B82F6).toArgb()
+                color = Color(0xFF6A83FF).toArgb()
                 setDrawValues(false)
                 lineWidth = 2f
                 setDrawCircles(true)
                 circleRadius = 4f
-                setCircleColor(Color(0xFF3B82F6).toArgb())
+                setCircleColor(Color(0xFF6A83FF).toArgb())
 
                 setDrawFilled(true)
                 fillDrawable = GradientDrawable(
                     GradientDrawable.Orientation.TOP_BOTTOM,
                     intArrayOf(
-                        Color(0xFF3B82F6).copy(alpha = 0.4f).toArgb(),
+                        Color(0xFF6A83FF).copy(alpha = 0.4f).toArgb(),
                         Color.Transparent.toArgb()
                     )
                 )
