@@ -58,8 +58,6 @@ fun KeywordStoreScreen(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.Start
         ) {
-            Text("보관함")
-
             KeywordListSection(keywordState, onDeleteClick = onDeleteClick)
         }
     }
@@ -79,19 +77,18 @@ fun KeywordListSection(
         item {
             Box(
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(vertical = 10.dp)
+                    .background(Color(0xFFF4F6FB))
+                    .padding(top = 10.dp)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(15.dp)
                 ) {
                     val count = when (keywordState) {
                         is KeywordStoreUiState.Success -> keywordState.data.size
                         else -> 0
                     }
-                    Text(text = "저장 키워드", fontSize = 15.sp, modifier = Modifier.weight(1f))
+                    Text(text = "저장된 키워드", fontSize = 15.sp, modifier = Modifier.weight(1f))
                     Text(text = "${count}개", fontSize = 15.sp)
                 }
             }
