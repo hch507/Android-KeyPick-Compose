@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.FetchKeywordInfoUsecase
 import com.example.domain.SaveKeywordUsecase
 import com.keypick.core.model.KeywordInfo
+import com.keypick.core.model.SavedKeyword
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,26 +37,30 @@ class KeywordInfoViewModel @Inject constructor(
     var search by mutableStateOf("")
         private set
 
-    fun onSearchChanged(search: String){
-        this.search= search
+    fun onSearchChanged(search: String) {
+        this.search = search
         Log.d("LoginViewModel", "onBlogIdChanged: ")
     }
 
     fun fetchKeywordInfoData(keyword: String) {
         viewModelScope.launch {
             fetchKeywordInfoUsecase(keyword = keyword)
-                .onStart { _keywordInfoState.update { KeywordInfoUiState.Loading }  }
+                .onStart { _keywordInfoState.update { KeywordInfoUiState.Loading } }
                 .catch { _keywordInfoState.update { KeywordInfoUiState.Error } }
-                .collectLatest { value -> _keywordInfoState.value = KeywordInfoUiState.Success(value) }
+                .collectLatest { value ->
+                    _keywordInfoState.value = KeywordInfoUiState.Success(value)
+                }
         }
     }
 
-    fun saveKeyword(keyword : String){
+    fun saveKeyword(keyword: SavedKeyword) {
         viewModelScope.launch {
-            saveKeywordUsecase(keyword = keyword)
-                .onStart { _keywordSaveState.update { KeywordInfoUiState.Loading }  }
+            saveKeywordUsecase(keyword)
+                .onStart { _keywordSaveState.update { KeywordInfoUiState.Loading } }
                 .catch { _keywordSaveState.update { KeywordInfoUiState.Error } }
-                .collectLatest { value -> _keywordSaveState.value = KeywordInfoUiState.Success(value) }
+                .collectLatest { value ->
+                    _keywordSaveState.value = KeywordInfoUiState.Success(value)
+                }
         }
     }
 

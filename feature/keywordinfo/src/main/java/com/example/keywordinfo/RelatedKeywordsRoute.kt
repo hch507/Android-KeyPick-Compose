@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.card.AppCard
 import com.keypick.core.model.KeywordInfo
 import com.keypick.core.model.RelKeywordResource
+import com.keypick.core.model.SavedKeyword
 
 
 @Composable
@@ -55,7 +56,7 @@ fun RelatedKeywordsRoute(
 @Composable
 fun RelatedKeywordsScreen(
     keywordInfoState: KeywordInfoUiState<KeywordInfo>,
-    onSaveClick: (String) -> Unit
+    onSaveClick: (SavedKeyword) -> Unit
 ) {
     when (keywordInfoState) {
         KeywordInfoUiState.Error -> {
@@ -82,7 +83,7 @@ fun RelatedKeywordsScreen(
 @Composable
 fun RelKeywordInfoSuccessScreen(
     relKeywordResourceList: List<RelKeywordResource>,
-    onSaveClick: (String) -> Unit
+    onSaveClick: (SavedKeyword) -> Unit
 ) {
     if (relKeywordResourceList.isEmpty()) return
     Box(
@@ -98,7 +99,7 @@ fun RelKeywordInfoSuccessScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp) // 아이템 간 간격
         ) {
 
-            item { RelKeywordCard(relKeywordResourceList[0].relKeyword, onSaveClick = onSaveClick) }
+            item { RelKeywordCard(relKeywordResourceList[0], onSaveClick = onSaveClick) }
             item { Spacer(modifier = Modifier.height(25.dp)) }
             stickyHeader {
                 Box(
@@ -130,8 +131,8 @@ fun RelKeywordInfoSuccessScreen(
 
 @Composable
 fun RelKeywordCard(
-    keyword: String,
-    onSaveClick: (String) -> Unit
+    keyword: RelKeywordResource,
+    onSaveClick: (SavedKeyword) -> Unit
 ) {
     AppCard(
         modifier = Modifier.fillMaxWidth()
@@ -155,7 +156,11 @@ fun RelKeywordCard(
 
                 IconButton(
                     onClick = {
-                        onSaveClick(keyword)
+                        onSaveClick(SavedKeyword(
+                            keyword= keyword.relKeyword,
+                            timestamp =System.currentTimeMillis(),
+                            resultCount = keyword.monthlyPcQcCnt + keyword.monthlyMobileQcCnt
+                        ))
                     },
                     modifier = Modifier
                         .fillMaxHeight()
@@ -175,7 +180,7 @@ fun RelKeywordCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = keyword,
+                text = keyword.relKeyword,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold
             )
@@ -186,7 +191,7 @@ fun RelKeywordCard(
 @Composable
 fun RelatedItem(
     relKeywordResource: RelKeywordResource,
-    onSaveClick: (String) -> Unit
+    onSaveClick: (SavedKeyword) -> Unit
 ) {
     AppCard(
         modifier = Modifier.fillMaxWidth()
@@ -204,7 +209,13 @@ fun RelatedItem(
                 Text(text = relKeywordResource.relKeyword, fontSize = 20.sp)
                 IconButton(
                     onClick = {
-                        onSaveClick(relKeywordResource.relKeyword)
+                        onSaveClick(
+                            SavedKeyword(
+                                keyword = relKeywordResource.relKeyword,
+                                timestamp =System.currentTimeMillis(),
+                                resultCount = relKeywordResource.monthlyPcQcCnt + relKeywordResource.monthlyMobileQcCnt
+                            )
+                        )
                     },
                     modifier = Modifier
                         .fillMaxHeight()

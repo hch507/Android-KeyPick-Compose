@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.domain.DeleteKeywordUsecase
 import com.example.domain.GetStoredKeywordUsecase
+import com.keypick.core.model.SavedKeyword
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,11 +19,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class KeywordStoreViewModel @Inject constructor(
-//    private val deleteKeywordUsecase: DeleteKeywordUsecase,
+    private val deleteKeywordUsecase: DeleteKeywordUsecase,
     private val getStoredKeywordUsecase: GetStoredKeywordUsecase
 ) :ViewModel(){
     private val _keywordSaveState =
-        MutableStateFlow<KeywordStoreUiState<List<String>>>(KeywordStoreUiState.Loading)
+        MutableStateFlow<KeywordStoreUiState<List<SavedKeyword>>>(KeywordStoreUiState.Loading)
     val keywordSaveState = _keywordSaveState.asStateFlow()
 
 
@@ -38,6 +39,9 @@ class KeywordStoreViewModel @Inject constructor(
     }
 
     fun deleteKeyword(keyword : String){
+        viewModelScope.launch {
+            deleteKeywordUsecase.invoke(keyword)
+        }
 
     }
 }
