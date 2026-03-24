@@ -12,28 +12,24 @@ import androidx.compose.ui.graphics.Color
 //)
 
 private val LightColorScheme = lightColorScheme(
-    primary = Red30,
+    primary = Primary500,
     onPrimary = White,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
-    onSurface = Black,
-    onBackground = Color(0xFF1C1B1F),
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-//    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    secondary = Black600,
+    onSecondary = White,
+
+    surface = White,
+    onSurface = Black600,
+
+    background = Background,
+    onBackground = Black,
+
+    error = ErrorRed
 )
 
 @Composable
 fun KeypickComposeTheme(
-    // Dynamic color is available on Android 12+
-//    dynamicColor: Boolean = true,
+
     content: @Composable () -> Unit
 ) {
     val colorScheme = LightColorScheme

@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.designsystem.theme.primaryDisabledContainer
+import com.example.designsystem.theme.primaryDisabledContent
 
 @Composable
 fun AppButton(
@@ -28,10 +30,10 @@ fun AppButton(
             .height(56.dp),
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (enabled) Color(0xFF5B6FEF) else Color(0xFFE3E5EC),
-            contentColor = if (enabled) Color.White else Color(0xFF5B6FEF),
-            disabledContainerColor = Color(0xFFE3E5EC),
-            disabledContentColor = Color(0xFF5B6FEF)
+            containerColor = if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary,
+            contentColor = if (enabled) Color.White else MaterialTheme.colorScheme.primary,
+            disabledContainerColor = MaterialTheme.colorScheme.primaryDisabledContainer,
+            disabledContentColor = MaterialTheme.colorScheme.primaryDisabledContent
         ),
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = if (enabled) 4.dp else 0.dp

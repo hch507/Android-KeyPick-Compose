@@ -1,6 +1,5 @@
 package com.example.login
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,8 +36,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.ui.draw.shadow
 import com.example.designsystem.button.AppButton
 import com.example.designsystem.card.AppCard
+import com.example.designsystem.theme.KeypickComposeTheme
 
 
 @Composable
@@ -81,7 +82,7 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFF0F0F3))
+                .background(MaterialTheme.colorScheme.background)
                 .padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -125,6 +126,8 @@ fun LoginSection(
 ) {
     AppCard(
         modifier = modifier
+            .shadow(elevation = 8.dp)
+
     ) {
         Column(modifier = modifier) {
             var blogId by remember { mutableStateOf("") }
@@ -132,28 +135,29 @@ fun LoginSection(
             Text(
                 text = stringResource(R.string.login_id_title),
                 fontSize = 20.sp,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             OutlinedTextField(
                 modifier = modifier,
                 value = blogId,
                 onValueChange = { blogId = it },
+                singleLine = true,
                 label = { Text(text = stringResource(R.string.login_id_hint)) },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = if (isLoginError) Color.Red else Color(0xFF5B6FEF),
-                    focusedLabelColor = if (isLoginError) Color.Red else Color(0xFF5B6FEF),
-                    cursorColor = if (isLoginError) Color.Red else Color(0xFF5B6FEF),
-                    focusedSupportingTextColor = Color.Red,
-                    errorBorderColor = Color.Red,
-                    errorLabelColor = Color.Red
+                    focusedBorderColor = if (isLoginError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                    focusedLabelColor = if (isLoginError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                    cursorColor = if (isLoginError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                    focusedSupportingTextColor = MaterialTheme.colorScheme.error,
+                    errorBorderColor = MaterialTheme.colorScheme.error,
+                    errorLabelColor = MaterialTheme.colorScheme.error
                 )
             )
             if (isLoginError) {
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = stringResource(R.string.login_error_message),
-                    color = Color.Red,
+                    color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -191,7 +195,7 @@ fun OrDivider(
         Text(
             text = stringResource(R.string.login_divider),
             modifier = Modifier.padding(horizontal = 12.dp),
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.bodyMedium
         )
 
@@ -217,10 +221,10 @@ fun NonLoginButton(
             .height(56.dp),
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor =  Color(0xFF717379),
-            contentColor =  Color.White ,
-            disabledContainerColor = Color(0xFFE3E5EC),
-            disabledContentColor = Color(0xFF5B6FEF)
+            containerColor =  MaterialTheme.colorScheme.secondary,
+            contentColor =  MaterialTheme.colorScheme.onSecondary ,
+            disabledContainerColor = MaterialTheme.colorScheme.secondary,
+            disabledContentColor = MaterialTheme.colorScheme.onSecondary
         ),
         elevation = ButtonDefaults.buttonElevation(
             defaultElevation = 4.dp
@@ -241,7 +245,7 @@ fun LoginTitle() {
         text = stringResource(R.string.common_app_name),
         fontSize = 44.sp,
         fontWeight = FontWeight.Bold,
-        color = Color.Black
+        color = MaterialTheme.colorScheme.onBackground
     )
 }
 
