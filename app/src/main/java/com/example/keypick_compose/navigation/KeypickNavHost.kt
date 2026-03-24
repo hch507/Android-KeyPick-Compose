@@ -14,8 +14,7 @@ import com.example.keywordinfo.navigation.navigateToKeywordInfo
 import com.example.login.navigation.LoginRoute
 import com.example.login.navigation.loginScreen
 import com.example.login.navigation.navigateToLogin
-import com.example.nonlogin.navigation.navigateToNonLogin
-import com.example.nonlogin.navigation.nonLoginScreen
+
 import com.example.search.navigation.navigateToSearch
 import com.example.search.navigation.searchScreen
 
@@ -37,11 +36,9 @@ fun KeypickNavHost(
                     )
                 )
             },
-            onNonLoginClick = navController::navigateToNonLogin
+            onNonLoginClick = navController::navigateToSearch
         )
-        nonLoginScreen(
-            onMoveToLoginClick = navController::navigateToLogin
-        )
+
         homeScreen(
             onRecommendKeywordClick = { keyword ->
                 navController.navigateToKeywordInfo(keyword)

@@ -35,7 +35,6 @@ include(":core:domain")
 include(":core:network")
 //include(":build-logic:convention")
 
-include(":feature:nonlogin")
 include(":core:model")
 include(":feature:home")
 include(":feature:userbloginfo")
