@@ -3,4 +3,11 @@
 
     <string name="keyword_detail_title">키워드 정보</string>
     <string name="releted_keywords_title">연관 검색어</string>
+    <string name="keyword_detail_pc_item">PC 검색</string>
+    <string name="keyword_detail_mobile_item">모바일 검색</string>
+    <string name="keyword_detail_blog_item">블로그</string>
+    <string name="keyword_detail_posting_item">포스팅</string>
+    <string name="keyword_detail_chart_title">키워드 추이 분석</string>
+    <string name="keyword_detail_keyword_name">키워드 명</string>
+    <string name="keyword_detail_item_description">30일 기준</string>
 </resources>
