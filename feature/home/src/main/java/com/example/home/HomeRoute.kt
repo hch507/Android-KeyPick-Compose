@@ -40,6 +40,7 @@ import com.example.home.navigation.navigateToHomeLevelDestination
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.home.navigation.HomeUiState
 import androidx.compose.ui.draw.shadow
+import com.example.designsystem.theme.rankBackground
 
 @Composable
 internal fun HomeRoute(
@@ -80,16 +81,16 @@ fun HomeScreen(
     blogId: HomeUiState<String>
 ) {
     Scaffold(
-        containerColor = Color(0xFFF4F6FB), // 여기 추가
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
                 title = { Text(stringResource(selectTab.titleText)) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor =
                         if (selectTab == HomeLevelDestination.RANKING)
-                            Color(0xFFC5C9FE)// 원하는 색
+                            MaterialTheme.colorScheme.rankBackground
                         else
-                            Color(0xFFF4F6FB),
+                            MaterialTheme.colorScheme.background,
                     titleContentColor =
                         if (selectTab == HomeLevelDestination.RANKING)
                             Color.White
@@ -151,7 +152,7 @@ fun BottomNavigationBar(
             .fillMaxWidth()
             .shadow(12.dp, RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
             .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
-            .background(Color(0xFFF4F6FB))
+            .background(MaterialTheme.colorScheme.surface)
             .border(
                 0.1.dp,
                 MaterialTheme.colorScheme.tertiaryContainer,
@@ -159,7 +160,7 @@ fun BottomNavigationBar(
             )
     ) {
         NavigationBar(
-            containerColor = Color(0xFFF4F6FB)
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
             destinations.forEach { destination ->
 
@@ -173,7 +174,7 @@ fun BottomNavigationBar(
                             painter = painterResource(id = destination.iconRes),
                             contentDescription = stringResource(id = destination.titleText),
                             tint = if (isSelected) Color.Black
-                            else MaterialTheme.colorScheme.onSurfaceVariant
+                            else MaterialTheme.colorScheme.onSurface
                         )
                     }, label = {
                         Text(text = stringResource(destination.titleText))

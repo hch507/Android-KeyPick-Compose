@@ -12,6 +12,7 @@ val Red30 = Color(0xFFF96060)
 
 
 val Background = Color(0xFFF4F6FB)
+val RankBackground = Color(0xFFC5C9FE)
 
 val Primary50 = Color(0xFFE8EAFF)
 val Primary100 = Color(0xFFD6E0FF)

@@ -9,3 +9,6 @@ val ColorScheme.primaryDisabledContainer: Color
 
 val ColorScheme.primaryDisabledContent: Color
     get() = Primary500
+
+val ColorScheme.rankBackground:Color
+    get() = RankBackground
