@@ -19,13 +19,13 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AppCard(
     modifier: Modifier,
-    content : @Composable () -> Unit
-){
+    content: @Composable () -> Unit,
+) {
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(20.dp),
-        tonalElevation = 2.dp,
-        color = Color.White
+        shadowElevation = 2.dp,
+        color = MaterialTheme.colorScheme.surface
     ) {
         Box(
             modifier = Modifier.padding(16.dp)

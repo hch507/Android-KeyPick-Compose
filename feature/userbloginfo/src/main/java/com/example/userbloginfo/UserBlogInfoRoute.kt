@@ -21,12 +21,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -41,6 +39,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,8 +52,6 @@ import com.example.designsystem.theme.KeypickComposeTheme
 import com.keypick.core.model.UserBlogCntData
 import kotlinx.coroutines.flow.collectLatest
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
@@ -80,7 +77,7 @@ internal fun UserBlogInfoRoute(
             if (keyword == null) {
                 Toast.makeText(
                     context,
-                    "추천 키워드가 없습니다.",
+                    context.getString(R.string.user_info_empty_recommend),
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
@@ -156,11 +153,11 @@ fun UserBlogInfoContent(
             }
 
             item {
-                Text("내 블로그", fontSize = 20.sp, modifier = Modifier.fillMaxWidth())
+                Text(stringResource(R.string.user_info_blog), fontSize = 20.sp, modifier = Modifier.fillMaxWidth())
             }
 
             item {
-                Text("${data.blogId}님의 블로그 현황을 알려드릴게요.", fontSize = 15.sp)
+                Text(stringResource(R.string.user_info_blog_description, data.blogId), fontSize = 15.sp)
             }
 
             item {
@@ -224,16 +221,16 @@ fun RecommendKeywordCard(
             ) {
 
                 Text(
-                    text = "오늘의 키워드가 \n도착했어요.",
+                    text = stringResource(R.string.user_info_recommend_message),
                     fontSize = 20.sp,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.surface
 
                 )
                 Spacer(Modifier.height(7.dp))
                 Text(
-                    text = "지금 참여하고 선물을 받으세요.",
-                    fontSize = 10.sp,
-                    color = Color.White
+                    text = stringResource(R.string.user_info_recommend_description),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.surface
                 )
                 Spacer(Modifier.height(7.dp))
 
@@ -265,14 +262,14 @@ fun BlogInfoBody(
             BlogInfoCard(
                 modifier = Modifier.weight(1f),
                 data = todayCnt,
-                descrption = "오늘 방문자",
+                description = stringResource(R.string.user_info_today_visitor),
                 icon = com.example.designsystem.R.drawable.ic_home_today
             )
             Spacer(Modifier.width(10.dp))
             BlogInfoCard(
                 modifier = Modifier.weight(1f),
                 data = gapCnt.toString(),
-                descrption = "전날 대비",
+                description = stringResource(R.string.user_info_gap),
                 icon = com.example.designsystem.R.drawable.ic_home_yesterday
             )
         }
@@ -282,14 +279,19 @@ fun BlogInfoBody(
         ) {
             Column() {
                 Text(
-                    "최근 5일 방문자 분석",
-                    color = Color.Gray,
+                    stringResource(R.string.user_info_chart_title),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 KeyPickChart(
                     visitors = listOf(data.visitorCntList[4].cnt.toFloat(), data.visitorCntList[3].cnt.toFloat(), data.visitorCntList[2].cnt.toFloat(), data.visitorCntList[1].cnt.toFloat(), data.visitorCntList[0].cnt.toFloat()),
-                    labels = listOf("4일 전", "3일 전", "2일 전", "1일 전", "오늘"),
+                    labels = listOf(stringResource(R.string.user_info_4_ago),
+                        stringResource(R.string.user_info_3_ago),
+                        stringResource(R.string.user_info_2_ago),
+                        stringResource(R.string.user_info_1_ago),
+                        stringResource(R.string.user_info_today)
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(250.dp),
@@ -306,7 +308,7 @@ fun BlogInfoBody(
 fun BlogInfoCard(
     modifier: Modifier = Modifier,
     data: String,
-    descrption: String,
+    description: String,
     @DrawableRes icon: Int
 ) {
     AppCard(
@@ -321,12 +323,14 @@ fun BlogInfoCard(
             Spacer(Modifier.height(7.dp))
             Text(
                 text = data,
-                fontSize = 25.sp
+                fontSize = 25.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(Modifier.height(7.dp))
             Text(
-                text = descrption,
-                fontSize = 15.sp
+                text = description,
+                fontSize = 15.sp,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -346,7 +350,7 @@ fun BlogProfile(
             .fillMaxWidth()
             .shadow(4.dp, shape = RoundedCornerShape(20.dp))
             .background(
-                color = Color.White,
+                color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(20.dp)
             )
             .padding(16.dp)
@@ -360,7 +364,6 @@ fun BlogProfile(
             Icon(
                 painter = painterResource(id = com.example.designsystem.R.drawable.ic_logout),
                 contentDescription = "logout",
-                tint = Color(0xFF333366),
                 modifier = Modifier
                     .size(20.dp)
             )
@@ -369,7 +372,7 @@ fun BlogProfile(
         Spacer(Modifier.width(10.dp))
         Text(
             modifier = Modifier.align(Alignment.CenterStart),
-            text = "${blogId}님의 블로그",
+            text = stringResource(R.string.user_info_title_description, blogId),
             fontSize = 20.sp
         )
 
@@ -419,7 +422,7 @@ fun BlogInfoCardPreview() {
     KeypickComposeTheme {
         BlogInfoCard(
             data = "1234",
-            descrption = "오늘 방문자",
+            description = "오늘 방문자",
             icon = com.example.designsystem.R.drawable.ic_store_nav
         )
     }

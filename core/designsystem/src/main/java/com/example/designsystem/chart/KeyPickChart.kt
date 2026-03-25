@@ -48,6 +48,7 @@ fun KeyPickChart(
 
                 xAxis.apply {
                     position = XAxis.XAxisPosition.BOTTOM
+                    yOffset = 8f // 라벨과 차트 간격
                     setDrawGridLines(false)
                     valueFormatter = object : ValueFormatter() {
                         override fun getFormattedValue(value: Float): String {
