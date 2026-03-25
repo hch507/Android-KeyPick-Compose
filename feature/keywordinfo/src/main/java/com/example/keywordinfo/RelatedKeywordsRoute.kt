@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,7 +49,7 @@ fun RelatedKeywordsRoute(
         viewModel.saveKeyword(it)
         Toast.makeText(
             context,
-            "저장되었습니다",
+            context.getString(R.string.related_keyword_save),
             Toast.LENGTH_SHORT
         ).show()
     })
@@ -89,7 +91,7 @@ fun RelKeywordInfoSuccessScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF4F6FB)),
+            .background(MaterialTheme.colorScheme.background),
     ) {
         LazyColumn(
             modifier = Modifier
@@ -105,7 +107,7 @@ fun RelKeywordInfoSuccessScreen(
                 Box(
                     modifier = Modifier
                         .background(
-                            Color(0xFFF4F6FB)
+                            MaterialTheme.colorScheme.background
                         )
                         .padding(vertical = 10.dp)
                 ) {
@@ -114,8 +116,17 @@ fun RelKeywordInfoSuccessScreen(
                             .fillMaxWidth()
 
                     ) {
-                        Text(text = "연관 키워드", fontSize = 15.sp, modifier = Modifier.weight(1f))
-                        Text(text = "${relKeywordResourceList.size - 1}개", fontSize = 15.sp)
+                        Text(
+                            text = stringResource(R.string.related_keyword_title),
+                            fontSize = 15.sp,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Text(
+                            text = stringResource(
+                                R.string.related_keyword_cnt,
+                                relKeywordResourceList.size - 1
+                            ), fontSize = 15.sp
+                        )
                     }
                 }
 
@@ -149,18 +160,20 @@ fun RelKeywordCard(
             ) {
 
                 Text(
-                    text = "키워드 명",
-                    color = Color.Gray,
+                    text = stringResource(R.string.related_keyword_name),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 14.sp
                 )
 
                 IconButton(
                     onClick = {
-                        onSaveClick(SavedKeyword(
-                            keyword= keyword.relKeyword,
-                            timestamp =System.currentTimeMillis(),
-                            resultCount = keyword.monthlyPcQcCnt + keyword.monthlyMobileQcCnt
-                        ))
+                        onSaveClick(
+                            SavedKeyword(
+                                keyword = keyword.relKeyword,
+                                timestamp = System.currentTimeMillis(),
+                                resultCount = keyword.monthlyPcQcCnt + keyword.monthlyMobileQcCnt
+                            )
+                        )
                     },
                     modifier = Modifier
                         .fillMaxHeight()
@@ -206,13 +219,17 @@ fun RelatedItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                Text(text = relKeywordResource.relKeyword, fontSize = 20.sp)
+                Text(
+                    text = relKeywordResource.relKeyword,
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
                 IconButton(
                     onClick = {
                         onSaveClick(
                             SavedKeyword(
                                 keyword = relKeywordResource.relKeyword,
-                                timestamp =System.currentTimeMillis(),
+                                timestamp = System.currentTimeMillis(),
                                 resultCount = relKeywordResource.monthlyPcQcCnt + relKeywordResource.monthlyMobileQcCnt
                             )
                         )
@@ -244,7 +261,7 @@ fun RelatedItem(
                 )
                 Text(
                     text = "${relKeywordResource.monthlyPcQcCnt + relKeywordResource.monthlyMobileQcCnt}회",
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 15.sp,
                 )
 
