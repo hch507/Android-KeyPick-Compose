@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -91,7 +92,7 @@ fun KeywordInfoScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFF4F6FB)),
+                .background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -100,10 +101,10 @@ fun KeywordInfoScreen(
             }
             item {
                 StatRow(
-                    leftTitle = "PC 검색",
+                    leftTitle = stringResource(R.string.keyword_detail_pc_item),
                     leftValue =pcCnt ,
                     leftIcon =  painterResource(com.example.designsystem.R.drawable.ic_pc_item),
-                    rightTitle = "모바일 검색",
+                    rightTitle = stringResource(R.string.keyword_detail_mobile_item),
                     rightValue = mobileCnt,
                     rightIcon = painterResource(com.example.designsystem.R.drawable.ic_mobile_item),
 
@@ -111,10 +112,10 @@ fun KeywordInfoScreen(
             }
             item {
                 StatRow(
-                    leftTitle = "블로그",
+                    leftTitle = stringResource(R.string.keyword_detail_blog_item),
                     leftValue = keywordBlogInfoResource.totalCnt.toString(),
                     leftIcon = painterResource(com.example.designsystem.R.drawable.ic_blog_item),
-                    rightTitle = "포스팅",
+                    rightTitle = stringResource(R.string.keyword_detail_posting_item),
                     rightValue = if (postingCnt == 100) "+$postingCnt" else "$postingCnt" ,
                     rightIcon = painterResource(com.example.designsystem.R.drawable.ic_posting_tiem)
                 )
@@ -125,8 +126,8 @@ fun KeywordInfoScreen(
                 ) {
                     Column() {
                         Text(
-                            "최근 5일 방문자 분석",
-                            color = Color.Gray,
+                            stringResource(R.string.keyword_detail_chart_title),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                             style = MaterialTheme.typography.bodyMedium
                         )
                         Spacer(modifier = Modifier.height(20.dp))
@@ -155,7 +156,6 @@ fun KeywordCard(keyword: String){
     ) {
         Column {
 
-            // 제목 + 아이콘
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -165,8 +165,8 @@ fun KeywordCard(keyword: String){
             ) {
 
                 Text(
-                    text = "키워드 명",
-                    color = Color.Gray,
+                    text = stringResource(R.string.keyword_detail_keyword_name),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 14.sp
                 )
 
@@ -236,7 +236,6 @@ fun StatCard(
             modifier = Modifier.fillMaxSize()
         ) {
 
-            // 제목 + 아이콘
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -245,7 +244,7 @@ fun StatCard(
 
                 Text(
                     text = title,
-                    color = Color.Gray,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     fontSize = 14.sp
                 )
 
@@ -265,8 +264,8 @@ fun StatCard(
             )
 
             Text(
-                text = "30일 기준",
-                color = Color.Gray,
+                text = stringResource(R.string.keyword_detail_item_description),
+                color = MaterialTheme.colorScheme.onSurface,
                 fontSize = 12.sp
             )
         }
