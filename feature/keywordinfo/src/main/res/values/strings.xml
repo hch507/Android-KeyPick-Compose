@@ -10,4 +10,8 @@
     <string name="keyword_detail_chart_title">키워드 추이 분석</string>
     <string name="keyword_detail_keyword_name">키워드 명</string>
     <string name="keyword_detail_item_description">30일 기준</string>
+    <string name="related_keyword_save">저장되었습니다</string>
+    <string name="related_keyword_title">연관 키워드</string>
+    <string name="related_keyword_cnt">%1$s개</string>
+    <string name="related_keyword_name">키워드 명</string>
 </resources>
