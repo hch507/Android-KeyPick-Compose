@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="user_info_empty_recommend">추천 키워드가 없습니다.</string>
+    <string name="user_info_blog">내 블로그</string>
+    <string name="user_info_blog_description">%1$s님의 블로그 현황을 알려드릴게요.</string>
+    <string name="user_info_recommend_message">오늘의 키워드가 \n도착했어요.</string>
+    <string name="user_info_recommend_description">지금 참여하고 선물을 받으세요.</string>
+    <string name="user_info_today_visitor">오늘 방문자</string>
+    <string name="user_info_gap">전날 대비</string>
+    <string name="user_info_chart_title">최근 5일 방문자 분석</string>
+    <string name="user_info_4_ago">4일 전</string>
+    <string name="user_info_3_ago">3일 전</string>
+    <string name="user_info_2_ago">2일 전</string>
+    <string name="user_info_1_ago">1일 전</string>
+    <string name="user_info_today">오늘</string>
+    <string name="user_info_title_description">%1$s님의 블로그</string>
+</resources>
