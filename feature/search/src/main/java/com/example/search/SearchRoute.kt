@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -35,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -100,7 +102,7 @@ fun SearchScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFF7F7F7))
+                    .background(MaterialTheme.colorScheme.background)
                     .padding(20.dp)
             ) {
                 Spacer(modifier = Modifier.height(16.dp))
@@ -108,7 +110,8 @@ fun SearchScreen(
                 SearchTextField(
                     value = searchKeyword,
                     onValueChange = { newValue -> onSearchKeywordChange(newValue) },
-                    onSearch = onSearchClick
+                    onSearch = onSearchClick,
+                    placeholder = stringResource(com.example.search.R.string.search_hint)
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -135,22 +138,22 @@ fun RecentSearchSection(
         SearchUiState.Idle -> {}
 
         SearchUiState.Loading -> {
-            Text("로딩중...")
+            Text(stringResource(com.example.search.R.string.search_loading))
         }
 
         SearchUiState.Error -> {
-            Text("최근 검색어를 불러오지 못했습니다.")
+            Text(stringResource(com.example.search.R.string.search_error))
         }
 
         is SearchUiState.Success -> {
-
+            val data = recentSearchsUiState.data
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(250.dp)
                     .shadow(4.dp, shape = RoundedCornerShape(20.dp))
                     .background(
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.surface,
                         shape = RoundedCornerShape(20.dp)
                     )
                     .padding(16.dp)
@@ -160,17 +163,30 @@ fun RecentSearchSection(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items(
-                        items = recentSearchsUiState.data,
-                        key = { it.keyword }
-                    ) { search ->
-                        RecentSearchItem(
-                            text = search.keyword,
-                            onDeleteItem = onDeleteRecentSearch
+
+                if (data.isEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = stringResource(com.example.search.R.string.recent_search_empty),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        items(
+                            items = data,
+                            key = { it.keyword }
+                        ) { search ->
+                            RecentSearchItem(
+                                text = search.keyword,
+                                onDeleteItem = onDeleteRecentSearch
+                            )
+                        }
                     }
                 }
             }
@@ -199,7 +215,6 @@ fun RecentSearchItem(
             modifier = Modifier
                 .size(18.dp)
                 .clickable { onDeleteItem(text) },
-            tint = Color.Gray
         )
     }
 }
@@ -214,13 +229,13 @@ fun RecentSearchHeader(
     ) {
 
         Text(
-            text = "최근 검색어",
-            fontWeight = FontWeight.Bold
+            text = stringResource(com.example.search.R.string.search_recent),
+            color = MaterialTheme.colorScheme.onSurface
         )
 
         Text(
-            text = "전체 삭제",
-            color = Color.Gray,
+            text = stringResource(com.example.search.R.string.search_delete_all),
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.clickable {
                 onDeleteAll()
             }
@@ -235,7 +250,7 @@ fun SearchTopBar(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFF7F7F7))
+            .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
             .padding(vertical = 8.dp, horizontal = 12.dp),
 
@@ -248,7 +263,7 @@ fun SearchTopBar(
             )
         }
         Text(
-            "검색",
+            stringResource(com.example.search.R.string.search_header),
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
             fontSize = 25.sp,
