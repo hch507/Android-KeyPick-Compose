@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.data.repository.KeywordRepository
 import com.example.data.repository.LoginOrCntRepository
 import com.example.domain.FetchRankUsecase
+import com.keypick.core.model.Rank
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +24,7 @@ class RankViewModel @Inject constructor(
     private val fetchRankUsecase: FetchRankUsecase,
 
 ) : ViewModel() {
-    private val _rankResult = MutableStateFlow<RankUiState<Int>>(RankUiState.Loading)
+    private val _rankResult = MutableStateFlow<RankUiState<Rank>>(RankUiState.Loading)
     val rankResult = _rankResult.asStateFlow()
     fun fetchBlogRankData(keyword : String, blogId : String){
         Log.d("fetchBlogRankData", "fetchBlogRankData:${keyword} ${blogId}")

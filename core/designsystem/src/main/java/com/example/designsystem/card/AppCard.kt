@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun AppCard(
-    modifier: Modifier,
+    modifier: Modifier =Modifier,
     content: @Composable () -> Unit,
 ) {
     Surface(

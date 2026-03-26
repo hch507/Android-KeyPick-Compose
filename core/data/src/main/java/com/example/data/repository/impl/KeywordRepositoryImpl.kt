@@ -6,9 +6,9 @@ import com.example.network.NaverNetworkDataSource
 import com.example.network.NaverRelNetworkDataSource
 import com.example.network.model.asExternalBlogInfoModel
 import com.example.network.model.asExternalRankModel
+import com.keypick.core.model.AllRank
 import com.keypick.core.model.KeywordBlogInfoResource
 import com.keypick.core.model.MonthRatioResource
-import com.keypick.core.model.Rank
 import com.keypick.core.model.RelKeywordResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -25,7 +25,7 @@ class KeywordRepositoryImpl @Inject constructor(
             emit(result.asExternalBlogInfoModel())
         }
 
-    override suspend fun fetchBlogPostRank(keyword: String): Flow<Rank> = flow {
+    override suspend fun fetchBlogPostRank(keyword: String): Flow<List<AllRank>> = flow {
         val result = naverNetworkDataSource.fetchBlogPostRank(keyword = keyword)
         emit(result.asExternalRankModel())
     }

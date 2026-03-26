@@ -1,5 +1,6 @@
 package com.example.network.model
 
+import com.keypick.core.model.AllRank
 import com.keypick.core.model.BlogData
 import com.keypick.core.model.KeywordBlogInfoResource
 import com.keypick.core.model.Rank
@@ -34,9 +35,13 @@ fun BlogSearchDto.asExternalBlogInfoModel(): KeywordBlogInfoResource = KeywordBl
     }
 )
 
-fun BlogSearchDto.asExternalRankModel(): Rank {
-    val rankdata = items.map {
-        it.bloggerlink
+fun BlogSearchDto.asExternalRankModel(): List<AllRank> {
+    return items.mapIndexed {index, item->
+        AllRank(
+            rank = index+1,
+            title = item.title,
+            link = item.bloggerlink
+        )
     }
-    return Rank(blogLink = rankdata )
+
 }
