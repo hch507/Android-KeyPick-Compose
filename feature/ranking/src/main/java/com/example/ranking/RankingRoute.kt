@@ -76,7 +76,7 @@ fun RankingScreen(
             )
             when (uiState) {
                 RankUiState.Error -> {
-                    Log.d("DEBUG_RANK", "-RankingScreen() called ${uiState._data}")
+                    RankErrorScreen()
                 }
 
                 RankUiState.Loading -> {}
@@ -230,6 +230,21 @@ fun ResultCard(rank: MyRank) {
                 rank.title
             }, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
+    }
+}
+@Composable
+fun RankErrorScreen(){
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Text(
+            text = stringResource(R.string.ranking_error_description),
+
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 @Composable

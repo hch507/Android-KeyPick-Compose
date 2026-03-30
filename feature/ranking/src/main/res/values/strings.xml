@@ -4,4 +4,5 @@
     <string name="ranking_posting_title">인기 포스팅 순위</string>
     <string name="ranking_not_in_100">포스팅이 상위 100위 안에 들지 못했어요.</string>
     <string name="ranking_my_rank">내 순위 %1$s</string>
+    <string name="ranking_error_description">서버와 오류가 발생했습니다. \n 다시 시도해주세요.</string>
 </resources>
