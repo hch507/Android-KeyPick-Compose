@@ -42,6 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.card.AppCard
 import com.example.designsystem.textfield.SearchTextField
+import com.example.designsystem.theme.rankBackground
 import com.keypick.core.model.MyRank
 import com.keypick.core.model.Rank
 
@@ -101,7 +102,7 @@ fun RankingSearchSection(
                     bottomEnd = 32.dp
                 )
             )
-            .background(Color(0xFFC5C9FE))
+            .background(MaterialTheme.colorScheme.rankBackground)
             .padding(horizontal = 24.dp, vertical = 32.dp)
     ) {
         Column(
@@ -112,7 +113,7 @@ fun RankingSearchSection(
             Text(
                 modifier = Modifier.padding(bottom = 20.dp),
                 text = stringResource(R.string.ranking_description),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 20.sp
             )
 
@@ -138,7 +139,7 @@ fun RankResultSection(rank: Rank) {
         ResultCard(rank.myRank)
         Text(stringResource(R.string.ranking_posting_title), fontSize = 20.sp, color = MaterialTheme.colorScheme.onBackground)
         LazyColumn(
-            modifier = Modifier.weight(1f), // ⭐ 핵심
+            modifier = Modifier.weight(1f),
             contentPadding = PaddingValues(bottom = 15.dp)
         ) {
             items(
@@ -171,7 +172,7 @@ fun RankListItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        // 왼쪽 번호
+
         Text(
             text = index.toString(),
             fontSize = 18.sp,
@@ -218,12 +219,16 @@ fun ResultCard(rank: MyRank) {
         ) {
 
             Text(
-                text = "내 순위 ${rank.myRank}",
+                text = stringResource(R.string.ranking_my_rank, rank.myRank),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
 
-            Text(rank.title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(text = if(rank.myRank=="+100") {
+                stringResource(R.string.ranking_not_in_100)
+            } else {
+                rank.title
+            }, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }
